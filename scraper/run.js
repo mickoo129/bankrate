@@ -8,6 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
+const { JSDOM, VirtualConsole } = require('jsdom');
 const banks = require('./banks');
 const { extractTables } = require('./extract');
 const { parseDeposits, parseFx, validUntil, parseTextRates } = require('./parse');
@@ -16,6 +17,7 @@ const DATA_DIR = path.join(__dirname, '..', 'public', 'data');
 const CURRENCIES = ['HKD', 'USD', 'CNY', 'AUD', 'GBP', 'JPY'];
 const MAX_PAGES_PER_BANK = 18;
 const CONCURRENCY = 4;
+const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36';
 
 const args = Object.fromEntries(process.argv.slice(2).map((a) => {
   const [k, v] = a.replace(/^--/, '').split('=');
@@ -91,6 +93,16 @@ async function loadPage(context, url) {
         data.lines += '\n' + fd.lines;
       } catch {}
     }
+    // Some sites serve a bot-check page to headless browsers; the plain HTML often still has the tables.
+    if (!data.tables.length) {
+      try {
+        const html = await (await fetch(url, { headers: { 'User-Agent': UA, 'Accept-Language': 'zh-HK,zh;q=0.9' }, signal: AbortSignal.timeout(30000) })).text();
+        const dom = new JSDOM(html, { url, virtualConsole: new VirtualConsole() });
+        const raw = extractTables(dom.window.document);
+        if (raw.tables.length) { data.tables = raw.tables; data.text += ' ' + raw.text; data.lines += '\n' + raw.lines; data.viaHtml = true; }
+        dom.window.close();
+      } catch {}
+    }
     const links = await page.evaluate(() => Array.from(document.querySelectorAll('a[href]')).map((a) => ({ href: a.href.split('#')[0], text: (a.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 60) })));
     return { status, finalUrl: page.url(), data, links };
   } finally {
@@ -128,7 +140,7 @@ async function scrapeBank(context, bank, mid, report) {
 
   while (queue.length && visited.size < MAX_PAGES_PER_BANK) {
     const item = queue.shift();
-    item.url = canonical(item.url);
+    if (!item.fixed) item.url = canonical(item.url);
     const key = item.url;
     if (visited.has(key)) continue;
     visited.add(key);
@@ -139,6 +151,9 @@ async function scrapeBank(context, bank, mid, report) {
       rep.status = status;
       rep.finalUrl = finalUrl;
       rep.tables = data.tables.length;
+      rep.title = (data.title || '').slice(0, 60);
+      rep.textLen = (data.text || '').length;
+      if (data.viaHtml) rep.mode = 'html';
       if (status >= 400) { rep.error = 'HTTP ' + status; continue; }
       const type = guessType(item.type, data);
       let rows = rowsFromPage(data, type, finalUrl).filter((r) => r.tenorDays >= 7 && r.tenorDays <= 1100 && r.rate < 20);
@@ -280,7 +295,7 @@ function updateHistory(history, latest) {
     locale: 'zh-HK',
     timezoneId: 'Asia/Hong_Kong',
     viewport: { width: 1366, height: 900 },
-    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
+    userAgent: UA,
     extraHTTPHeaders: { 'Accept-Language': 'zh-HK,zh;q=0.9,en;q=0.6' },
   });
   await context.route('**/*', (route) => {

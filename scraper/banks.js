@@ -51,7 +51,11 @@ module.exports = [
   {
     id: 'bea', name: '東亞', nameEn: 'BEA', group: 'major',
     site: 'https://www.hkbea.com',
-    pages: [],
+    pages: [
+      { url: 'https://www.hkbea.com/hk-form/?formId=RATE&rateType=hkddr&language=tc#/forms/MISC', type: 'board' },
+      { url: 'https://www.hkbea.com/hk-form/?formId=RATE&rateType=fcdr&language=tc#/forms/MISC', type: 'board' },
+    ],
+    fxPages: ['https://www.hkbea.com/hk-form/?formId=RATE&rateType=ttfx&language=tc#/forms/MISC'],
     seeds: ['https://www.hkbea.com/', 'https://www.hkbea.com/html/tc/index.html'],
   },
   {
