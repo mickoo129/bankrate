@@ -268,7 +268,7 @@ function conditionsFromRaw(text) {
 }
 
 const PROMO_WORDS = /優惠|特惠|特優|推廣|新資金|promotion|offer|preferential|special|campaign/i;
-const FX_CONVERT = /(?:兌換|轉換)[^。]{0,40}(?:同時|並|後)[^。]{0,25}(?:設立|開立|敘造|敍做|辦理)[^。]{0,10}定期|經本行(?:兌換|轉換)|兌換交易|兌換現有外幣|以外幣兌換/;
+const FX_CONVERT = /(?:兌換|轉換)[^。]{0,40}(?:同時|並|後)[^。]{0,25}(?:設立|開立|敘造|敍做|辦理)[^。]{0,30}定期|經本行(?:兌換|轉換)|兌換交易|兌換現有外幣|以外幣兌換/;
 
 function parseDeposits(page, source) {
   const pageText = page.text || '';
