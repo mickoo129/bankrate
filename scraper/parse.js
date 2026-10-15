@@ -192,6 +192,7 @@ const COND_HINTS = [
   [/Citigold|花旗私人/i, 'Citigold'],
   [/新客戶|新開戶|new customer/i, '新客戶'],
   [/兌換|conversion|converted/i, '需經本行兌換'],
+  [/等值年利率|獎賞錢|RewardCash/i, '含獎賞錢等值'],
 ];
 function conditionsFrom(text) {
   const tags = [];

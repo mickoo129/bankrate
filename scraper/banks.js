@@ -18,7 +18,9 @@ module.exports = [
   {
     id: 'hangseng', name: '恒生', nameEn: 'Hang Seng', group: 'major',
     site: 'https://www.hangseng.com',
-    pages: [],
+    pages: [
+      { url: 'https://cms.hangseng.com/cms/emkt/pmo/grp06/p04/chi/index.html', type: 'promo' },
+      { url: 'https://cms.hangseng.com/cms/emkt/pmo/grp03/p97/chi/index.html', type: 'promo' },],
     seeds: [
       'https://www.hangseng.com/zh-hk/personal/banking/rates/deposit-interest-rates/',
       'https://www.hangseng.com/zh-hk/personal/banking/rates/foreign-exchange-rates/',
@@ -52,6 +54,7 @@ module.exports = [
     id: 'bea', name: '東亞', nameEn: 'BEA', group: 'major',
     site: 'https://www.hkbea.com',
     pages: [
+      { url: 'https://www.hkbea.com/html/tc/bea-personal-banking-supremegold-time-deposit.html', type: 'promo' },
       { url: 'https://www.hkbea.com/hk-form/?formId=RATE&rateType=hkddr&language=tc#/forms/MISC', type: 'board' },
       { url: 'https://www.hkbea.com/hk-form/?formId=RATE&rateType=fcdr&language=tc#/forms/MISC', type: 'board' },
     ],
@@ -90,7 +93,8 @@ module.exports = [
   {
     id: 'bocom', name: '交通銀行(香港)', nameEn: 'BOCOM (HK)', group: 'mid',
     site: 'https://www.hk.bankcomm.com',
-    pages: [],
+    pages: [
+      { url: 'https://www.hk.bankcomm.com/hk/shtml/hk/tw/2005742/2005763/2005764/list.shtml?channelId=2005742', type: 'board' },],
     seeds: ['https://www.hk.bankcomm.com/hk/shtml/hk/cn/', 'https://www.hk.bankcomm.com/'],
   },
   {
@@ -102,7 +106,8 @@ module.exports = [
   {
     id: 'citic', name: '中信銀行(國際)', nameEn: 'CNCBI', group: 'mid',
     site: 'https://www.cncbinternational.com',
-    pages: [],
+    pages: [
+      { url: 'https://ibanking.cncbinternational.com/CKWPortal/appmanager/Portal/CKWPersonPopup?_nfpb=true&_windowLabel=rateEnquiryController_CS_popup_1&rateEnquiryController_CS_popup_1_actionOverride=%2Fportlets%2Fpersonal%2FrateEnquiry%2FdoInitFdRate&_pageLabel=ckwPopupCS_RateTables', type: 'board' },],
     seeds: ['https://www.cncbinternational.com/personal/deposits/tc/index.jsp', 'https://www.cncbinternational.com/home/tc/index.jsp'],
   },
   {
@@ -114,13 +119,15 @@ module.exports = [
   {
     id: 'cmbwl', name: '招商永隆', nameEn: 'CMB Wing Lung', group: 'mid',
     site: 'https://www.cmbwinglungbank.com',
-    pages: [],
+    pages: [
+      { url: 'https://www.cmbwinglungbank.com/wlb_corporate/hk/personal/investments/financial-information/interest-rates/deposit-interest-rates.html', type: 'board' },],
     seeds: ['https://www.cmbwinglungbank.com/wlb_corporate/hk/personal/deposit.html', 'https://www.cmbwinglungbank.com/wlb_corporate/hk/index.html'],
   },
   {
     id: 'chonghing', name: '創興', nameEn: 'Chong Hing', group: 'mid',
     site: 'https://www.chbank.com',
-    pages: [],
+    pages: [
+      { url: 'https://www.chbank.com/tc/personal/banking-services/useful-information/deposit-rates/index.shtml', type: 'board' },],
     seeds: ['https://www.chbank.com/tc/personal/deposits/', 'https://www.chbank.com/tc/personal/index.shtml', 'https://www.chbank.com/'],
   },
   {
@@ -144,7 +151,8 @@ module.exports = [
   {
     id: 'ncb', name: '南洋商業', nameEn: 'Nanyang Commercial', group: 'mid',
     site: 'https://www.ncb.com.hk',
-    pages: [],
+    pages: [
+      { url: 'https://www.ncb.com.hk/nanyang_bank/popup1/ncbinfo.html', type: 'promo' },],
     seeds: ['https://www.ncb.com.hk/nanyang_bank/personal_banking/deposit_services/', 'https://www.ncb.com.hk/'],
   },
   {
@@ -169,13 +177,15 @@ module.exports = [
   {
     id: 'welab', name: 'WeLab Bank', nameEn: 'WeLab Bank', group: 'virtual',
     site: 'https://www.welab.bank',
-    pages: [],
+    pages: [
+      { url: 'https://www.welab.bank/zh/feature/gosave_2/', type: 'promo' },],
     seeds: ['https://www.welab.bank/zh/', 'https://www.welab.bank/zh/feature/'],
   },
   {
     id: 'livi', name: 'livi', nameEn: 'livi bank', group: 'virtual',
     site: 'https://www.livibank.com',
-    pages: [],
+    pages: [
+      { url: 'https://www.livibank.com/zh_HK/features/livisave.html', type: 'promo' },],
     seeds: ['https://www.livibank.com/zh_HK/', 'https://www.livibank.com/zh_HK/features/'],
   },
   {
@@ -193,7 +203,8 @@ module.exports = [
   {
     id: 'airstar', name: '天星銀行', nameEn: 'Airstar Bank', group: 'virtual',
     site: 'https://www.airstarbank.com',
-    pages: [],
+    pages: [
+      { url: 'https://www.airstarbank.com/zh-hk/deposit.html', type: 'promo' },],
     seeds: ['https://www.airstarbank.com/zh-hk/', 'https://www.airstarbank.com/zh-hk/deposit.html'],
   },
   {
