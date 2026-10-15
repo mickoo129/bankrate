@@ -194,8 +194,9 @@
         const v = state.view === 'interest'
           ? `${fmt(state.amount * r.rate / 100 * DAYS(t.d) / 365, 0)}<small> ${state.ccy}</small>`
           : `${pct(r.rate)}<small>%</small>`;
-        return `<td class="cell${isBest ? ' best' : ''}${state.open === openK ? ' open' : ''}" data-k="${openK}" tabindex="0" role="button" aria-expanded="${state.open === openK}" aria-label="${esc(b.name)} ${t.label} ${pct(r.rate)}%，撳睇條件">
-          <div class="v">${v}</div><div class="meta">${tagsOf(r, true)}${change(b.id, t.d, r.rate)}</div></td>`;
+        const board = r.type !== 'promo';
+        return `<td class="cell${isBest ? ' best' : ''}${board ? ' board' : ''}${state.open === openK ? ' open' : ''}" data-k="${openK}" tabindex="0" role="button" aria-expanded="${state.open === openK}" aria-label="${esc(b.name)} ${t.label} ${pct(r.rate)}%，撳睇條件">
+          <div class="v">${v}</div><div class="meta">${board ? '<i class="tag board">牌價</i>' : tagsOf(r, true)}${change(b.id, t.d, r.rate)}</div></td>`;
       }).join('')}</tr>`);
       if (state.open && state.open.startsWith(b.id + '|')) html.push(detailRow(b, +state.open.split('|')[1]));
     }

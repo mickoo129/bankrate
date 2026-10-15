@@ -79,7 +79,11 @@ function tenorLabel(days) {
 // ---- rates ----------------------------------------------------------------
 function parseRate(cell, pctTable) {
   if (!cell) return null;
-  const c = cell.replace(/\s+/g, '');
+  let c = cell.replace(/\s+/g, '');
+  const pair = c.match(/^\(?(\d{1,2}\.\d{1,6})%?\)?[\/／](\d{1,2}\.\d{1,6})%?\*{0,3}$/);
+  if (pair) { const a = parseFloat(pair[1]), b = parseFloat(pair[2]); const v = Math.max(a, b); return v > 0 && v < 20 ? v : null; }
+  const paren = c.match(/^\((\d{1,2}\.\d{1,6})\)$/);
+  if (paren && pctTable) c = paren[1];
   if (/^(-|—|–|N\/A|不適用|不設|--)$/i.test(c)) return null;
   let m = c.match(/^(?:年利率|最高|高達|Upto|up to)?(\d{1,2}(?:\.\d{1,6})?)%(?:p\.?a\.?|\*+|#|\^|[\[(（]?[a-zA-Z0-9]{0,2}[\])）]?)?$/i);
   if (!m && pctTable) m = c.match(/^(\d{1,2}\.\d{1,6})\*{0,3}$/);
@@ -191,10 +195,16 @@ const COND_HINTS = [
   [/豐盛理財|Treasures/i, '豐盛理財'],
   [/Citigold|花旗私人/i, 'Citigold'],
   [/新客戶|新開戶|new customer/i, '新客戶'],
-  [/兌換|conversion|converted/i, '需經本行兌換'],
+  [/(?:經本行|於本行|透過本行|以外幣|將外幣|現有外幣|指定貨幣)\S{0,6}兌換|兌換\S{0,4}(?:成|為)(?:港元|港幣|指定貨幣|外幣)|兌換(?:外幣|指定貨幣)\S{0,8}(?:定存|定期)|conver(?:t|sion)[^.]{0,30}(?:time deposit|HKD)/i, '需經本行兌換'],
   [/等值年利率|獎賞錢|RewardCash/i, '含獎賞錢等值'],
 ];
-function conditionsFrom(text) {
+const PREMIUM_TAGS = ['卓越理財尊尚', '卓越理財', '優越理財', '優先理財', '豐盛理財', 'Citigold'];
+// Customer-tier tags only from text that labels this specific rate (headers), not from the whole page
+function conditionsFrom(text, opts = {}) {
+  if (opts.noTier) return conditionsFromRaw(text).filter((t) => !PREMIUM_TAGS.includes(t));
+  return conditionsFromRaw(text);
+}
+function conditionsFromRaw(text) {
   const tags = [];
   for (const [re, tag] of COND_HINTS) if (re.test(text) && !tags.includes(tag)) tags.push(tag);
   // keep Premier Elite from also tagging Premier
@@ -206,7 +216,10 @@ function parseDeposits(page, source) {
   const rows = [];
   for (const tbl of page.tables) {
     const found = analyseDepositTable(tbl, page);
-    const tags = conditionsFrom((tbl.context || '').slice(-300));
+    const ctx = (tbl.context || '');
+    // nearby heading text: conditions such as 新資金 / 網上; customer tiers only if right next to the table
+    const tags = [...new Set([...conditionsFrom(ctx.slice(-140), { noTier: true }), ...conditionsFrom(ctx.slice(-50))])];
+    if (/new-?customer|newcustomer|new_customer|新客/i.test(source.url || '')) tags.push('新客戶');
     for (const f of found) {
       const segTags = conditionsFrom((f.segment || '') + ' ' + (f.tierLabel || ''));
       rows.push({

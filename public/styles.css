@@ -232,3 +232,8 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
   #cmp .bank-cell select.rel { font-size: .7rem; padding: 1px 2px; min-height: 24px; width: 56px; }
   .picker-groups { grid-template-columns: 1fr; }
 }
+
+/* board (non-promotional) rates: quieter so they don't read like errors */
+.cell.board .v { color: var(--ink-3); font-weight: 500; }
+.tag.board { color: var(--ink-3); background: transparent; border: 1px solid var(--line); font-weight: 500; }
+@media (max-width: 720px) { #cmp .cell .meta .tag.board { font-size: .58rem; padding: 0 2px; } }
