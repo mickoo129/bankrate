@@ -320,3 +320,17 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
   .me-actions .btn { flex: 1; }
   .legend-line .best { display: none; }
 }
+
+/* FX deposit calculator */
+.adv { border-top: 1px dashed var(--line); padding-top: 10px; }
+.adv summary { cursor: pointer; font-size: .86rem; color: var(--ink-2); min-height: 32px; }
+.adv .f-row { margin-top: 8px; align-items: center; }
+.adv .q-help { margin: 0; flex: 1 1 240px; }
+.steps { margin: 0; padding-left: 1.3em; }
+.steps li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: .9rem; }
+.steps li b { font: 600 1rem var(--num); white-space: nowrap; }
+.td-sum { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; font-size: .92rem; }
+.td-sum b { font: 700 1.2rem var(--num); }
+.worse { color: var(--promo); }
+.rk-rate.neg { color: var(--down); }
+#tdList .rk-rate { font-size: 1.25rem; }

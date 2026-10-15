@@ -119,19 +119,23 @@
   <!-- 外幣定期計算 -->
   <section id="tab-fxtd" class="panel" role="tabpanel" hidden>
     <div class="title-row"><h1>外幣定期：扣埋換匯實際賺幾多？</h1></div>
-    <div class="grid2">
-      <div class="filters card">
-        <div class="f-col">
-          <label class="field"><span>港元本金</span><span class="input"><b>HKD</b><input id="tdAmt" inputmode="numeric" value="100,000" aria-label="港元本金"></span></label>
-          <label class="field"><span>換成</span><span class="input"><select id="tdCcy" aria-label="外幣"></select></span></label>
-          <label class="field"><span>存期</span><span class="input"><select id="tdTenor" aria-label="存期"></select></span></label>
-          <label class="field"><span>外幣定期年息 %</span><span class="input"><input id="tdRate" inputmode="decimal" aria-label="外幣年息"></span></label>
-          <label class="field"><span>每次換匯差價 %</span><span class="input"><input id="tdSpread" inputmode="decimal" aria-label="換匯差價"></span></label>
-          <label class="field"><span>到期時外幣升跌 %</span><span class="input"><input id="tdMove" inputmode="decimal" value="0" aria-label="外幣升跌"></span></label>
-        </div>
+    <div class="filters card">
+      <div class="f-row">
+        <label class="field"><span>港元本金</span><span class="input"><b>HKD</b><input id="tdAmt" inputmode="numeric" value="100,000" aria-label="港元本金"></span></label>
+        <div class="field"><span>換成</span><div class="seg" id="tdCcy" role="radiogroup" aria-label="外幣"></div></div>
+        <div class="field"><span>存期</span><div class="seg" id="tdTenor" role="radiogroup" aria-label="存期"></div></div>
       </div>
-      <div class="card result" id="tdResult"></div>
+      <details class="adv">
+        <summary>進階：假設到期時外幣升跌</summary>
+        <div class="f-row">
+          <label class="field"><span>外幣對港元升跌（%）</span><span class="input"><input id="tdMove" inputmode="decimal" value="0" aria-label="外幣升跌百分比"></span></label>
+          <p class="q-help">例如輸入 -2，即係到期時外幣跌咗 2%。美元同港元掛鈎，通常可以當 0。</p>
+        </div>
+      </details>
     </div>
+    <p class="caption" id="tdBase"></p>
+    <ol class="ranklist card" id="tdList"></ol>
+    <p class="note">每間銀行都用佢自己公布嘅電匯買入／賣出價計換匯成本；未有牌價嘅銀行用市場平均差價估算，會標明「估算」。息口按「我嘅情況」設定計（喺定期比較頁設定），包括要同時換外幣先有嘅優惠。實際成交價以銀行為準。</p>
   </section>
 
   <!-- 走勢 -->

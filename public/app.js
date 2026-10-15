@@ -389,55 +389,102 @@
   }
 
   // ---------- 外幣定期計算 ----------
-  function bestRate(ccy, tenor) {
+  // Every bank is priced with its own TT rates and its own deposit rate.
+  const td = { ccy: 'USD', tenor: 90, open: null };
+  function medianSpread(ccy) {
+    const m = mid().rates[ccy]; if (!m) return 0.004;
+    const s = [];
+    for (const b of (state.data ? state.data.banks : [])) { const f = (b.fx || {})[ccy]; if (f && f.sell > f.buy) s.push((f.sell - f.buy) / 2 / m); }
+    if (!s.length) return 0.004;
+    s.sort((x, y) => x - y);
+    return s[Math.floor(s.length / 2)];
+  }
+  // offers the user can get in a foreign currency (converting is the whole point here, so
+  // "convert-and-deposit" offers count); minimum amounts are compared in that currency
+  function bestForeign(b, ccy, tenor, units) {
+    return (b.deposits || []).filter((r) => {
+      if (r.currency !== ccy || r.tenorDays !== tenor || isExpired(r)) return false;
+      const c = r.conditions || []; const m = me(b.id);
+      if (r.minAmount && r.minAmount > units) return false;
+      if (!m.newCustomer && c.includes('新客戶')) return false;
+      if (!m.newFunds && c.includes('新資金')) return false;
+      if (!m.premium && isPremium(r)) return false;
+      return true;
+    }).sort((x, y) => y.rate - x.rate)[0] || null;
+  }
+  function bestHkd(tenor) {
     let best = null;
     for (const b of (state.data ? state.data.banks : [])) for (const r of b.deposits || []) {
-      if (r.currency !== ccy || r.tenorDays !== tenor || isExpired(r) || (r.conditions || []).includes('需經本行兌換')) continue;
-      if (!best || r.rate > best.r.rate) best = { b, r };
+      if (r.currency !== 'HKD' || r.tenorDays !== tenor) continue;
+      const amtSave = state.amount; state.amount = num($('#tdAmt').value);
+      const ok = !whyNot(r, b.id); state.amount = amtSave;
+      if (ok && (!best || r.rate > best.r.rate)) best = { b, r };
     }
     return best;
   }
-  function avgSpread(ccy) {
-    const m = mid().rates[ccy]; if (!m) return 0.4;
-    const s = [];
-    for (const b of (state.data ? state.data.banks : [])) { const f = (b.fx || {})[ccy]; if (f) s.push((f.sell - m) / m * 100); }
-    if (!s.length) return 0.4;
-    s.sort((a, b) => a - b);
-    return Math.max(0.05, +s[Math.floor(s.length / 2)].toFixed(2));
-  }
-  function fillTdDefaults() {
-    const ccy = $('#tdCcy').value, tenor = +$('#tdTenor').value;
-    const best = bestRate(ccy, tenor);
-    $('#tdRate').value = best ? best.r.rate : '';
-    $('#tdRate').dataset.src = best ? `${best.b.name}${best.r.type === 'promo' ? '優惠，可能有條件' : '牌價'}` : '';
-    $('#tdSpread').value = avgSpread(ccy);
-  }
   function renderTd() {
-    const ccy = $('#tdCcy').value, tenor = +$('#tdTenor').value, amt = num($('#tdAmt').value);
-    const rate = num($('#tdRate').value), s = num($('#tdSpread').value) / 100, move = num($('#tdMove').value) / 100;
+    const amt = num($('#tdAmt').value), ccy = td.ccy, tenor = td.tenor, move = num($('#tdMove').value) / 100;
+    const list = $('#tdList');
     const m = mid().rates[ccy];
-    const out = $('#tdResult');
-    if (!m || !amt) { out.innerHTML = '<p>未有匯價數據，暫時計唔到。</p>'; return; }
-    const days = DAYS(tenor);
-    const units = amt / (m * (1 + s));
-    const interest = units * rate / 100 * days / 365;
-    const back = (units + interest) * m * (1 + move) * (1 - s);
-    const gain = back - amt;
-    const annual = gain / amt * 365 / days * 100;
-    const fxCost = amt - units * m * (1 - s);
-    const hk = bestRate('HKD', tenor);
-    const hkGain = hk ? amt * hk.r.rate / 100 * days / 365 : null;
-    const breakeven = ((amt / ((units + interest) * m * (1 - s))) - 1) * 100;
-    const src = $('#tdRate').dataset.src;
-    const dp = ccy === 'JPY' ? 0 : 2;
-    out.innerHTML = `
-      <div class="row"><span>換成${esc(CCY_NAME[ccy])}（已扣差價）</span><b>${esc(ccy)} ${fmt(units, dp)}</b></div>
-      <div class="row"><span>${TENOR_LABEL(tenor)}利息・年息 ${pct(rate)}%${src ? `（${esc(src)}）` : ''}</span><b>${esc(ccy)} ${fmt(interest, dp)}</b></div>
-      <div class="row"><span>來回換匯成本</span><b class="neg">−HKD ${fmt(fxCost, 0)}</b></div>
-      <div class="row total"><span>到期換返港元淨賺</span><b class="${gain >= 0 ? 'pos-c' : 'neg'}">${gain >= 0 ? '+' : '−'}HKD ${fmt(Math.abs(gain), 0)}</b></div>
-      <div class="row"><span>折合實際年回報</span><b class="${annual >= 0 ? 'pos-c' : 'neg'}">${annual.toFixed(2)}%</b></div>
-      ${hk ? `<div class="row"><span>對比直接做港元${TENOR_LABEL(tenor)}（${esc(hk.b.name)} ${pct(hk.r.rate)}%）</span><b>+HKD ${fmt(hkGain, 0)}</b></div>` : ''}
-      <p>到期時${esc(CCY_NAME[ccy])}只要跌多過 <b>${Math.abs(breakeven).toFixed(2)}%</b> 就會蝕本金。${ccy === 'USD' ? '美元同港元掛鈎，匯率波動通常好細，主要成本係換匯差價。' : '呢個貨幣同港元冇掛鈎，匯率升跌可以遠大於利息。'}存期愈短，換匯成本佔回報嘅比例愈大。</p>`;
+    if (!state.data || !m || !amt) { list.innerHTML = '<li class="empty-msg">未有匯價數據，暫時計唔到。</li>'; return; }
+    const days = DAYS(tenor), dp = ccy === 'JPY' ? 0 : 2, sp = medianSpread(ccy);
+    const hk = bestHkd(tenor);
+    const hkGain = hk ? amt * hk.r.rate / 100 * days / 365 : 0;
+    $('#tdBase').innerHTML = hk
+      ? `對比：直接做港元${TENOR_LABEL(tenor)}，最高係${esc(hk.b.name)} ${pct(hk.r.rate)}%，到期賺 <b>HKD ${fmt(hkGain, 0)}</b>，冇匯率風險。`
+      : `港元${TENOR_LABEL(tenor)}暫時冇合適息口可以對比。`;
+    const rows = [];
+    for (const b of state.data.banks) {
+      const f = (b.fx || {})[ccy];
+      const sell = f ? f.sell : m * (1 + sp), buy = f ? f.buy : m * (1 - sp);
+      const units = amt / sell;
+      const r = bestForeign(b, ccy, tenor, units);
+      if (!r) continue;
+      const interest = units * r.rate / 100 * days / 365;
+      const back = (units + interest) * buy * (1 + move);
+      const fxCost = amt - units * buy;
+      const gain = back - amt;
+      const breakeven = (amt / ((units + interest) * buy) - 1) * 100;
+      rows.push({ b, r, f, sell, buy, units, interest, back, fxCost, gain, annual: gain / amt * 365 / days * 100, breakeven });
+    }
+    rows.sort((x, y) => y.gain - x.gain);
+    if (!rows.length) { list.innerHTML = `<li class="empty-msg">暫時未有銀行提供${esc(CCY_NAME[ccy])}${TENOR_LABEL(tenor)}定期息口，試吓揀另一個存期。</li>`; return; }
+    list.innerHTML = rows.map((x, i) => {
+      const k = x.b.id, open = td.open === k;
+      const worse = hk && x.gain < hkGain;
+      const n = needs(x.r);
+      return `<li class="rk${i === 0 && x.gain > 0 ? ' best' : ''}${open ? ' open' : ''}">
+        <button type="button" class="rk-head" data-td="${k}" aria-expanded="${open}">
+          <span class="rk-pos">${i + 1}</span>
+          <span class="rk-name"><b>${esc(x.b.name)}</b><small>${esc(CCY_NAME[ccy])}年息 ${pct(x.r.rate)}%・換匯成本 HKD ${fmt(x.fxCost, 0)}${x.f ? '' : '（估算）'}${worse ? '・<span class="worse">比做港元少</span>' : ''}</small></span>
+          <span class="rk-rate ${x.gain >= 0 ? '' : 'neg'}">${x.gain >= 0 ? '+' : '−'}${fmt(Math.abs(x.gain), 0)}<small> HKD</small></span>
+        </button>
+        ${open ? `<div class="rk-detail"><div class="detail-in">
+          <ol class="steps">
+            <li><span>用 HKD ${fmt(amt, 0)} 換${esc(CCY_NAME[ccy])}（銀行賣出價 ${fmt(x.sell, ccy === 'JPY' ? 5 : 4)}${x.f ? '' : '，估算'}）</span><b>${ccy} ${fmt(x.units, dp)}</b></li>
+            <li><span>${TENOR_LABEL(tenor)}定期，年息 ${pct(x.r.rate)}% ${x.r.type === 'promo' ? '優惠' : '牌價'}</span><b>+${ccy} ${fmt(x.interest, dp)}</b></li>
+            <li><span>到期換返港元（銀行買入價 ${fmt(x.buy * (1 + move), ccy === 'JPY' ? 5 : 4)}${move ? `，已計外幣${move > 0 ? '升' : '跌'} ${Math.abs(move * 100)}%` : ''}）</span><b>HKD ${fmt(x.back, 0)}</b></li>
+          </ol>
+          <div class="td-sum"><span>淨賺（已扣換匯成本 HKD ${fmt(x.fxCost, 0)}）</span><b class="${x.gain >= 0 ? 'pos-c' : 'neg'}">${x.gain >= 0 ? '+' : '−'}HKD ${fmt(Math.abs(x.gain), 0)}</b></div>
+          <div class="td-sum"><span>折合實際年回報</span><b>${x.annual.toFixed(2)}%</b></div>
+          <p class="o-needs">${n.length ? '條件：' + n.map(esc).join('・') : '冇特別條件'}</p>
+          <p class="o-why">到期時${esc(CCY_NAME[ccy])}只要跌多過 ${Math.abs(x.breakeven).toFixed(2)}% 就會蝕本金。${ccy === 'USD' ? '美元同港元掛鈎，波動通常好細。' : '呢個貨幣同港元冇掛鈎，匯率升跌可以大過利息。'}</p>
+          <p class="d-foot"><a href="${esc(x.r.url || x.b.site)}" target="_blank" rel="noopener">睇銀行原文及條款</a></p>
+        </div></div>` : ''}
+      </li>`;
+    }).join('');
+  }
+  function setupTd() {
+    seg($('#tdCcy'), CCY.slice(1).map((c) => ({ v: c.code, label: c.name })), td.ccy, (v) => { td.ccy = v; td.open = null; renderTd(); });
+    seg($('#tdTenor'), TENORS.map((t) => ({ v: t.d, label: t.label })), td.tenor, (v) => { td.tenor = v; td.open = null; renderTd(); });
+    $('#tdAmt').addEventListener('input', renderTd);
+    $('#tdAmt').addEventListener('blur', () => { $('#tdAmt').value = fmt(num($('#tdAmt').value)); });
+    $('#tdMove').addEventListener('input', renderTd);
+    $('#tdList').addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      const h = e.target.closest('[data-td]'); if (!h) return;
+      td.open = td.open === h.dataset.td ? null : h.dataset.td; renderTd();
+    });
   }
 
   // ---------- 走勢 ----------
@@ -541,11 +588,7 @@
     $('#fxAmt').addEventListener('blur', () => { $('#fxAmt').value = fmt(num($('#fxAmt').value)); });
     $('#fxSwap').onclick = () => { const a = $('#fxFrom').value; $('#fxFrom').value = $('#fxTo').value; $('#fxTo').value = a; renderFx(); };
 
-    fillSelect($('#tdCcy'), CCY.slice(1).map((c) => ({ v: c.code, label: c.name })), 'USD');
-    fillSelect($('#tdTenor'), TENORS.slice(1).map((t) => ({ v: t.d, label: t.label })), 90);
-    $('#tdCcy').onchange = $('#tdTenor').onchange = () => { fillTdDefaults(); renderTd(); };
-    ['#tdAmt', '#tdRate', '#tdSpread', '#tdMove'].forEach((s) => $(s).addEventListener('input', () => { if (s === '#tdRate') $('#tdRate').dataset.src = '自訂'; renderTd(); }));
-    $('#tdAmt').addEventListener('blur', () => { $('#tdAmt').value = fmt(num($('#tdAmt').value)); });
+    setupTd();
 
     seg($('#tCcy'), ccyItems, state.tCcy, (v) => { state.tCcy = v; renderTrend(); });
     seg($('#tTenor'), tenorItems, state.tTenor, (v) => { state.tTenor = v; renderTrend(); });
@@ -567,7 +610,7 @@
     $('#updated').innerHTML = `更新於 <b>${esc(timeAgo(data.updatedAt))}</b><br>${ok} 間銀行`;
     fillSelect($('#tBank'), [{ v: '', label: '（唔比較）' }, ...data.banks.filter((b) => b.deposits && b.deposits.length).map((b) => ({ v: b.id, label: b.name }))], state.tBank);
     if (state.banks) state.banks = state.banks.filter((id) => data.banks.some((b) => b.id === id));
-    renderMe(); renderPicker(); renderRates(); renderFx(); fillTdDefaults(); renderTd(); renderTrend(); renderStatus();
+    renderMe(); renderPicker(); renderRates(); renderFx(); renderTd(); renderTrend(); renderStatus();
   }
 
   document.addEventListener('DOMContentLoaded', init);
