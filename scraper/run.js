@@ -115,7 +115,8 @@ async function scrapeBank(context, bank, mid, report) {
 
   while (queue.length && visited.size < MAX_PAGES_PER_BANK) {
     const item = queue.shift();
-    const key = item.url.replace(/#.*$/, '').replace(/\/$/, '');
+    item.url = canonical(item.url);
+    const key = item.url;
     if (visited.has(key)) continue;
     visited.add(key);
     const rep = { bank: bank.id, url: item.url, ok: false };
@@ -129,7 +130,14 @@ async function scrapeBank(context, bank, mid, report) {
       const type = guessType(item.type, data);
       const rows = rowsFromPage(data, type, finalUrl).filter((r) => r.tenorDays >= 7 && r.tenorDays <= 1100 && r.rate < 20);
       const end = validUntil(data.text);
-      rows.forEach((r) => { if (r.type === 'promo' && end) r.validUntil = end; });
+      const today = hkDate();
+      rows.forEach((r) => {
+        if (r.type === 'board') r.conditions = conditionsOnlyFromSegment(r);
+        if (r.type === 'promo' && end) r.validUntil = end;
+      });
+      const before = rows.length;
+      for (let k = rows.length - 1; k >= 0; k--) if (rows[k].validUntil && rows[k].validUntil < today) rows.splice(k, 1);
+      if (before && !rows.length) rep.note = 'offer expired ' + end;
       const f = mid ? parseFx(data, mid.rates) : {};
       rep.rows = rows.length;
       rep.fx = Object.keys(f);
@@ -144,8 +152,9 @@ async function scrapeBank(context, bank, mid, report) {
           if (!l.href || !sameSite(l.href, bank.site)) continue;
           const hay = l.href + ' ' + l.text;
           if (!LINK_WANT.test(hay) || LINK_AVOID.test(hay)) continue;
-          if (/\/en[\/-]|\/eng\/|english|lang=en/i.test(l.href)) continue; // prefer Chinese pages
-          queue.push({ url: l.href, discovered: true });
+          if (VARIANT.test(l.href) || looksArchived(l.href)) continue; // prefer current Traditional Chinese pages
+          if (bank.exclude && new RegExp(bank.exclude, 'i').test(l.href)) continue;
+          queue.push({ url: canonical(l.href), discovered: true });
         }
       }
     } catch (e) {
@@ -166,6 +175,28 @@ async function scrapeBank(context, bank, mid, report) {
   }));
   return { deposits: uniq, fx, sources: Array.from(sources), offerEnd };
 }
+
+function conditionsOnlyFromSegment(r) {
+  const { conditionsFrom } = require('./parse');
+  return conditionsFrom((r.segment || '') + ' ' + (r.tierLabel || ''));
+}
+// strip tracking parameters so the same page is not visited twice
+function canonical(url) {
+  try {
+    const u = new URL(url);
+    u.hash = '';
+    for (const k of Array.from(u.searchParams.keys())) if (/^(cmpid|pid|intcid|utm_|icid|cid|ref|source)/i.test(k)) u.searchParams.delete(k);
+    return u.toString().replace(/\/$/, '');
+  } catch { return url; }
+}
+// pages whose URL carries a date older than ~10 months are archived offers
+function looksArchived(url) {
+  const m = url.match(/(20[12]\d)[\/_-]?([01]\d)[\/_-]?([0-3]\d)/);
+  if (!m) return false;
+  const t = Date.UTC(+m[1], +m[2] - 1, +m[3]);
+  return Number.isFinite(t) && Date.now() - t > 300 * 864e5;
+}
+const VARIANT = /zh-cn|zh_cn|\/sc\/|_sc\/|hongkong_sc|simplified|\/en\/|\/en-hk\/|\/eng\/|english|lang=en|\/hongkong\/|\/en_/i;
 
 function summarise(rows) {
   const best = {};

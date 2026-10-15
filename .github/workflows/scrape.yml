@@ -44,7 +44,7 @@ jobs:
         run: |
           git config user.name "rates-bot"
           git config user.email "rates-bot@users.noreply.github.com"
-          git add public/data/latest.json public/data/history.json
+          git add public/data/latest.json public/data/history.json public/data/report.json
           if git diff --cached --quiet; then echo "no change"; exit 0; fi
           git commit -m "data: update rates $(TZ=Asia/Hong_Kong date '+%Y-%m-%d %H:%M') [skip netlify]"
           git pull --rebase origin main

@@ -1,1 +1,127 @@
-<!doctype html><meta charset="utf-8"><title>建置中</title><p>網站建置中</p>
+<!doctype html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>定存息口通｜香港銀行定期息口及匯價比較</title>
+<meta name="description" content="自動更新香港各大銀行及虛擬銀行港元、美元、人民幣、澳元、英鎊、日圓定期存款息口，附優惠條件、到期日、歷史走勢及匯價比較。">
+<meta name="theme-color" content="#12372a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2312372a'/%3E%3Ctext x='16' y='22' font-size='17' text-anchor='middle' fill='%23eef3ee' font-family='sans-serif'%3E%25%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Noto+Sans+HK:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="./">定存息口通</a>
+    <p class="stamp-time" id="updated">讀取中…</p>
+  </div>
+  <nav class="tabs wrap" role="tablist" aria-label="功能">
+    <button role="tab" aria-selected="true" data-tab="rates">定期息口</button>
+    <button role="tab" aria-selected="false" data-tab="fx">匯價</button>
+    <button role="tab" aria-selected="false" data-tab="fxtd">外幣定期回報</button>
+    <button role="tab" aria-selected="false" data-tab="trend">息口走勢</button>
+    <button role="tab" aria-selected="false" data-tab="about">資料來源</button>
+  </nav>
+</header>
+
+<main class="wrap">
+  <!-- 定期息口 -->
+  <section id="tab-rates" class="panel" role="tabpanel">
+    <h1 class="lead">邊間銀行定期最高息？</h1>
+    <div class="controls">
+      <div class="ctl">
+        <span class="ctl-label" id="lbl-ccy">貨幣</span>
+        <div class="chips" id="ccy" role="radiogroup" aria-labelledby="lbl-ccy"></div>
+      </div>
+      <div class="ctl">
+        <span class="ctl-label" id="lbl-tenor">存期</span>
+        <div class="chips" id="tenor" role="radiogroup" aria-labelledby="lbl-tenor"></div>
+      </div>
+      <div class="ctl ctl-row">
+        <label class="amount">
+          <span class="ctl-label">存款金額</span>
+          <span class="amount-box"><span id="amt-ccy">HKD</span><input id="amount" inputmode="numeric" value="100,000" aria-label="存款金額"></span>
+        </label>
+        <label class="toggle"><input type="checkbox" id="plainOnly"> 只睇冇特別條件嘅息口</label>
+        <label class="toggle"><input type="checkbox" id="hideFx"> 唔計「外幣兌換」優惠</label>
+      </div>
+    </div>
+    <p class="hint" id="rates-hint"></p>
+    <ol class="ledger" id="ledger" aria-live="polite"></ol>
+  </section>
+
+  <!-- 匯價 -->
+  <section id="tab-fx" class="panel" role="tabpanel" hidden>
+    <h1 class="lead">換錢，每間銀行俾幾多？</h1>
+    <div class="controls">
+      <div class="ctl ctl-row">
+        <label class="amount">
+          <span class="ctl-label">我有</span>
+          <span class="amount-box"><select id="fxFrom" aria-label="原本貨幣"></select><input id="fxAmt" inputmode="decimal" value="10,000" aria-label="金額"></span>
+        </label>
+        <button class="swap" id="fxSwap" aria-label="對調貨幣">⇄</button>
+        <label class="amount">
+          <span class="ctl-label">換成</span>
+          <span class="amount-box"><select id="fxTo" aria-label="目標貨幣"></select></span>
+        </label>
+      </div>
+    </div>
+    <div class="mid" id="fxMid"></div>
+    <ol class="ledger" id="fxLedger" aria-live="polite"></ol>
+    <p class="note">銀行價係電匯（TT）牌價，網上或分行實際成交價可能有優惠或者唔同；市場參考價每日更新一次，只作比較之用，銀行唔會用呢個價同你換。</p>
+  </section>
+
+  <!-- 外幣定期回報 -->
+  <section id="tab-fxtd" class="panel" role="tabpanel" hidden>
+    <h1 class="lead">做外幣定期，扣埋換匯實際賺幾多？</h1>
+    <div class="controls">
+      <div class="ctl ctl-row">
+        <label class="amount"><span class="ctl-label">本金</span><span class="amount-box">HKD<input id="tdAmt" inputmode="numeric" value="100,000" aria-label="港元本金"></span></label>
+        <label class="amount"><span class="ctl-label">換成</span><span class="amount-box"><select id="tdCcy" aria-label="外幣"></select></span></label>
+        <label class="amount"><span class="ctl-label">存期</span><span class="amount-box"><select id="tdTenor" aria-label="存期"></select></span></label>
+      </div>
+      <div class="ctl ctl-row">
+        <label class="amount"><span class="ctl-label">外幣定期年息 (%)</span><span class="amount-box"><input id="tdRate" inputmode="decimal" aria-label="外幣年息"></span></label>
+        <label class="amount"><span class="ctl-label">換匯差價（每次）%</span><span class="amount-box"><input id="tdSpread" inputmode="decimal" aria-label="換匯差價"></span></label>
+        <label class="amount"><span class="ctl-label">到期時外幣升跌 %</span><span class="amount-box"><input id="tdMove" inputmode="decimal" value="0" aria-label="外幣升跌"></span></label>
+      </div>
+    </div>
+    <div class="result" id="tdResult"></div>
+  </section>
+
+  <!-- 走勢 -->
+  <section id="tab-trend" class="panel" role="tabpanel" hidden>
+    <h1 class="lead">高息可以維持幾耐？</h1>
+    <div class="controls">
+      <div class="ctl"><span class="ctl-label" id="lbl-tccy">貨幣</span><div class="chips" id="tCcy" role="radiogroup" aria-labelledby="lbl-tccy"></div></div>
+      <div class="ctl"><span class="ctl-label" id="lbl-tten">存期</span><div class="chips" id="tTenor" role="radiogroup" aria-labelledby="lbl-tten"></div></div>
+      <div class="ctl"><span class="ctl-label">比較銀行</span><select id="tBank" aria-label="比較銀行"></select></div>
+    </div>
+    <figure class="chart" id="chart"></figure>
+    <p class="note" id="trendNote"></p>
+  </section>
+
+  <!-- 資料來源 -->
+  <section id="tab-about" class="panel" role="tabpanel" hidden>
+    <h1 class="lead">數據點樣嚟？</h1>
+    <div class="prose">
+      <p>系統每兩個鐘自動打開各銀行嘅公開網頁，讀取定期存款息口表同匯價表。冇人手修改。</p>
+      <p>讀唔到嘅銀行（例如息口只放喺圖片或 PDF、網頁改版）會喺下面標示，網站會繼續顯示最後一次成功讀到嘅數據同時間。</p>
+      <p><strong>重要：</strong>所有息口只供參考，以銀行公布為準。好多高息有條件，例如只限新資金、指定客戶級別、網上開立，或者要先經該銀行兌換外幣；優惠亦有限期。開戶前請睇清楚原文條款。本網站唔提供任何投資建議。</p>
+    </div>
+    <table class="status" id="statusTable">
+      <thead><tr><th>銀行</th><th>狀態</th><th>最後成功更新</th><th>來源</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+</main>
+
+<footer class="foot wrap">
+  <p>息口只供參考，以銀行公布為準。數據自動收集自各銀行公開網頁。</p>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
