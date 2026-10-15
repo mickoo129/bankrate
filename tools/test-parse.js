@@ -84,4 +84,6 @@ assert.deepStrictEqual(rows.map((r) => r.tenorDays).sort(), [180, 90].sort());
 rows = parseDeposits({ tables: [{ index: 0, context: '特優港元定期存款優惠 (不論新舊資金)', grid: [['存款期', '港元'], ['3個月', '3.00%']] }] }, { type: 'promo', url: 'x' });
 assert.ok(!rows[0].conditions.includes('新資金'));
 
+rows = parseDeposits({ tables: [{ index: 0, context: '定期存款優惠 查看更多 | 特優(外幣兌換)定期存款優惠', grid: [['貨幣', '存期', '年利率'], ['HKD', '7天', '6.00%']] }] }, { type: 'promo', url: 'x' });
+assert.ok(rows[0].conditions.includes('需經本行兌換'));
 console.log('all parser tests passed');
