@@ -123,7 +123,7 @@ table.cmp { width: 100%; border-collapse: separate; border-spacing: 0; font-size
 .up, .down { font-style: normal; font-size: .7rem; font-weight: 700; }
 .up { color: var(--up); } .down { color: var(--down); }
 tr.muted td { color: var(--ink-3); }
-tr.group td { background: var(--surface-2); color: var(--ink-2); font-size: .8rem; text-align: left; padding: 7px 12px; }
+tr.group td { background: var(--surface-2); color: var(--ink-2); font-size: .8rem; text-align: left; padding: 9px 12px; white-space: normal; position: static; }
 
 /* detail row */
 tr.detail > td { background: var(--surface-2) !important; white-space: normal; text-align: left; padding: 0; }
@@ -174,15 +174,26 @@ tr.detail > td { background: var(--surface-2) !important; white-space: normal; t
 .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); background: var(--navy); color: #fff; padding: 10px 16px; border-radius: 8px; font-size: .9rem; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 20; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+@media (max-width: 960px) {
+  .cmp th, .cmp td { padding: 10px 8px; }
+  #cmp th:first-child, #cmp td:first-child { min-width: 104px; }
+  #cmp .cell .v { font-size: 1.05rem; }
+}
 @media (max-width: 720px) {
+  .tabs { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+  .tabs button { padding: 10px 10px 12px; font-size: .88rem; }
+  .fx-col { display: none; }
   .grid2 { grid-template-columns: 1fr; }
   .cmp th, .cmp td { padding: 9px 6px; }
-  .cmp th:first-child, .cmp td:first-child { min-width: 0; width: 76px; max-width: 76px; white-space: normal; padding-left: 10px; }
+  #cmp th:first-child, #cmp td:first-child { min-width: 0; width: 72px; max-width: 72px; white-space: normal; padding-left: 10px; }
+  #fxTable th:first-child, #fxTable td:first-child { min-width: 100px; }
+  #fxTable .bank-cell small { font-size: .68rem; }
   #cmp .bank-cell b { font-size: .86rem; line-height: 1.25; }
   #cmp .bank-cell small:not(.stale) { display: none; }
   #cmp .bank-cell small.stale { font-size: .66rem; }
   #cmp thead th { font-size: .74rem; padding: 9px 4px; }
-  #cmp .cell { padding: 8px 4px; }
+  #cmp .cell { padding: 8px 3px; }
+  #cmp thead th { padding-left: 3px; padding-right: 3px; }
   #cmp .cell .v { font-size: .98rem; }
   #cmp .cell .v small { font-size: .62rem; }
   #cmp .cell .meta { min-height: 12px; gap: 2px; }
@@ -193,3 +204,6 @@ tr.detail > td { background: var(--surface-2) !important; white-space: normal; t
   .input input { width: 7.2em; }
 }
 @media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+
+.fx-hint { display: none; }
+@media (max-width: 720px) { .fx-hint { display: block; } #cmp th:first-child, #cmp td:first-child { min-width: 0; } }

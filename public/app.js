@@ -254,13 +254,13 @@
     out.sort((x, y) => (y.got ?? -1) - (x.got ?? -1));
     const bestGot = Math.max(...out.map((o) => o.got ?? -1));
     const cur = CCY.slice(1);
-    $('#fxTable thead').innerHTML = `<tr><th scope="col">銀行</th><th scope="col" aria-sort="descending">你收到 ${esc(to)}</th><th scope="col">比市場價少</th>${cur.map((c) => `<th scope="col">${c.name}<br><small>買入／賣出</small></th>`).join('')}</tr>`;
+    $('#fxTable thead').innerHTML = `<tr><th scope="col">銀行</th><th scope="col" aria-sort="descending">你收到 ${esc(to)}</th><th scope="col">比市場價少</th>${cur.map((c) => `<th scope="col" class="fx-col">${c.name}<br><small>買入／賣出</small></th>`).join('')}</tr>`;
     $('#fxTable tbody').innerHTML = out.length ? out.map(({ b, got, fx }) => {
       const cost = got != null && midOut ? (1 - got / midOut) * 100 : null;
       return `<tr><th scope="row" class="bank-cell"><b>${esc(b.name)}</b><small>${esc(timeAgo(b.fxAt).split('（')[0])}</small></th>
         <td class="cell${got != null && got === bestGot ? ' best' : ''}"><div class="v">${got != null ? fmt(got, dp) : '—'}</div></td>
         <td>${cost != null ? `${cost.toFixed(2)}%` : '—'}</td>
-        ${cur.map((c) => `<td class="fx-pair">${fx[c.code] ? `<span class="v">${fmt(fx[c.code].buy, c.code === 'JPY' ? 5 : 4)}</span><br><span class="v">${fmt(fx[c.code].sell, c.code === 'JPY' ? 5 : 4)}</span>` : '—'}</td>`).join('')}</tr>`;
+        ${cur.map((c) => `<td class="fx-pair fx-col">${fx[c.code] ? `<span class="v">${fmt(fx[c.code].buy, c.code === 'JPY' ? 5 : 4)}</span><br><span class="v">${fmt(fx[c.code].sell, c.code === 'JPY' ? 5 : 4)}</span>` : '—'}</td>`).join('')}</tr>`;
     }).join('') : '<tr><td colspan="8" class="empty-msg">暫時未讀到銀行牌價。</td></tr>';
   }
 
