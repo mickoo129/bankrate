@@ -42,47 +42,61 @@
           <span>存款金額</span>
           <span class="input"><b id="amt-ccy">HKD</b><input id="amount" inputmode="numeric" value="100,000" aria-label="存款金額"></span>
         </label>
-        <div class="seg small" id="view" role="radiogroup" aria-label="顯示">
-          <button role="radio" data-v="rate" aria-checked="true">年利率</button>
-          <button role="radio" data-v="interest" aria-checked="false">到期利息</button>
+      </div>
+      <div class="me-row">
+        <p class="me-summary" id="meSummary"></p>
+        <div class="me-actions">
+          <button class="btn" id="meBtn" type="button" aria-expanded="false" aria-controls="mePanel">設定我嘅情況</button>
+          <button class="btn" id="pickerBtn" type="button" aria-expanded="false" aria-controls="picker">揀銀行</button>
         </div>
       </div>
-      <div class="f-row profile">
-        <label class="check"><input type="checkbox" id="pFund"> 筆錢係由其他銀行轉過嚟（新資金）</label>
-        <label class="check"><input type="checkbox" id="pFx"> 我會先經銀行換外幣</label>
-        <button class="btn picker-btn" id="pickerBtn" type="button" aria-expanded="false" aria-controls="picker">揀銀行</button>
+
+      <div class="sheet" id="mePanel" hidden>
+        <div class="q">
+          <h3>1. 你筆錢而家喺邊間銀行？</h3>
+          <p class="q-help">好多優惠只限「由其他銀行轉過嚟」嘅錢。揀咗之後，存返同一間銀行就唔會計呢類優惠。</p>
+          <span class="input"><select id="homeBank" aria-label="筆錢而家喺邊間銀行"></select></span>
+        </div>
+        <div class="q">
+          <h3>2. 你喺邊幾間銀行已經有戶口？</h3>
+          <p class="q-help">有戶口嘅銀行唔會計「只限新客戶」嘅優惠。可以揀多間，冇就唔使揀。</p>
+          <div class="chips" id="accChips"></div>
+        </div>
+        <div class="q">
+          <h3>3. 你喺邊間係高級理財客戶？</h3>
+          <p class="q-help">例如滙豐卓越理財、恒生優越理財、中銀「中銀理財」、渣打優先理財。通常要有幾十萬至一百萬以上資產先係。唔肯定就唔使揀。</p>
+          <div class="chips" id="premChips"></div>
+        </div>
+        <div class="sheet-foot">
+          <button class="btn" type="button" id="meReset">清除設定</button>
+          <button class="btn primary" type="button" id="meDone">完成</button>
+        </div>
       </div>
-      <div class="picker" id="picker" hidden>
-        <div class="picker-head">
-          <p>剔選要比較嘅銀行，並喺右邊揀你喺嗰間銀行嘅身份。只限新客戶或者高級理財客戶嘅息口，會按你揀嘅身份計。</p>
+
+      <div class="sheet" id="picker" hidden>
+        <div class="q">
+          <h3>只比較以下銀行</h3>
           <div class="picker-actions">
             <button class="btn" type="button" data-preset="all">全部</button>
             <button class="btn" type="button" data-preset="major">只睇大型銀行</button>
             <button class="btn" type="button" data-preset="virtual">只睇虛擬銀行</button>
             <button class="btn" type="button" data-preset="none">清除</button>
           </div>
+          <div class="picker-groups" id="pickerList"></div>
         </div>
-        <div class="picker-groups" id="pickerList"></div>
-        <div class="picker-foot"><button class="btn primary" type="button" id="pickerDone">完成</button></div>
+        <div class="sheet-foot"><button class="btn primary" type="button" id="pickerDone">完成</button></div>
       </div>
     </div>
 
+    <div class="seg tenor-seg" id="tenorSeg" role="radiogroup" aria-label="存期"></div>
     <p class="caption" id="caption"></p>
-    <div class="table-wrap card">
-      <table class="cmp" id="cmp">
-        <thead></thead>
-        <tbody></tbody>
-      </table>
+    <div class="table-wrap card wide-only">
+      <table class="cmp" id="cmp"><thead></thead><tbody></tbody></table>
     </div>
+    <ol class="ranklist card narrow-only" id="rank"></ol>
     <p class="legend-line">
-      <span class="lg best">每欄最高</span>
-      <span class="lg"><i class="tag promo">優惠</i> 推廣息口，有限期／有條件</span>
-      <span class="lg"><i class="tag board">牌價</i> 銀行標準息口，冇條件</span>
-      <span class="lg"><i class="more-hint">另有 X%</i> 有更高息優惠，但你未符合條件（撳格仔睇原因）</span>
-      <span class="lg"><i class="tag board">牌價</i> 冇優惠，銀行標準息口</span>
-      <span class="lg"><i class="up">▲</i><i class="down">▼</i> 同 7 日前比較</span>
-      <span class="lg">撳銀行名下面嘅身份可以逐間改</span>
-      <span class="lg">撳任何一格睇詳細條件</span>
+      <span class="lg best">每個存期最高</span>
+      <span class="lg"><i class="dot-cond"></i>有條件，撳入去睇</span>
     </p>
   </section>
 
