@@ -207,3 +207,28 @@ tr.detail > td { background: var(--surface-2) !important; white-space: normal; t
 
 .fx-hint { display: none; }
 @media (max-width: 720px) { .fx-hint { display: block; } #cmp th:first-child, #cmp td:first-child { min-width: 0; } }
+
+/* bank picker + per-bank relationship */
+.profile { align-items: center; }
+.picker-btn { margin-left: auto; }
+.btn.primary { background: var(--navy); color: #fff; border-color: var(--navy); }
+.btn.primary:hover { color: #fff; opacity: .9; }
+.picker { border-top: 1px dashed var(--line); padding-top: 14px; }
+.picker-head p { margin: 0 0 10px; font-size: .86rem; color: var(--ink-2); max-width: 52em; }
+.picker-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.picker-actions .btn { min-height: 34px; padding: 5px 12px; font-size: .85rem; }
+.picker-groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 6px 24px; }
+.pg h4 { margin: 8px 0 4px; font-size: .8rem; color: var(--ink-2); font-weight: 500; }
+.pick-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px solid var(--line); }
+.pick-row.nodata { opacity: .6; }
+.pick-row small { color: var(--ink-3); font-size: .75rem; }
+.picker-foot { display: flex; justify-content: flex-end; margin-top: 12px; }
+select.rel { font: 500 .74rem var(--sans); color: var(--ink-2); background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px; padding: 2px 4px; min-height: 26px; cursor: pointer; max-width: 100%; }
+select.rel.rel-existing { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); }
+select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, var(--promo) 40%, var(--line)); }
+.bank-cell select.rel { display: block; margin-top: 3px; }
+@media (max-width: 720px) {
+  .picker-btn { margin-left: 0; width: 100%; }
+  #cmp .bank-cell select.rel { font-size: .7rem; padding: 1px 2px; min-height: 24px; width: 56px; }
+  .picker-groups { grid-template-columns: 1fr; }
+}

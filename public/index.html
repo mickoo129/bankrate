@@ -47,13 +47,24 @@
           <button role="radio" data-v="interest" aria-checked="false">到期利息</button>
         </div>
       </div>
-      <fieldset class="f-row profile">
-        <legend>我嘅情況（只顯示我攞到嘅息口）</legend>
-        <label class="check"><input type="checkbox" id="pNew"> 我係新客戶</label>
-        <label class="check"><input type="checkbox" id="pFund"> 我有新資金</label>
-        <label class="check"><input type="checkbox" id="pPrem"> 我係高級理財客戶</label>
+      <div class="f-row profile">
+        <label class="check"><input type="checkbox" id="pFund"> 筆錢係由其他銀行轉過嚟（新資金）</label>
         <label class="check"><input type="checkbox" id="pFx"> 我會先經銀行換外幣</label>
-      </fieldset>
+        <button class="btn picker-btn" id="pickerBtn" type="button" aria-expanded="false" aria-controls="picker">揀銀行</button>
+      </div>
+      <div class="picker" id="picker" hidden>
+        <div class="picker-head">
+          <p>剔選要比較嘅銀行，並喺右邊揀你喺嗰間銀行嘅身份。只限新客戶或者高級理財客戶嘅息口，會按你揀嘅身份計。</p>
+          <div class="picker-actions">
+            <button class="btn" type="button" data-preset="all">全部</button>
+            <button class="btn" type="button" data-preset="major">只睇大型銀行</button>
+            <button class="btn" type="button" data-preset="virtual">只睇虛擬銀行</button>
+            <button class="btn" type="button" data-preset="none">清除</button>
+          </div>
+        </div>
+        <div class="picker-groups" id="pickerList"></div>
+        <div class="picker-foot"><button class="btn primary" type="button" id="pickerDone">完成</button></div>
+      </div>
     </div>
 
     <p class="caption" id="caption"></p>
@@ -67,6 +78,7 @@
       <span class="lg best">每欄最高</span>
       <span class="lg"><i class="tag promo">優惠</i> 推廣息口，有限期／有條件</span>
       <span class="lg"><i class="up">▲</i><i class="down">▼</i> 同 7 日前比較</span>
+      <span class="lg">撳銀行名下面嘅身份可以逐間改</span>
       <span class="lg">撳任何一格睇詳細條件</span>
     </p>
   </section>
