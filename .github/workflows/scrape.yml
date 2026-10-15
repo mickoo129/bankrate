@@ -1,0 +1,51 @@
+name: 更新息口及匯價
+
+on:
+  schedule:
+    # 每 2 小時一次（UTC 時間；即香港時間 00:17、02:17 …）
+    - cron: '17 */2 * * *'
+  workflow_dispatch:
+    inputs:
+      only:
+        description: '只更新某幾間銀行（例如 hsbc,sc），留空 = 全部'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scrape
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Install browser
+        run: npx playwright install --with-deps chromium
+      - name: Scrape
+        run: node scraper/run.js ${{ github.event.inputs.only && format('--only={0}', github.event.inputs.only) || '' }}
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report
+          path: public/data/report.json
+          retention-days: 7
+      - name: Commit data
+        run: |
+          git config user.name "rates-bot"
+          git config user.email "rates-bot@users.noreply.github.com"
+          git add public/data/latest.json public/data/history.json
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git commit -m "data: update rates $(TZ=Asia/Hong_Kong date '+%Y-%m-%d %H:%M') [skip netlify]"
+          git pull --rebase origin main
+          git push

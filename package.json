@@ -1,0 +1,18 @@
+{
+  "name": "hk-bank-rates",
+  "version": "1.0.0",
+  "description": "香港銀行定期息口及匯價比較",
+  "scripts": {
+    "scrape": "node scraper/run.js",
+    "test": "node tools/test-parse.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "terser": "^5.51.2"
+  },
+  "dependencies": {
+    "playwright": "^1.64.1"
+  },
+  "private": true
+}
