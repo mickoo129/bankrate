@@ -81,8 +81,8 @@ function parseRate(cell, pctTable) {
   if (!cell) return null;
   const c = cell.replace(/\s+/g, '');
   if (/^(-|—|–|N\/A|不適用|不設|--)$/i.test(c)) return null;
-  let m = c.match(/^(?:年利率|最高|高達|Upto|up to)?(\d{1,2}(?:\.\d{1,5})?)%(?:p\.?a\.?|\*+|#|\^|[\[(（]?[a-zA-Z0-9]{0,2}[\])）]?)?$/i);
-  if (!m && pctTable) m = c.match(/^(\d{1,2}\.\d{1,5})\*{0,3}$/);
+  let m = c.match(/^(?:年利率|最高|高達|Upto|up to)?(\d{1,2}(?:\.\d{1,6})?)%(?:p\.?a\.?|\*+|#|\^|[\[(（]?[a-zA-Z0-9]{0,2}[\])）]?)?$/i);
+  if (!m && pctTable) m = c.match(/^(\d{1,2}\.\d{1,6})\*{0,3}$/);
   if (!m) return null;
   const v = parseFloat(m[1]);
   if (!(v > 0 && v < 20)) return null;
@@ -111,14 +111,15 @@ const STRIP_FOR_SEGMENT = new RegExp(
     '\\d[\\d,.]*', '萬', '至', '或以上', '以上', '或', 'to', 'and above', 'or above', 'above',
     '年利率', '利率', '存款額', '存款金額', '金額', 'p\\.a\\.', '%', '\\(', '\\)', '（', '）', '/', '-', '–',
     'Deposit Amount', 'Interest Rate', 'Amount', 'rate', '存款期', 'Tenor',
-    '新資金', '特惠', '優惠', '定期存款', '定存', '貨幣', '達', '起存', '最低', '每', '筆', 'p\\.a', '\\*', '#', '：', ':',
+    '新資金', '特惠', '優惠', '定期存款', '定存', '貨幣', '達(?=\\s*[港美人澳英日HUCAGJ\\d])', '起存', '最低', '每', '筆', 'p\\.a', '\\*', '#', '：', ':',
     'New Funds?', 'Time Deposits?', 'Preferential', 'Promotional', 'Minimum', 'Currency', 'of',
   ].join('|'),
   'gi'
 );
 function segmentOf(header) {
   const s = (header || '').replace(STRIP_FOR_SEGMENT, ' ').replace(/\s+/g, ' ').trim();
-  return s.length >= 2 && s.length <= 40 ? s : '';
+  const letters = (s.match(/[\u4e00-\u9fffA-Za-z]/g) || []).length;
+  return letters >= 2 && s.length <= 40 ? s : '';
 }
 
 // ---- deposit tables -------------------------------------------------------

@@ -27,11 +27,11 @@
 
   const state = {
     data: null, history: null, liveMid: null,
-    ccy: 'HKD', tenor: 90, amount: 100000, plainOnly: false, hideFx: false,
+    ccy: 'HKD', tenor: 90, amount: 100000, plainOnly: false, incFx: false,
     tCcy: 'HKD', tTenor: 90, tBank: '',
   };
   try { Object.assign(state, JSON.parse(localStorage.getItem('dep-prefs') || '{}')); } catch {}
-  const save = () => { try { localStorage.setItem('dep-prefs', JSON.stringify({ ccy: state.ccy, tenor: state.tenor, amount: state.amount, plainOnly: state.plainOnly, hideFx: state.hideFx })); } catch {} };
+  const save = () => { try { localStorage.setItem('dep-prefs', JSON.stringify({ ccy: state.ccy, tenor: state.tenor, amount: state.amount, plainOnly: state.plainOnly, incFx: state.incFx })); } catch {} };
 
   // ---------- data loading ----------
   async function getJson(name) {
@@ -63,6 +63,7 @@
     if (mins < 60 * 48) return `${local}（${Math.round(mins / 60)} 小時前）`;
     return `${local}（${Math.round(mins / 1440)} 日前）`;
   }
+  const todayHK = () => new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);
   const shortDate = (iso) => { const [, m, d] = iso.split('-'); return `${+m}月${+d}日`; };
 
   // ---------- chips ----------
@@ -81,7 +82,8 @@
     if (r.currency !== state.ccy || r.tenorDays !== state.tenor) return false;
     if (r.minAmount && r.minAmount > state.amount) return false;
     if (state.plainOnly && ((r.conditions && r.conditions.length) || r.segment)) return false;
-    if (state.hideFx && (r.conditions || []).includes('需經本行兌換')) return false;
+    if (!state.incFx && (r.conditions || []).includes('需經本行兌換')) return false;
+    if (r.validUntil && r.validUntil < todayHK()) return false; // expired offer
     return true;
   }
   function condTags(r) {
@@ -89,6 +91,7 @@
     if (r.type === 'promo') out.push('<span class="chop">優惠</span>');
     for (const c of r.conditions || []) out.push(`<span class="chop">${esc(c)}</span>`);
     if (r.segment) out.push(`<span class="plain">${esc(r.segment)}</span>`);
+    if (r.type === 'promo' && !(r.conditions || []).length && !r.segment) out.push('<span class="plain">條件請睇銀行原文</span>');
     if (!out.length) out.push('<span class="plain">牌價・冇特別條件</span>');
     return out.join(' ');
   }
@@ -122,11 +125,11 @@
     }
     list.innerHTML = lines.map(({ b, best, rows }, i) => {
       const interest = state.amount * best.rate / 100 * days / 365;
-      const others = (b.deposits || []).filter((r) => r.currency === state.ccy).sort((x, y) => x.tenorDays - y.tenorDays || y.rate - x.rate).slice(0, 40);
+      const others = (b.deposits || []).filter((r) => r.currency === state.ccy && !(r.validUntil && r.validUntil < todayHK())).sort((x, y) => x.tenorDays - y.tenorDays || y.rate - x.rate).slice(0, 40);
       const staleNote = b.status === 'stale' ? `<span class="stale">數據截至 ${timeAgo(b.lastSuccess)}</span>` : '';
       return `<li class="line">
         <span class="pos">${i + 1}</span>
-        <div><div class="bank">${esc(b.name)}<small>${esc(b.nameEn)}</small></div></div>
+        <div><div class="bank">${esc(b.name)}${b.nameEn && b.nameEn !== b.name ? `<small>${esc(b.nameEn)}</small>` : ''}</div></div>
         <div class="rate">${pct(best.rate)}<span>%</span></div>
         <div class="sub">${condTags(best)} ${best.minAmount ? `<span>起存 ${state.ccy} ${fmt(best.minAmount)}</span>` : ''} ${endsTag(best)} ${staleNote}
           <a class="src" href="${esc(best.url)}" target="_blank" rel="noopener">銀行原文</a></div>
@@ -162,7 +165,7 @@
     $('#fxLedger').innerHTML = out.length ? out.map(({ b, got }, i) => {
       const cost = midOut ? (1 - got / midOut) * 100 : null;
       return `<li class="line"><span class="pos">${i + 1}</span>
-        <div><div class="bank">${esc(b.name)}<small>${esc(b.nameEn)}</small></div></div>
+        <div><div class="bank">${esc(b.name)}${b.nameEn && b.nameEn !== b.name ? `<small>${esc(b.nameEn)}</small>` : ''}</div></div>
         <div class="rate">${fmt(got, dp)}<span> ${esc(to)}</span></div>
         <div class="sub">${cost != null ? `<span>比市場價少 ${cost.toFixed(2)}%</span>` : ''} <span>牌價時間：${timeAgo(b.fxAt)}</span></div></li>`;
     }).join('') : '<li class="empty">暫時未讀到銀行嘅電匯牌價，可以先參考上面嘅市場價。</li>';
@@ -172,7 +175,7 @@
   function bestRate(ccy, tenor) {
     let best = null;
     for (const b of (state.data ? state.data.banks : [])) for (const r of b.deposits || []) {
-      if (r.currency === ccy && r.tenorDays === tenor && (!best || r.rate > best.r.rate)) best = { b, r };
+      if (r.currency === ccy && r.tenorDays === tenor && !(r.conditions || []).includes('需經本行兌換') && !(r.validUntil && r.validUntil < todayHK()) && (!best || r.rate > best.r.rate)) best = { b, r };
     }
     return best;
   }
@@ -319,9 +322,9 @@
     $('#amount').value = fmt(state.amount);
     amountInput($('#amount'), (v) => { state.amount = v; save(); renderRates(); });
     $('#plainOnly').checked = state.plainOnly;
-    $('#hideFx').checked = state.hideFx;
+    $('#incFx').checked = state.incFx;
     $('#plainOnly').onchange = (e) => { state.plainOnly = e.target.checked; save(); renderRates(); };
-    $('#hideFx').onchange = (e) => { state.hideFx = e.target.checked; save(); renderRates(); };
+    $('#incFx').onchange = (e) => { state.incFx = e.target.checked; save(); renderRates(); };
 
     fillSelect($('#fxFrom'), CCY.map((c) => ({ v: c.code, label: `${c.code} ${c.name}` })), 'HKD');
     fillSelect($('#fxTo'), CCY.map((c) => ({ v: c.code, label: `${c.code} ${c.name}` })), 'USD');

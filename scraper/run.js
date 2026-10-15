@@ -78,6 +78,19 @@ async function loadPage(context, url) {
       await page.waitForTimeout(1500);
     } catch {}
     const data = await page.evaluate(extractTables);
+    for (const frame of page.frames()) {
+      if (frame === page.mainFrame()) continue;
+      const fu = frame.url();
+      if (!/^https?:/.test(fu) || /google|facebook|doubleclick|youtube|livechat|lpsnmedia|optimizely|recaptcha/i.test(fu)) continue;
+      try {
+        const fd = await frame.evaluate(extractTables);
+        const offset = data.tables.length + 1000;
+        fd.tables.forEach((t) => { t.index += offset; t.context = '[IFRAME] ' + t.context; });
+        data.tables.push(...fd.tables);
+        data.text += ' ' + fd.text;
+        data.lines += '\n' + fd.lines;
+      } catch {}
+    }
     const links = await page.evaluate(() => Array.from(document.querySelectorAll('a[href]')).map((a) => ({ href: a.href.split('#')[0], text: (a.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 60) })));
     return { status, finalUrl: page.url(), data, links };
   } finally {
@@ -143,7 +156,12 @@ async function scrapeBank(context, bank, mid, report) {
         if (r.type === 'promo' && end) r.validUntil = end;
       });
       const before = rows.length;
-      for (let k = rows.length - 1; k >= 0; k--) if (rows[k].validUntil && rows[k].validUntil < today) rows.splice(k, 1);
+      const longAgo = hkDate(new Date(Date.now() - 180 * 864e5));
+      for (let k = rows.length - 1; k >= 0; k--) {
+        const v = rows[k].validUntil;
+        if (v && v < longAgo) { rows[k].validUntil = null; continue; } // boilerplate date, ignore
+        if (v && v < today) rows.splice(k, 1);
+      }
       if (before && !rows.length) rep.note = 'offer expired ' + end;
       const f = mid ? parseFx(data, mid.rates) : {};
       rep.rows = rows.length;

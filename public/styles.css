@@ -18,12 +18,12 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     --paper: #0e1d17; --paper-2: #13261e; --ink: #e2eee6; --ink-2: #9fb6aa; --rule: #284237;
-    --guilloche: #16291f; --chop: #ff8a7d; --chop-bg: #3a1d1a; --amber: #f2c46d; --amber-bg: #3a2c10; --good: #6fd3a0;
+    --guilloche: #12231b; --chop: #ff8a7d; --chop-bg: #3a1d1a; --amber: #f2c46d; --amber-bg: #3a2c10; --good: #6fd3a0;
   }
 }
 :root[data-theme='dark'] {
   --paper: #0e1d17; --paper-2: #13261e; --ink: #e2eee6; --ink-2: #9fb6aa; --rule: #284237;
-  --guilloche: #16291f; --chop: #ff8a7d; --chop-bg: #3a1d1a; --amber: #f2c46d; --amber-bg: #3a2c10; --good: #6fd3a0;
+  --guilloche: #12231b; --chop: #ff8a7d; --chop-bg: #3a1d1a; --amber: #f2c46d; --amber-bg: #3a2c10; --good: #6fd3a0;
 }
 
 * { box-sizing: border-box; }
