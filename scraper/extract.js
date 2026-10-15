@@ -78,6 +78,8 @@ function extractTables(doc) {
     url: (doc.defaultView || window).location.href,
     // page text is used for "effective date" detection and as a fallback
     text: clean(doc.body ? (doc.body.innerText || doc.body.textContent) : '').slice(0, 40000),
+    // line-preserving text for the non-table fallback parser
+    lines: (doc.body ? (doc.body.innerText || '') : '').slice(0, 60000),
     tables: out,
   };
 }

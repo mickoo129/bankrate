@@ -286,9 +286,60 @@ function parseFx(page, mid) {
 // "至2026年10月31日" / "until 31 Oct 2026" → validity end date of an offer
 function validUntil(text) {
   const t = text || '';
-  const m = t.match(/(?:至|直至|截至|止|until|till|to)\s*(20\d{2})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日/i);
-  if (m) return `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`;
-  return null;
+  const re = /(?:至|直至|截至|止|until|till|to)\s*(20\d{2})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日/gi;
+  let m, best = null;
+  while ((m = re.exec(t))) {
+    const d = `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`;
+    if (!best || d > best) best = d;
+  }
+  return best;
+}
+
+// ---- text fallback (pages that lay rates out with <div>s instead of <table>) ----
+// Looks for a tenor and a % rate on the same line, or a tenor line followed closely
+// by a rate line. Currency comes from the line itself or the nearest heading above.
+const RATE_IN_TEXT = /(\d{1,2}(?:\.\d{1,4})?)\s*%/g;
+const TENOR_IN_TEXT = /(\d{1,2}|[一二兩三六九十]{1,3})\s*(?:個)?\s*(日|天|星期|週|個月|月|年|days?|weeks?|months?|M\b)/gi;
+function parseTextRates(text, source) {
+  const lines = (text || '').split(/\n+/).map((l) => l.replace(/\s+/g, ' ').trim()).filter(Boolean);
+  const out = [];
+  let ctxCcy = null;
+  let ctxLine = -99;
+  const push = (ccy, days, rate, i, raw) => {
+    if (!ccy || !CURRENCIES[ccy] || !days || days < 7 || days > 1100 || !(rate > 0.01 && rate < 15)) return;
+    const near = lines.slice(Math.max(0, i - 4), i + 1).join(' ');
+    if (/儲蓄|活期|savings|按揭|貸款|loan|信用卡|回贈|cash ?back|保險|基金|最優惠利率|P\s*[-+]/i.test(near) && !/定期|time deposit/i.test(near)) return;
+    out.push({ currency: ccy, tenorDays: days, tenor: tenorLabel(days), rate, minAmount: null, tierLabel: raw.slice(0, 80), segment: '', fromText: true, near });
+  };
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.length <= 40) {
+      const c = onlyCurrency(line);
+      if (c && c !== 'OTHER') { ctxCcy = c; ctxLine = i; }
+      if (c === 'OTHER') { ctxCcy = null; }
+    }
+    if (line.length > 160) continue;
+    const tenors = [...line.matchAll(TENOR_IN_TEXT)].map((m) => parseTenor(m[0])).filter(Boolean);
+    const rates = [...line.matchAll(RATE_IN_TEXT)].map((m) => parseFloat(m[1]));
+    const own = onlyCurrency(line);
+    const ccy = own && own !== 'OTHER' ? own : (i - ctxLine <= 12 ? ctxCcy : null);
+    if (own === 'OTHER') continue;
+    if (tenors.length === 1 && rates.length >= 1) { push(ccy, tenors[0], Math.max(...rates), i, line); continue; }
+    if (tenors.length > 1 && rates.length === tenors.length) { tenors.forEach((d, k) => push(ccy, d, rates[k], i, line)); continue; }
+    // tenor alone on its line, rate on one of the next 3 lines
+    if (tenors.length === 1 && rates.length === 0 && line.length <= 20) {
+      for (let j = i + 1; j <= i + 3 && j < lines.length; j++) {
+        if ([...lines[j].matchAll(TENOR_IN_TEXT)].length) break;
+        const r = [...lines[j].matchAll(RATE_IN_TEXT)].map((m) => parseFloat(m[1]));
+        if (r.length === 1 && lines[j].length <= 40) { push(ccy, tenors[0], r[0], j, line + ' ' + lines[j]); break; }
+      }
+    }
+  }
+  const seen = new Set();
+  return out.filter((r) => {
+    const k = r.currency + r.tenorDays + '|' + r.rate;
+    if (seen.has(k)) return false; seen.add(k); return true;
+  }).map((r) => ({ ...r, type: source.type || 'promo', conditions: conditionsFrom(r.near.slice(-200)), sourceUrl: source.url, near: undefined }));
 }
 function effectiveDate(text) {
   const m = (text || '').match(/(20\d{2})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日/);
@@ -298,4 +349,4 @@ function effectiveDate(text) {
   return null;
 }
 
-module.exports = { validUntil, parseDeposits, parseFx, parseTenor, parseRate, parseMinAmount, lastCurrency, effectiveDate, tenorLabel, conditionsFrom };
+module.exports = { parseTextRates, validUntil, parseDeposits, parseFx, parseTenor, parseRate, parseMinAmount, lastCurrency, effectiveDate, tenorLabel, conditionsFrom };

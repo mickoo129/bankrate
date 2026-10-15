@@ -52,21 +52,13 @@ module.exports = [
     id: 'bea', name: '東亞', nameEn: 'BEA', group: 'major',
     site: 'https://www.hkbea.com',
     pages: [],
-    seeds: [
-      'https://www.hkbea.com/html/tc/bea-personal-banking-time-deposit.html',
-      'https://www.hkbea.com/html/tc/bea-personal-banking-deposit-rates.html',
-      'https://www.hkbea.com/html/tc/bea-personal-banking.html',
-    ],
+    seeds: ['https://www.hkbea.com/', 'https://www.hkbea.com/html/tc/index.html'],
   },
   {
     id: 'citi', name: '花旗', nameEn: 'Citibank', group: 'major',
     site: 'https://www.citibank.com.hk',
     pages: [],
-    seeds: [
-      'https://www.citibank.com.hk/chinese/banking/time-deposit/index.htm',
-      'https://www.citibank.com.hk/chinese/banking/rates/index.htm',
-      'https://www.citibank.com.hk/chinese/',
-    ],
+    seeds: ['https://www.citibank.com.hk/chinese/personal-banking/time-deposit/', 'https://www.citibank.com.hk/portal/home_chinese/hkcb_Home.htm'],
   },
   {
     id: 'dbs', name: '星展', nameEn: 'DBS', group: 'major',
@@ -83,7 +75,7 @@ module.exports = [
     id: 'icbc', name: '工銀亞洲', nameEn: 'ICBC (Asia)', group: 'mid',
     site: 'https://www.icbcasia.com',
     pages: [],
-    seeds: ['https://www.icbcasia.com/tc/personal/deposits/', 'https://www.icbcasia.com/tc/'],
+    seeds: ['https://www.icbcasia.com/hk/tc/personal/default.html', 'https://www.icbcasia.com/hk/tc/default.html', 'https://www.icbcasia.com/hk/tc/'],
   },
   {
     id: 'ccb', name: '建行亞洲', nameEn: 'CCB (Asia)', group: 'mid',
@@ -113,13 +105,13 @@ module.exports = [
     id: 'ocbc', name: '華僑銀行', nameEn: 'OCBC HK', group: 'mid',
     site: 'https://www.ocbc.com.hk',
     pages: [],
-    seeds: ['https://www.ocbc.com.hk/webpages/tc/personal/deposits/index.html', 'https://www.ocbc.com.hk/webpages/tc/index.html'],
+    seeds: ['https://www.ocbc.com.hk/', 'https://www.ocbc.com.hk/personal-banking/zh-hk/'],
   },
   {
     id: 'cmbwl', name: '招商永隆', nameEn: 'CMB Wing Lung', group: 'mid',
     site: 'https://www.cmbwinglungbank.com',
     pages: [],
-    seeds: ['https://www.cmbwinglungbank.com/wlb_corporate/hk/personal/deposit.html', 'https://www.cmbwinglungbank.com/'],
+    seeds: ['https://www.cmbwinglungbank.com/wlb_corporate/hk/personal/deposit.html', 'https://www.cmbwinglungbank.com/wlb_corporate/hk/index.html'],
   },
   {
     id: 'chonghing', name: '創興', nameEn: 'Chong Hing', group: 'mid',
@@ -131,7 +123,7 @@ module.exports = [
     id: 'fubon', name: '富邦', nameEn: 'Fubon', group: 'mid',
     site: 'https://www.fubonbank.com.hk',
     pages: [],
-    seeds: ['https://www.fubonbank.com.hk/tc/personal/deposit.html', 'https://www.fubonbank.com.hk/tc/'],
+    seeds: ['https://www.fubonbank.com.hk/tc/deposit/fixed-deposit/home.html', 'https://www.fubonbank.com.hk/tc/rates-enquiry.html', 'https://www.fubonbank.com.hk/tc/home.html'],
   },
   {
     id: 'publicbank', name: '大眾銀行', nameEn: 'Public Bank', group: 'mid',
@@ -143,7 +135,7 @@ module.exports = [
     id: 'shacom', name: '上海商業', nameEn: 'Shanghai Commercial', group: 'mid',
     site: 'https://www.shacombank.com.hk',
     pages: [],
-    seeds: ['https://www.shacombank.com.hk/tch/personal/deposits/index.jsp', 'https://www.shacombank.com.hk/tch/'],
+    seeds: ['https://www.shacombank.com.hk/tch/personal/deposits/fixed/fixed.jsp', 'https://www.shacombank.com.hk/'],
   },
   {
     id: 'ncb', name: '南洋商業', nameEn: 'Nanyang Commercial', group: 'mid',
@@ -168,7 +160,7 @@ module.exports = [
     id: 'mox', name: 'Mox', nameEn: 'Mox', group: 'virtual',
     site: 'https://mox.com',
     pages: [],
-    seeds: ['https://mox.com/zh/save/', 'https://mox.com/zh/'],
+    seeds: ['https://mox.com/zh/promotions/time-deposit/', 'https://mox.com/zh/'],
   },
   {
     id: 'welab', name: 'WeLab Bank', nameEn: 'WeLab Bank', group: 'virtual',

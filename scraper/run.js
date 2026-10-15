@@ -10,11 +10,11 @@ const path = require('path');
 const { chromium } = require('playwright');
 const banks = require('./banks');
 const { extractTables } = require('./extract');
-const { parseDeposits, parseFx, validUntil } = require('./parse');
+const { parseDeposits, parseFx, validUntil, parseTextRates } = require('./parse');
 
 const DATA_DIR = path.join(__dirname, '..', 'public', 'data');
 const CURRENCIES = ['HKD', 'USD', 'CNY', 'AUD', 'GBP', 'JPY'];
-const MAX_PAGES_PER_BANK = 14;
+const MAX_PAGES_PER_BANK = 18;
 const CONCURRENCY = 4;
 
 const args = Object.fromEntries(process.argv.slice(2).map((a) => {
@@ -106,7 +106,7 @@ async function scrapeBank(context, bank, mid, report) {
   const queue = [];
   for (const p of bank.pages || []) queue.push({ url: p.url, type: p.type, fixed: true });
   for (const u of bank.fxPages || []) queue.push({ url: u, fx: true, fixed: true });
-  for (const u of bank.seeds || []) queue.push({ url: u, seed: true });
+  for (const u of bank.seeds || []) queue.push({ url: u, seed: true, depth: 0 });
 
   const deposits = [];
   let fx = {};
@@ -128,7 +128,14 @@ async function scrapeBank(context, bank, mid, report) {
       rep.tables = data.tables.length;
       if (status >= 400) { rep.error = 'HTTP ' + status; continue; }
       const type = guessType(item.type, data);
-      const rows = rowsFromPage(data, type, finalUrl).filter((r) => r.tenorDays >= 7 && r.tenorDays <= 1100 && r.rate < 20);
+      let rows = rowsFromPage(data, type, finalUrl).filter((r) => r.tenorDays >= 7 && r.tenorDays <= 1100 && r.rate < 20);
+      if (!rows.length && /定期|定存|time deposit/i.test(data.text)) {
+        rows = parseTextRates(data.lines, { type: type === 'board' ? 'board' : 'promo', url: finalUrl });
+        if (rows.length) rep.mode = 'text';
+      }
+      if (!rows.length && data.tables.length) {
+        rep.debug = data.tables.slice(0, 3).map((t) => t.context.slice(-60) + ' ## ' + t.grid.slice(0, 3).map((r) => r.slice(0, 5).join(' / ')).join(' || ').slice(0, 220));
+      }
       const end = validUntil(data.text);
       const today = hkDate();
       rows.forEach((r) => {
@@ -147,14 +154,18 @@ async function scrapeBank(context, bank, mid, report) {
       if (Object.keys(f).length) { fx = { ...f, ...fx }; sources.add(finalUrl); }
       if (end && rows.some((r) => r.type === 'promo')) offerEnd = offerEnd || end;
       // discovery: follow promising links from seed pages (and from fixed pages too)
-      if ((item.seed || item.fixed) && !args['no-discover']) {
+      const depth = item.depth ?? 0;
+      const strong = /定期|定存|time-?deposit|存款利率|deposit-?rate|board-?rate|匯率|exchange-?rate/i;
+      if ((item.seed || item.fixed || (item.discovered && depth < 2)) && !args['no-discover']) {
         for (const l of links) {
           if (!l.href || !sameSite(l.href, bank.site)) continue;
           const hay = l.href + ' ' + l.text;
           if (!LINK_WANT.test(hay) || LINK_AVOID.test(hay)) continue;
           if (VARIANT.test(l.href) || looksArchived(l.href)) continue; // prefer current Traditional Chinese pages
           if (bank.exclude && new RegExp(bank.exclude, 'i').test(l.href)) continue;
-          queue.push({ url: canonical(l.href), discovered: true });
+          if (item.discovered && !strong.test(hay)) continue; // second hop: only clearly relevant links
+          const next = { url: canonical(l.href), discovered: true, depth: depth + 1 };
+          if (strong.test(hay)) queue.unshift(next); else queue.push(next);
         }
       }
     } catch (e) {
