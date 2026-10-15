@@ -18,7 +18,7 @@
   ];
   const TENOR_LABEL = (d) => (TENORS.find((t) => t.d === d) || {}).label || (d < 30 ? `${d}日` : `${Math.round(d / 30)}個月`);
   const DAYS = (d) => (d === 360 ? 365 : d === 180 ? 182 : d === 90 ? 91 : d);
-  const PREMIUM = /卓越|尊尚|優越|豐盛|Citigold|優先理財|財富|VIP|私人|Premier|Prestige|Priority|Treasures|Wealth|Elite/i;
+  const PREMIUM = /卓越|尊尚|優越|豐盛|Citigold|優先理財|財富|VIP|私人|貴賓|顯卓|至尊|理財金|高級理財|Premier|Prestige|Priority|Treasures|Wealth|Elite/i;
   const GROUP_NAME = { major: '大型銀行', mid: '本地及中資銀行', virtual: '虛擬銀行' };
   const REL = [{ v: 'new', label: '新客戶', short: '新客' }, { v: 'existing', label: '現有客戶', short: '現有' }, { v: 'premium', label: '高級理財', short: '高級' }];
   const REL_CODE = { n: 'new', e: 'existing', p: 'premium' };
@@ -189,14 +189,17 @@
       html.push(`<tr data-bank="${b.id}"><th scope="row" class="bank-cell"><b>${esc(b.name)}</b>${relSel}${stale}</th>${TENORS.map((t) => {
         const r = cells[t.d];
         const openK = `${b.id}|${t.d}`;
-        if (!r) return `<td class="cell empty" data-k="${openK}" tabindex="0" aria-label="${esc(b.name)} ${t.label} 未有符合條件嘅息口">—</td>`;
+        const better = (b.deposits || []).filter((x) => x.currency === state.ccy && x.tenorDays === t.d && whyNot(x, b.id) && !isExpired(x) && !(x.minAmount && x.minAmount > state.amount && !r))
+          .sort((x, y) => y.rate - x.rate)[0];
+        const hint = better && (!r || better.rate > r.rate + 0.1) ? `<i class="more-hint" title="${esc(whyNot(better, b.id))}">另有 ${pct(better.rate)}%</i>` : '';
+        if (!r) return `<td class="cell empty" data-k="${openK}" tabindex="0" role="button" aria-label="${esc(b.name)} ${t.label} 未有符合你條件嘅息口">—${hint ? `<div class="meta">${hint}</div>` : ''}</td>`;
         const isBest = r.rate === best[t.d] && best[t.d] > 0;
         const v = state.view === 'interest'
           ? `${fmt(state.amount * r.rate / 100 * DAYS(t.d) / 365, 0)}<small> ${state.ccy}</small>`
           : `${pct(r.rate)}<small>%</small>`;
-        const board = r.type !== 'promo';
-        return `<td class="cell${isBest ? ' best' : ''}${board ? ' board' : ''}${state.open === openK ? ' open' : ''}" data-k="${openK}" tabindex="0" role="button" aria-expanded="${state.open === openK}" aria-label="${esc(b.name)} ${t.label} ${pct(r.rate)}%，撳睇條件">
-          <div class="v">${v}</div><div class="meta">${board ? '<i class="tag board">牌價</i>' : tagsOf(r, true)}${change(b.id, t.d, r.rate)}</div></td>`;
+        const kind = r.type === 'promo' ? tagsOf(r, true) : '<i class="tag board">牌價</i>';
+        return `<td class="cell${isBest ? ' best' : ''}${r.type !== 'promo' ? ' is-board' : ''}${state.open === openK ? ' open' : ''}" data-k="${openK}" tabindex="0" role="button" aria-expanded="${state.open === openK}" aria-label="${esc(b.name)} ${t.label} ${pct(r.rate)}%${r.type !== 'promo' ? '（牌價）' : ''}，撳睇條件">
+          <div class="v">${v}</div><div class="meta">${kind}${change(b.id, t.d, r.rate)}${hint}</div></td>`;
       }).join('')}</tr>`);
       if (state.open && state.open.startsWith(b.id + '|')) html.push(detailRow(b, +state.open.split('|')[1]));
     }

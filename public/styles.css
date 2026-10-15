@@ -237,3 +237,13 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
 .cell.board .v { color: var(--ink-3); font-weight: 500; }
 .tag.board { color: var(--ink-3); background: transparent; border: 1px solid var(--line); font-weight: 500; }
 @media (max-width: 720px) { #cmp .cell .meta .tag.board { font-size: .58rem; padding: 0 2px; } }
+
+/* board rate vs offer */
+.tag.board { color: var(--ink-3); background: transparent; border: 1px solid var(--line); font-weight: 500; }
+.cell.is-board .v { color: var(--ink-2); font-weight: 500; }
+.more-hint { font-style: normal; font-size: .68rem; color: var(--accent); white-space: nowrap; border-bottom: 1px dotted currentColor; }
+.cell.empty .meta { justify-content: flex-end; }
+@media (max-width: 720px) {
+  #cmp .cell .meta .tag.board { display: none; }
+  #cmp .more-hint { font-size: .6rem; }
+}

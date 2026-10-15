@@ -58,4 +58,30 @@ assert.ok(Math.abs(fx.USD.buy - 7.81) < 1e-9 && fx.USD.tt);
 assert.ok(Math.abs(fx.JPY.sell - 0.0503) < 1e-9);
 assert.ok(!fx.CAD);
 
+// --- cases found when checking against bank websites (Oct 2026) ---
+// savings offer laid out like a deposit table (建行)
+rows = parseDeposits({ tables: [{ index: 0, context: '「月月增息儲蓄戶口」優惠 於推廣期內客戶只需成功開立戶口，可享以下活期儲蓄存款年利率：', grid: [
+  ['存款貨幣', '存款期', '特惠定期存款年利率'], ['港元', '3個月', '高達 3.60%'], ['美元', '3個月', '高達 5.50%'],
+] }] }, { type: 'promo', url: 'x' });
+assert.strictEqual(rows.length, 0, 'savings table must be ignored');
+// USD table whose caption also mentions 港幣 (滙豐獎賞錢)
+rows = parseDeposits({ tables: [{ index: 0, context: '其他客戶 | [CAPTION] 最低存款金額：2,000美元或以上 等值年利率根據…每1「獎賞錢」可抵銷價值港幣1元', grid: [
+  ['存款期', '等值年利率'], ['3個月', '3.10%'],
+] }] }, { type: 'promo', url: 'x' });
+assert.strictEqual(rows[0].currency, 'USD');
+// "USD2,000 to USD49,999" header
+rows = parseDeposits({ tables: [{ index: 0, context: 'Time deposit', grid: [['Tenor', 'USD2,000 to USD49,999'], ['7 Days', '0.50%']] }] }, { type: 'board', url: 'x' });
+assert.strictEqual(rows[0].currency, 'USD');
+// tier written as a row label after a transposed table (大新): VIP must be tagged
+rows = parseDeposits({ tables: [{ index: 0, context: '港元定期存款優惠 以全新資金開立', grid: [
+  ['VIP 銀行服務客戶', 'VIP 銀行服務客戶', 'VIP 銀行服務客戶'], ['存款金額（港元）', '存款期', '存款期'], ['存款金額（港元）', '1個月', '3個月'], ['200,000 - 1,000,000以下', '0.001%', '3%'],
+] }] }, { type: 'promo', url: 'x' });
+assert.ok(rows.length === 1 && rows[0].rate === 3 && rows[0].conditions.includes('高級理財客戶'), 'VIP row tagged, 0.001% dropped');
+// "3/6個月"
+rows = parseDeposits({ tables: [{ index: 0, context: '網上專屬定期存款優惠利率', grid: [['貨幣', '存款期', '特優年利率 (%)'], ['港元', '3/6個月', '2.40']] }] }, { type: 'promo', url: 'x' });
+assert.deepStrictEqual(rows.map((r) => r.tenorDays).sort(), [180, 90].sort());
+// "不論新舊資金" is not a new-funds offer
+rows = parseDeposits({ tables: [{ index: 0, context: '特優港元定期存款優惠 (不論新舊資金)', grid: [['存款期', '港元'], ['3個月', '3.00%']] }] }, { type: 'promo', url: 'x' });
+assert.ok(!rows[0].conditions.includes('新資金'));
+
 console.log('all parser tests passed');

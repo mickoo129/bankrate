@@ -2,12 +2,12 @@
 // Pure functions, no network: easy to test with saved page snapshots.
 
 const CURRENCIES = {
-  HKD: [/港元/, /港幣/, /\bHKD\b/i, /HK\$/i, /Hong ?Kong Dollar/i],
-  USD: [/美元/, /美金/, /\bUSD\b/i, /US\$/i, /US Dollar/i],
-  CNY: [/人民幣/, /\bRMB\b/i, /\bCNY\b/i, /\bCNH\b/i, /Renminbi/i],
-  AUD: [/澳元/, /澳幣/, /\bAUD\b/i, /AU\$/i, /Australian Dollar/i],
-  GBP: [/英鎊/, /\bGBP\b/i, /Pound/i, /Sterling/i],
-  JPY: [/日圓/, /日元/, /\bJPY\b/i, /Japanese Yen/i, /\bYen\b/i],
+  HKD: [/港元/, /港幣/, /(?<![A-Za-z])HKD(?![A-Za-z])/i, /HK\$/i, /Hong ?Kong Dollar/i],
+  USD: [/美元/, /美金/, /(?<![A-Za-z])USD(?![A-Za-z])/i, /US\$/i, /US Dollar/i],
+  CNY: [/人民幣/, /(?<![A-Za-z])RMB(?![A-Za-z])/i, /(?<![A-Za-z])CNY(?![A-Za-z])/i, /(?<![A-Za-z])CNH(?![A-Za-z])/i, /Renminbi/i],
+  AUD: [/澳元/, /澳幣/, /(?<![A-Za-z])AUD(?![A-Za-z])/i, /AU\$/i, /Australian Dollar/i],
+  GBP: [/英鎊/, /(?<![A-Za-z])GBP(?![A-Za-z])/i, /Pound/i, /Sterling/i],
+  JPY: [/日圓/, /日元/, /(?<![A-Za-z])JPY(?![A-Za-z])/i, /Japanese Yen/i, /\bYen\b/i],
 };
 // Currencies we do NOT track; used to stop a table being mis-assigned.
 const OTHER_CCY = /(加拿大元|加元|加幣|泰國銖|新西蘭元|\bCAD\b|紐元|紐西蘭|\bNZD\b|歐羅|歐元|\bEUR\b|瑞士法郎|瑞郎|\bCHF\b|新加坡元|星元|\bSGD\b|泰銖|\bTHB\b|南非|\bZAR\b)/i;
@@ -44,6 +44,32 @@ function onlyCurrency(text) {
   return f.length === 1 ? f[0].code : null;
 }
 
+// all tracked currencies named in a short label such as "港元 / 人民幣"
+function currencyList(text) {
+  if (!text || text.length > 60) return [];
+  return currenciesIn(text).sort((a, b) => a.pos - b.pos).map((f) => f.code);
+}
+const CCY_WORD = '(港元|港幣|美元|美金|人民幣|澳元|英鎊|日圓|日元|HKD|USD|RMB|CNY|AUD|GBP|JPY)';
+const CCY_MAP = { 港元: 'HKD', 港幣: 'HKD', HKD: 'HKD', 美元: 'USD', 美金: 'USD', USD: 'USD', 人民幣: 'CNY', RMB: 'CNY', CNY: 'CNY', 澳元: 'AUD', AUD: 'AUD', 英鎊: 'GBP', GBP: 'GBP', 日圓: 'JPY', 日元: 'JPY', JPY: 'JPY' };
+// "最低存款金額：2,000美元" → USD. The deposit amount names the table's currency more reliably
+// than any other currency word nearby (e.g. "每1獎賞錢價值港幣1元").
+function amountCurrency(text) {
+  const re = new RegExp(`(?:最低存款金額|存款金額|最低存款額|存款額|最低存款|起存|新資金達?|Minimum deposit)[：:\\s]*(?:${CCY_WORD}\\s*[\\d,]+|[\\d,]+\\s*(?:元)?\\s*${CCY_WORD})`, 'gi');
+  let m, last = null;
+  while ((m = re.exec(text || ''))) last = CCY_MAP[(m[1] || m[2] || '').toUpperCase()] || CCY_MAP[m[1] || m[2]];
+  return last;
+}
+// the text right above a table (its title / caption), not the whole page section
+function lastSegments(ctx) {
+  const parts = (ctx || '').split(' | ').map((x) => x.trim()).filter(Boolean);
+  let out = parts.pop() || '';
+  while (parts.length && out.replace(/\[CAPTION\]|\[TAB\]|\[IFRAME\]/g, '').trim().length < 14) out = parts.pop() + ' | ' + out;
+  // captions belong to the table: also include the segment before a caption
+  if (/^\[CAPTION\]/.test(out) && parts.length) out = parts.pop() + ' | ' + out;
+  return out;
+}
+const SAVINGS = /活期|儲蓄(?:存款)?年利率|儲蓄戶口|savings? account|savings? rate/i;
+
 // ---- tenors ---------------------------------------------------------------
 const CN_NUM = { 一: 1, 兩: 2, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9, 十: 10, 十二: 12, 十八: 18, 二十四: 24, 三十六: 36 };
 function toNum(s) {
@@ -69,6 +95,14 @@ function parseTenor(cell) {
     const n = toNum(m[1]); return n ? n * 360 : null;
   }
   return null;
+}
+function tenorsOf(cell) {
+  const one = parseTenor(cell);
+  if (one) return [one];
+  const m = (cell || '').replace(/\s+/g, '').match(/^(\d{1,2})[\/／、及和,](\d{1,2})(?:個)?(月|日|天)$/);
+  if (!m) return [];
+  const k = m[3] === '月' ? 30 : 1;
+  return [parseInt(m[1], 10) * k, parseInt(m[2], 10) * k];
 }
 function tenorLabel(days) {
   if (days < 30) return `${days}日`;
@@ -106,7 +140,7 @@ function parseMinAmount(text) {
   else if (unit === 'k') v *= 1e3;
   else if (unit === '億') v *= 1e8;
   if (/以下|below|less than|under/i.test(t) && !/至|-|to/.test(t)) return 0;
-  return v;
+  return v >= 100 ? v : null;
 }
 
 const STRIP_FOR_SEGMENT = new RegExp(
@@ -117,6 +151,7 @@ const STRIP_FOR_SEGMENT = new RegExp(
     'Deposit Amount', 'Interest Rate', 'Amount', 'rate', '存款期', 'Tenor',
     '新資金', '特惠', '優惠', '定期存款', '定存', '貨幣', '達(?=\\s*[港美人澳英日HUCAGJ\\d])', '起存', '最低', '每', '筆', 'p\\.a', '\\*', '#', '：', ':',
     'New Funds?', 'Time Deposits?', 'Preferential', 'Promotional', 'Minimum', 'Currency', 'of',
+    '以下', '少於', '存款期', '銀行服務', '元',
   ].join('|'),
   'gi'
 );
@@ -138,7 +173,7 @@ function analyseDepositTable(tbl, pageCtx) {
   const colScore = new Array(nCols).fill(0);
   const rowScore = new Array(nRows).fill(0);
   grid.forEach((row, r) => row.forEach((cell, c) => {
-    if (parseTenor(cell)) { colScore[c]++; rowScore[r]++; }
+    if (tenorsOf(cell).length) { colScore[c]++; rowScore[r]++; }
   }));
   const bestCol = colScore.indexOf(Math.max(...colScore));
   const bestRow = rowScore.indexOf(Math.max(...rowScore));
@@ -153,81 +188,137 @@ function analyseDepositTable(tbl, pageCtx) {
     tenorCol = bestRow;
   }
   const rows = g;
-  const firstTenorRow = rows.findIndex((row) => parseTenor(row[tenorCol]));
+  const firstTenorRow = rows.findIndex((row) => tenorsOf(row[tenorCol]).length);
   const headerRows = rows.slice(0, Math.max(firstTenorRow, 0));
-  const ctxCcy = lastCurrency(tbl.context) || null;
+  const near = lastSegments(tbl.context);
+  const gridOnly = onlyCurrency(allText);
+  const ctxCcy = amountCurrency(near) || lastCurrency(near) || lastCurrency(tbl.context) || (pageCtx && pageCtx.prevCcy) || (gridOnly !== 'OTHER' && gridOnly) || null;
   const out = [];
 
   rows.forEach((row, r) => {
-    const days = parseTenor(row[tenorCol]);
-    if (!days) return;
+    for (const days of tenorsOf(row[tenorCol])) addRow(row, days);
+  });
+  function addRow(row, days) {
     // row label cells other than tenor (e.g. currency in first col)
-    const rowLabel = row.slice(0, tenorCol).join(' ');
+    const rowLabel = row.filter((x, k) => k !== tenorCol && parseRate(x, pctTable) == null && !tenorsOf(x).length).filter((x, k, a) => a.indexOf(x) === k).join(' ');
     row.forEach((cell, c) => {
       if (c === tenorCol) return;
       const rate = parseRate(cell, pctTable);
       if (rate == null) return;
       const header = headerRows.map((h) => h[c] || '').filter((x, i, a) => x && a.indexOf(x) === i).join(' ');
-      const ccy = onlyCurrency(header) || onlyCurrency(rowLabel) || ctxCcy;
-      if (!ccy || ccy === 'OTHER') return;
-      out.push({
+      // amounts such as "HK$50,000" name the currency of the minimum, not the deposit
+      const rowNoAmt = rowLabel.replace(/(?:HK\$|US\$|港元|港幣|美元|人民幣|HKD|USD|RMB)\s*[\d,]+(?:\.\d+)?|[\d,]+\s*(?:港元|港幣|美元|HKD|USD)/gi, ' ');
+      const one = onlyCurrency(header) || onlyCurrency(rowNoAmt) || (rowNoAmt.trim() === rowLabel.trim() ? null : onlyCurrency(rowLabel));
+      let ccys = one && one !== 'OTHER' ? [one] : [];
+      if (!one) ccys = currencyList(rowNoAmt).length ? currencyList(rowNoAmt) : currencyList(header);
+      if (!ccys.length && !one && ctxCcy && ctxCcy !== 'OTHER') ccys = [ctxCcy];
+      for (const ccy of ccys) out.push({
         currency: ccy,
         tenorDays: days,
         tenor: tenorLabel(days),
         rate,
-        minAmount: parseMinAmount(header),
-        tierLabel: header.slice(0, 80),
-        segment: segmentOf(header) || segmentOf(rowLabel),
+        minAmount: parseMinAmount(header) ?? parseMinAmount(rowLabel),
+        tierLabel: [header, rowLabel].filter(Boolean).join(' ').slice(0, 100),
+        segment: [...new Set([segmentOf(header), segmentOf(rowLabel)].filter(Boolean))].join(' ').slice(0, 40),
         tableIndex: tbl.index,
+        upTo: /高達|最高|up to/i.test(cell),
       });
     });
-  });
+  }
   return out;
 }
 
 const COND_HINTS = [
   [/新資金|new fund|new money/i, '新資金'],
-  [/網上|手機|app|online|mobile|電子/i, '網上/手機開立'],
+  [/網上|手機|流動(?:理財|銀行)|e-?Banking|mobile app|online banking/i, '網上/手機開立'],
   [/卓越理財尊尚|Premier Elite/i, '卓越理財尊尚'],
   [/卓越理財|Premier/i, '卓越理財'],
   [/優越理財|Prestige/i, '優越理財'],
   [/Priority|優先理財/i, '優先理財'],
   [/豐盛理財|Treasures/i, '豐盛理財'],
   [/Citigold|花旗私人/i, 'Citigold'],
-  [/新客戶|新開戶|new customer/i, '新客戶'],
+  [/新客戶|新開戶|全新.{0,10}客戶|new customer/i, '新客戶'],
+  [/私人財富|中銀理財|工銀財富|理財金|貴賓理財|貴賓|VIP|顯卓|至尊理財|優越私人|私人銀行|Private Wealth/i, '高級理財客戶'],
   [/(?:經本行|於本行|透過本行|以外幣|將外幣|現有外幣|指定貨幣)\S{0,6}兌換|兌換\S{0,4}(?:成|為)(?:港元|港幣|指定貨幣|外幣)|兌換(?:外幣|指定貨幣)\S{0,8}(?:定存|定期)|conver(?:t|sion)[^.]{0,30}(?:time deposit|HKD)/i, '需經本行兌換'],
   [/等值年利率|獎賞錢|RewardCash/i, '含獎賞錢等值'],
 ];
-const PREMIUM_TAGS = ['卓越理財尊尚', '卓越理財', '優越理財', '優先理財', '豐盛理財', 'Citigold'];
+const PREMIUM_TAGS = ['卓越理財尊尚', '卓越理財', '優越理財', '優先理財', '豐盛理財', 'Citigold', '高級理財客戶'];
 // Customer-tier tags only from text that labels this specific rate (headers), not from the whole page
 function conditionsFrom(text, opts = {}) {
   if (opts.noTier) return conditionsFromRaw(text).filter((t) => !PREMIUM_TAGS.includes(t));
   return conditionsFromRaw(text);
 }
 function conditionsFromRaw(text) {
+  // ignore risk warnings ("將外幣兌換為其他貨幣…蒙受本金損失") and download buttons
+  text = (text || '').replace(/[^。|]*(?:風險|蒙受|本金損失|自由兌換|匯率波動|risk)[^。|]*。?/gi, ' ');
   const tags = [];
   for (const [re, tag] of COND_HINTS) if (re.test(text) && !tags.includes(tag)) tags.push(tag);
+  // "不論新舊資金" / "新資金／現有資金": not a new-funds-only offer
+  if (/不論新舊資金|新舊資金|不論.{0,4}資金|新資金\s*[／\/及或]\s*現有資金|現有資金\s*[／\/及或]\s*新資金|現有資金\/續存/.test(text)) {
+    const i = tags.indexOf('新資金'); if (i >= 0) tags.splice(i, 1);
+  }
+  // "優惠不適用於透過網上理財…開立" means branch only
+  if (/不適用於[^。]{0,30}(網上|流動|手機|電話)/.test(text)) {
+    const i = tags.indexOf('網上/手機開立'); if (i >= 0) tags.splice(i, 1);
+    if (!tags.includes('只限分行')) tags.push('只限分行');
+  }
   // keep Premier Elite from also tagging Premier
   if (tags.includes('卓越理財尊尚')) return tags.filter((t) => t !== '卓越理財');
   return tags;
 }
 
+const PROMO_WORDS = /優惠|特惠|特優|推廣|新資金|promotion|offer|preferential|special|campaign/i;
+const FX_CONVERT = /(?:兌換|轉換)[^。]{0,40}(?:同時|並|後)[^。]{0,25}(?:設立|開立|敘造|敍做|辦理)[^。]{0,10}定期|經本行(?:兌換|轉換)|兌換交易|兌換現有外幣|以外幣兌換/;
+
 function parseDeposits(page, source) {
-  const rows = [];
+  const pageText = page.text || '';
+  const pageFx = FX_CONVERT.test(pageText);
+  const pageType = source.type || 'board';
+  // 1st pass: read every table
+  const perTable = [];
   for (const tbl of page.tables) {
-    const found = analyseDepositTable(tbl, page);
-    const ctx = (tbl.context || '');
-    // nearby heading text: conditions such as 新資金 / 網上; customer tiers only if right next to the table
-    const tags = [...new Set([...conditionsFrom(ctx.slice(-140), { noTier: true }), ...conditionsFrom(ctx.slice(-50))])];
+    const ctx = tbl.context || '';
+    const near = lastSegments(ctx);
+    // "可享以下活期儲蓄存款年利率" — a savings offer laid out like a deposit table
+    if (SAVINGS.test(near) && !/定期/.test(near)) continue;
+    const near0 = near;
+    const weak0 = (near0.replace(/\d[\d.,%]*|[^\u4e00-\u9fff]/g, '').length < 8) || (near0.match(/%/g) || []).length >= 3;
+    const prevT = perTable[perTable.length - 1];
+    const found = analyseDepositTable(tbl, { prevCcy: weak0 && prevT ? prevT.ccy : null });
+    if (!found.length) continue;
+    const head = tbl.grid.slice(0, 2).flat().join(' ');
+    const weak = (near.replace(/\d[\d.,%]*|[^\u4e00-\u9fff]/g, '').length < 8) || (near.match(/%/g) || []).length >= 3;
+    const prev = perTable[perTable.length - 1];
+    let type = pageType;
+    const shortMax = Math.max(0, ...found.filter((f) => f.tenorDays <= 14).map((f) => f.rate));
+    if (pageType === 'auto') type = PROMO_WORDS.test(near + ' ' + head) || shortMax >= 3 ? 'promo' : (weak && prev ? prev.type : 'board');
+    // conditions such as 新資金 / 網上 from the table's own title; customer tier only when the title is short (a tab label)
+    const headTags = conditionsFrom(head, { noTier: true }).filter((x) => x === '需經本行兌換' || x === '新資金');
+    const tierList = /其他(?:個人)?客戶|一般客戶|其他客戶|One\b/.test(near) && (near.match(/理財|客戶/g) || []).length > 2;
+    const namesTier = /(貴賓理財|貴賓|私人財富|中銀理財|工銀財富|理財金|顯卓|至尊理財|卓越理財|優越理財|Citigold|豐盛)[」"]?\s*客戶/.test(near);
+    const tags = [...new Set([...conditionsFrom(near, { noTier: tierList || (near.length > 40 && !namesTier) }), ...conditionsFrom(ctx.slice(-140), { noTier: true }), ...headTags])];
+    if (/親臨分行|於分行(?:辦理|開立)|透過本行分行/.test(near) && !/網上|手機|流動/.test(near)) { const i = tags.indexOf('網上/手機開立'); if (i >= 0) tags.splice(i, 1); if (!tags.includes('只限分行')) tags.push('只限分行'); }
+    if (weak && prev) for (const x of prev.tags) if (!tags.includes(x) && !PREMIUM_TAGS.includes(x)) tags.push(x);
     if (/new-?customer|newcustomer|new_customer|新客/i.test(source.url || '')) tags.push('新客戶');
-    for (const f of found) {
+    const regularTier = /其他(?:個人)?客戶|一般(?:個人)?客戶|滙豐One|綜合(?:戶口|客戶)|e時代|智選理財|BEA GOAL|優進理財|自在理財|智盈理財|其他個人/.test(near.slice(-60));
+    const tiered = regularTier || tags.some((t) => PREMIUM_TAGS.includes(t));
+    const shortOnly = Math.max(...found.map((f) => f.tenorDays)) <= 31;
+    perTable.push({ tbl, found, type, tags, tiered, shortOnly, sig: JSON.stringify(tbl.grid), ccy: found[0].currency });
+  }
+  // the same table often appears several times (mobile copy, hidden tab). Drop copies without a
+  // customer-tier label when a labelled copy exists, so a premium-only rate is not shown to everyone.
+  const labelled = new Set(perTable.filter((t) => t.tiered).map((t) => t.sig));
+  const rows = [];
+  for (const t of perTable) {
+    if (!t.tiered && labelled.has(t.sig)) continue;
+    for (const f of t.found) {
       const segTags = conditionsFrom((f.segment || '') + ' ' + (f.tierLabel || ''));
-      rows.push({
-        ...f,
-        type: source.type || 'board',
-        conditions: Array.from(new Set([...(source.conditions || []), ...tags, ...segTags])),
-        sourceUrl: source.url,
-      });
+      const conditions = new Set([...(source.conditions || []), ...t.tags, ...segTags]);
+      // short "convert-and-deposit" offers: the condition is often only stated once on the page
+      if (t.type === 'promo' && pageFx && t.shortOnly && !conditions.has('新資金')) conditions.add('需經本行兌換');
+      if (f.upTo) conditions.add('最高息（視乎條件）');
+      if (t.type === 'promo' && f.rate < (f.currency === 'JPY' ? 0.02 : 0.2)) continue; // placeholder rates such as 0.001%
+      rows.push({ ...f, type: t.type, conditions: Array.from(conditions), sourceUrl: source.url });
     }
   }
   // keep only currencies we track and dedupe exact duplicates
@@ -235,7 +326,7 @@ function parseDeposits(page, source) {
   return rows.filter((r) => {
     if (!CURRENCIES[r.currency]) return false;
     if (source.currencies && !source.currencies.includes(r.currency)) return false;
-    const k = [r.currency, r.tenorDays, r.rate, r.minAmount, r.segment, r.type].join('|');
+    const k = [r.currency, r.tenorDays, r.rate, r.minAmount, r.segment, r.type, r.conditions.join(',')].join('|');
     if (seen.has(k)) return false;
     seen.add(k);
     return true;
@@ -364,4 +455,4 @@ function effectiveDate(text) {
   return null;
 }
 
-module.exports = { parseTextRates, validUntil, parseDeposits, parseFx, parseTenor, parseRate, parseMinAmount, lastCurrency, effectiveDate, tenorLabel, conditionsFrom };
+module.exports = { amountCurrency, lastSegments, tenorsOf, parseTextRates, validUntil, parseDeposits, parseFx, parseTenor, parseRate, parseMinAmount, lastCurrency, effectiveDate, tenorLabel, conditionsFrom };

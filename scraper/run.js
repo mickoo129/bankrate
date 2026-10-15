@@ -116,14 +116,8 @@ function guessType(pageCfgType, data) {
 }
 
 function rowsFromPage(data, type, url) {
-  if (type !== 'auto') return parseDeposits(data, { type, url });
-  // decide per table: promo if the table's surrounding text mentions an offer
-  const out = [];
-  for (const t of data.tables) {
-    const tp = PROMO_HINT.test(t.context.slice(-250)) ? 'promo' : 'board';
-    out.push(...parseDeposits({ ...data, tables: [t] }, { type: tp, url }));
-  }
-  return out;
+  // 'auto' pages: each table is promo or board depending on its own title and header
+  return parseDeposits(data, { type, url });
 }
 
 async function scrapeBank(context, bank, mid, report) {
@@ -182,7 +176,7 @@ async function scrapeBank(context, bank, mid, report) {
       const f = mid ? parseFx(data, mid.rates) : {};
       rep.rows = rows.length;
       // keep what was read, so every number can be traced back to its table
-      debugPages.push({ url: finalUrl, type, title: data.title, tables: data.tables.map((t) => ({ i: t.index, ctx: t.context.slice(-240), grid: t.grid.slice(0, 40).map((r) => r.slice(0, 12).map((c) => c.slice(0, 60))) })), textRows: rep.mode === 'text' ? rows.length : 0 });
+      debugPages.push({ url: finalUrl, type, title: data.title, text: (data.text || '').slice(0, 6000), tables: data.tables.map((t) => ({ i: t.index, ctx: t.context.slice(-240), grid: t.grid.slice(0, 40).map((r) => r.slice(0, 12).map((c) => c.slice(0, 60))) })), textRows: rep.mode === 'text' ? rows.length : 0 });
       rep.fx = Object.keys(f);
       rep.ok = true;
       rep.sample = summarise(rows);

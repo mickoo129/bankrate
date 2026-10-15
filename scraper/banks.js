@@ -42,6 +42,7 @@ module.exports = [
   {
     id: 'sc', name: '渣打', nameEn: 'Standard Chartered', group: 'major',
     site: 'https://www.sc.com',
+    exclude: 'sc\\.com/hk/(?!zh/)',
     pages: [
       { url: 'https://www.sc.com/hk/zh/deposits/online-time-deposit/', type: 'promo' },
       { url: 'https://www.sc.com/hk/zh/deposits/time-deposits-promotion/', type: 'promo' },
