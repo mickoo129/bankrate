@@ -189,7 +189,7 @@
       html.push(`<tr data-bank="${b.id}"><th scope="row" class="bank-cell"><b>${esc(b.name)}</b>${relSel}${stale}</th>${TENORS.map((t) => {
         const r = cells[t.d];
         const openK = `${b.id}|${t.d}`;
-        const better = (b.deposits || []).filter((x) => x.currency === state.ccy && x.tenorDays === t.d && whyNot(x, b.id) && !isExpired(x) && !(x.minAmount && x.minAmount > state.amount && !r))
+        const better = (b.deposits || []).filter((x) => x.currency === state.ccy && x.tenorDays === t.d && whyNot(x, b.id) && !isExpired(x))
           .sort((x, y) => y.rate - x.rate)[0];
         const hint = better && (!r || better.rate > r.rate + 0.1) ? `<i class="more-hint" title="${esc(whyNot(better, b.id))}">另有 ${pct(better.rate)}%</i>` : '';
         if (!r) return `<td class="cell empty" data-k="${openK}" tabindex="0" role="button" aria-label="${esc(b.name)} ${t.label} 未有符合你條件嘅息口">—${hint ? `<div class="meta">${hint}</div>` : ''}</td>`;
