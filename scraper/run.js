@@ -134,6 +134,7 @@ async function scrapeBank(context, bank, mid, report) {
   for (const u of bank.seeds || []) queue.push({ url: u, seed: true, depth: 0 });
 
   const deposits = [];
+  const debugPages = [];
   let fx = {};
   const sources = new Set();
   let offerEnd = null;
@@ -180,6 +181,8 @@ async function scrapeBank(context, bank, mid, report) {
       if (before && !rows.length) rep.note = 'offer expired ' + end;
       const f = mid ? parseFx(data, mid.rates) : {};
       rep.rows = rows.length;
+      // keep what was read, so every number can be traced back to its table
+      debugPages.push({ url: finalUrl, type, title: data.title, tables: data.tables.map((t) => ({ i: t.index, ctx: t.context.slice(-240), grid: t.grid.slice(0, 40).map((r) => r.slice(0, 12).map((c) => c.slice(0, 60))) })), textRows: rep.mode === 'text' ? rows.length : 0 });
       rep.fx = Object.keys(f);
       rep.ok = true;
       rep.sample = summarise(rows);
@@ -217,6 +220,10 @@ async function scrapeBank(context, bank, mid, report) {
     minAmount: r.minAmount, type: r.type, conditions: r.conditions, segment: r.segment,
     tier: r.tierLabel, validUntil: r.validUntil || null, url: r.sourceUrl,
   }));
+  try {
+    fs.mkdirSync(path.join(__dirname, '..', 'debug'), { recursive: true });
+    fs.writeFileSync(path.join(__dirname, '..', 'debug', bank.id + '.json'), JSON.stringify(debugPages));
+  } catch {}
   return { deposits: uniq, fx, sources: Array.from(sources), offerEnd };
 }
 
