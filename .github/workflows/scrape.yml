@@ -24,6 +24,8 @@ jobs:
     timeout-minutes: 50
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main   # always start from the newest data, not the commit that queued this run
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -50,5 +52,8 @@ jobs:
           git add public/data/latest.json public/data/history.json public/data/report.json public/data/hkma.json debug/
           if git diff --cached --quiet; then echo "no change"; exit 0; fi
           git commit -m "data: update rates $(TZ=Asia/Hong_Kong date '+%Y-%m-%d %H:%M') [skip netlify]"
-          git pull --rebase origin main
-          git push
+          for i in 1 2 3; do
+            git pull --rebase -X theirs origin main && git push && exit 0
+            git rebase --abort 2>/dev/null; sleep 10
+          done
+          exit 1
