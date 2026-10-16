@@ -338,3 +338,5 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
 .warn-line { display: block; margin-top: 6px; padding: 8px 10px; border-radius: 8px; background: var(--warn-bg); color: var(--warn); font-size: .84rem; }
 
 .copyright { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); color: var(--ink-2); }
+
+.o-src { display: inline-block; margin-top: 4px; font-size: .78rem; }
