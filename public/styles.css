@@ -373,3 +373,10 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
 .red-note { margin: 12px 2px 0; color: var(--down); font-size: .9rem; font-weight: 500; line-height: 1.6; }
 .chart .legend i.dash { background: repeating-linear-gradient(90deg, var(--ink-3) 0 5px, transparent 5px 9px) !important; height: 2px; }
 .readout .ref { color: var(--ink-3); }
+
+.amt-warn { display: block; color: var(--down); font-size: .78rem; min-height: 0; }
+.amt-warn:empty { display: none; }
+@media (max-width: 720px) {
+  #ccy, #tdCcy { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; max-width: 100%; }
+  #ccy button, #tdCcy button { flex: none; padding: 6px 11px; }
+}

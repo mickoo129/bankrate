@@ -314,7 +314,7 @@
     const set = state.homeBank || state.accounts.length || state.premium.length;
     $('#meBtn').textContent = set ? '修改我嘅情況' : '設定我嘅情況';
   }
-  function changed() { save(); renderMe(); renderRates(); }
+  function changed() { save(); renderMe(); renderRates(); renderTd(); }
   function pickerLabel() {
     const total = state.data ? state.data.banks.length : 0;
     $('#pickerBtn').textContent = state.banks ? `揀銀行（${state.banks.length}／${total}）` : '揀銀行';
@@ -488,7 +488,8 @@
   function setupTd() {
     seg($('#tdCcy'), CCY.slice(1).map((c) => ({ v: c.code, label: c.name })), td.ccy, (v) => { td.ccy = v; td.open = null; renderTd(); });
     seg($('#tdTenor'), TENORS.map((t) => ({ v: t.d, label: t.label })), td.tenor, (v) => { td.tenor = v; td.open = null; renderTd(); });
-    $('#tdAmt').addEventListener('input', renderTd);
+    $('#tdAmt').addEventListener('input', () => { renderTd(); amountWarn($('#tdAmt'), num($('#tdAmt').value)); });
+    amountBox($('#tdAmt'));
     $('#tdAmt').addEventListener('blur', () => { $('#tdAmt').value = fmt(num($('#tdAmt').value)); });
     $('#tdMine').addEventListener('change', renderTd);
     $('#tdList').addEventListener('click', (e) => {
@@ -591,6 +592,21 @@
   }
 
   // ---------- wiring ----------
+  // amount boxes: tapping selects the whole number so typing replaces it; flag unlikely amounts
+  function amountBox(el) {
+    const sel = () => setTimeout(() => { try { el.setSelectionRange(0, el.value.length); } catch {} }, 0);
+    el.addEventListener('focus', sel);
+    el.addEventListener('click', () => { if (document.activeElement === el && el.selectionStart === el.selectionEnd && !el.dataset.typed) sel(); });
+    el.addEventListener('input', () => { el.dataset.typed = '1'; });
+    el.addEventListener('blur', () => { delete el.dataset.typed; });
+  }
+  function amountWarn(el, v) {
+    const box = el.closest('.input');
+    let w = box && box.parentElement.querySelector('.amt-warn');
+    if (!w && box) { w = document.createElement('small'); w.className = 'amt-warn'; box.after(w); }
+    if (w) w.textContent = v > 50000000 ? `你輸入咗 ${fmt(v)}，係咪多咗個零？` : '';
+  }
+
   function setupTabs() {
     const tabs = document.querySelectorAll('.tabs button');
     const show = (name) => {
@@ -615,8 +631,10 @@
     seg($('#ccy'), ccyItems, state.ccy, (v) => { state.ccy = v; state.open = null; save(); renderRates(); });
     seg($('#tenorSeg'), tenorItems, state.sort, (v) => { state.sort = v; state.open = null; save(); renderRates(); });
     $('#amount').value = fmt(state.amount);
-    $('#amount').addEventListener('input', () => { state.amount = num($('#amount').value); save(); renderRates(); });
+    $('#amount').addEventListener('input', () => { state.amount = num($('#amount').value); save(); renderRates(); amountWarn($('#amount'), state.amount); });
     $('#amount').addEventListener('blur', () => { $('#amount').value = state.amount ? fmt(state.amount) : ''; });
+    amountBox($('#amount'));
+    amountBox($('#fxAmt'));
     setupPanels();
     $('#share').onclick = async () => {
       const url = shareUrl();

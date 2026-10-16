@@ -96,6 +96,21 @@ function contextMins(text, { loose = false, strict = false } = {}) {
   return out;
 }
 
+// every "currency + amount" pair in a header such as "港元 1,000,000 / 美元128,000 / 澳元100,000"
+function amountPairs(text) {
+  const out = {};
+  const CW = CCY_WORD.replace('(', '(?:') + '|HK\\$|US\\$';
+  const re = new RegExp(`(${CW})\\s*([\\d,]+(?:\\.\\d+)?)\\s*(萬)?|([\\d,]+(?:\\.\\d+)?)\\s*(萬)?\\s*元?\\s*(${CW})`, 'gi');
+  let q;
+  while ((q = re.exec(text || ''))) {
+    const word = q[1] || q[6];
+    const code = /HK\$/i.test(word) ? 'HKD' : /US\$/i.test(word) ? 'USD' : (CCY_MAP[word.toUpperCase()] || CCY_MAP[word]);
+    let v = parseFloat(String(q[2] || q[4]).replace(/,/g, '')); if (q[3] || q[5]) v *= 1e4;
+    if (code && v >= 100 && out[code] == null) out[code] = v;
+  }
+  return out;
+}
+
 // the text right above a table (its title / caption), not the whole page section
 function lastSegments(ctx) {
   const parts = (ctx || '').split(' | ').map((x) => x.trim()).filter(Boolean);
@@ -359,6 +374,8 @@ function parseDeposits(page, source) {
       if (f.upTo) conditions.add('最高息（視乎條件）');
       if (t.type === 'promo' && f.rate < (f.currency === 'JPY' ? 0.02 : 0.2)) continue; // placeholder rates such as 0.001%
       let minAmount = f.minAmount;
+      const pairs = amountPairs(f.tierLabel);
+      if (Object.keys(pairs).length >= 2 && pairs[f.currency] != null) minAmount = pairs[f.currency];
       let minFrom = minAmount != null ? 'table' : null;
       if (minAmount == null) {
         const v = t.mins[f.currency] ?? (f.currency !== 'HKD' ? t.mins.FOREIGN : undefined);
@@ -505,4 +522,4 @@ function effectiveDate(text) {
   return null;
 }
 
-module.exports = { contextMins, amountCurrency, lastSegments, tenorsOf, parseTextRates, validUntil, parseDeposits, parseFx, parseTenor, parseRate, parseMinAmount, lastCurrency, effectiveDate, tenorLabel, conditionsFrom };
+module.exports = { amountPairs, contextMins, amountCurrency, lastSegments, tenorsOf, parseTextRates, validUntil, parseDeposits, parseFx, parseTenor, parseRate, parseMinAmount, lastCurrency, effectiveDate, tenorLabel, conditionsFrom };

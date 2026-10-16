@@ -94,4 +94,10 @@ assert.deepStrictEqual(contextMins('(原幣2,000或以上 /港元10,000或以上
 assert.deepStrictEqual(contextMins('金額少於HKD100,000以下'), {});
 rows = parseDeposits({ tables: [{ index: 0, context: '港元新資金定期存款優惠 | [CAPTION] 最低存款金額：港幣10,000元或以上', grid: [['存款期', '定期存款年利率'], ['3個月', '2.40%']] }] }, { type: 'promo', url: 'x' });
 assert.strictEqual(rows[0].minAmount, 10000);
+// header listing several currencies' minimums (富邦)
+rows = parseDeposits({ tables: [{ index: 0, context: '新資金定期存款優惠', grid: [
+  ['存款金額', '港元 1,000,000 / 美元128,000 / 澳元100,000 (或以上)', '港元 1,000,000 / 美元128,000 / 澳元100,000 (或以上)'], ['存款期', '三個月', '六個月'], ['港元', '3.2%', '3.4%'], ['美元', '4.45%', '/'],
+] }] }, { type: 'promo', url: 'x' });
+assert.strictEqual(rows.find((r) => r.currency === 'USD').minAmount, 128000);
+assert.strictEqual(rows.find((r) => r.currency === 'HKD').minAmount, 1000000);
 console.log('all parser tests passed');
