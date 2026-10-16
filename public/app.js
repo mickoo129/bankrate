@@ -420,63 +420,66 @@
       return true;
     }).sort((x, y) => y.rate - x.rate)[0] || null;
   }
-  function bestHkd(tenor) {
-    let best = null;
-    for (const b of (state.data ? state.data.banks : [])) for (const r of b.deposits || []) {
-      if (r.currency !== 'HKD' || r.tenorDays !== tenor) continue;
-      const amtSave = state.amount; state.amount = num($('#tdAmt').value);
-      const ok = !whyNot(r, b.id); state.amount = amtSave;
-      if (ok && (!best || r.rate > best.r.rate)) best = { b, r };
-    }
-    return best;
+  // same bank, plain HKD deposit, for the like-for-like comparison
+  function hkdAt(b, tenor, amt) {
+    const save = state.amount, saveCcy = state.ccy; state.amount = amt; state.ccy = 'HKD';
+    const r = (b.deposits || []).filter((x) => x.currency === 'HKD' && x.tenorDays === tenor && !whyNot(x, b.id)).sort((x, y) => y.rate - x.rate)[0] || null;
+    state.amount = save; state.ccy = saveCcy;
+    return r;
   }
+  const money = (v) => fmt(Math.round(v), 0);
+  const chip = (g) => `<span class="chip-g ${g >= 0 ? 'up' : 'dn'}">${g >= 0 ? '賺' : '蝕'} ${money(Math.abs(g))}</span>`;
   function renderTd() {
-    const amt = num($('#tdAmt').value), ccy = td.ccy, tenor = td.tenor, move = num($('#tdMove').value) / 100;
+    const amt = num($('#tdAmt').value), ccy = td.ccy, tenor = td.tenor;
     const list = $('#tdList');
     const m = mid().rates[ccy];
     if (!state.data || !m || !amt) { list.innerHTML = '<li class="empty-msg">未有匯價數據，暫時計唔到。</li>'; return; }
-    const days = DAYS(tenor), dp = ccy === 'JPY' ? 0 : 2, sp = medianSpread(ccy);
-    const hk = bestHkd(tenor);
-    const hkGain = hk ? amt * hk.r.rate / 100 * days / 365 : 0;
-    $('#tdBase').innerHTML = hk
-      ? `對比：直接做港元${TENOR_LABEL(tenor)}，最高係${esc(hk.b.name)} ${pct(hk.r.rate)}%，到期賺 <b>HKD ${fmt(hkGain, 0)}</b>，冇匯率風險。`
-      : `港元${TENOR_LABEL(tenor)}暫時冇合適息口可以對比。`;
+    const days = DAYS(tenor), sp = medianSpread(ccy);
+    const mine = state.accounts.length || state.homeBank;
+    $('#tdMineWrap').hidden = !mine;
+    const onlyMine = mine && $('#tdMine').checked;
+    const myBanks = new Set([...state.accounts, ...state.premium, state.homeBank].filter(Boolean));
+    $('#tdBase').innerHTML = `你放 <b>HKD ${money(amt)}</b> 做${esc(CCY_NAME[ccy])}定期 ${TENOR_LABEL(tenor)}，到期換返港幣攞返幾多？（按今日匯率計）`;
     const rows = [];
     for (const b of state.data.banks) {
+      if (onlyMine && !myBanks.has(b.id)) continue;
       const f = (b.fx || {})[ccy];
       const sell = f ? f.sell : m * (1 + sp), buy = f ? f.buy : m * (1 - sp);
       const units = amt / sell;
       const r = bestForeign(b, ccy, tenor, units);
       if (!r) continue;
       const interest = units * r.rate / 100 * days / 365;
-      const back = (units + interest) * buy * (1 + move);
-      const fxCost = amt - units * buy;
-      const gain = back - amt;
-      const breakeven = (amt / ((units + interest) * buy) - 1) * 100;
-      rows.push({ b, r, f, sell, buy, units, interest, back, fxCost, gain, annual: gain / amt * 365 / days * 100, breakeven });
+      const back = (units + interest) * buy;
+      const hk = hkdAt(b, tenor, amt);
+      rows.push({ b, r, f, units, back, gain: back - amt,
+        interestHkd: interest * buy, fxCost: amt - units * buy,
+        breakeven: (amt / ((units + interest) * buy) - 1) * 100,
+        hk, hkBack: hk ? amt + amt * hk.rate / 100 * days / 365 : null });
     }
     rows.sort((x, y) => y.gain - x.gain);
-    if (!rows.length) { list.innerHTML = `<li class="empty-msg">暫時未有銀行提供${esc(CCY_NAME[ccy])}${TENOR_LABEL(tenor)}定期息口，試吓揀另一個存期。</li>`; return; }
+    if (!rows.length) { list.innerHTML = `<li class="empty-msg">${onlyMine ? '你有戶口嘅銀行' : '暫時未有銀行'}未有${esc(CCY_NAME[ccy])}${TENOR_LABEL(tenor)}定期息口${onlyMine ? '，可以取消「只睇我有戶口嘅銀行」' : '，試吓揀另一個存期'}。</li>`; return; }
     list.innerHTML = rows.map((x, i) => {
       const k = x.b.id, open = td.open === k;
-      const worse = hk && x.gain < hkGain;
       const n = needs(x.r);
-      return `<li class="rk${i === 0 && x.gain > 0 ? ' best' : ''}${open ? ' open' : ''}">
+      const cmp = x.hk
+        ? `同一間做港元定期：攞返 HKD ${money(x.hkBack)}（${x.hkBack > x.back ? `多 ${money(x.hkBack - x.back)}` : x.hkBack < x.back ? `少 ${money(x.back - x.hkBack)}` : '一樣'}）`
+        : '呢間未有合適嘅港元同期定期資料';
+      return `<li class="rk${open ? ' open' : ''}">
         <button type="button" class="rk-head" data-td="${k}" aria-expanded="${open}">
           <span class="rk-pos">${i + 1}</span>
-          <span class="rk-name"><b>${esc(x.b.name)}</b><small>${esc(CCY_NAME[ccy])}年息 ${pct(x.r.rate)}%・${x.r.minAmount == null ? '起存額未知' : x.r.minAmount > 0 ? `${ccy} ${fmt(x.r.minAmount)} 起` : '冇起存要求'}・換匯成本 HKD ${fmt(x.fxCost, 0)}${x.f ? '' : '（估算）'}${worse ? '・<span class="worse">比做港元少</span>' : ''}</small></span>
-          <span class="rk-rate ${x.gain >= 0 ? '' : 'neg'}">${x.gain >= 0 ? '+' : '−'}${fmt(Math.abs(x.gain), 0)}<small> HKD</small></span>
+          <span class="rk-name"><b>${esc(x.b.name)}</b><small>${esc(CCY_NAME[ccy])}年息 ${pct(x.r.rate)}%${x.f ? '' : '・換錢價估算'}</small><small class="cmp">${cmp}</small></span>
+          <span class="rk-back"><small>到期攞返</small><b>HKD ${money(x.back)}</b>${chip(x.gain)}</span>
         </button>
         ${open ? `<div class="rk-detail"><div class="detail-in">
-          <ol class="steps">
-            <li><span>用 HKD ${fmt(amt, 0)} 換${esc(CCY_NAME[ccy])}（銀行賣出價 ${fmt(x.sell, ccy === 'JPY' ? 5 : 4)}${x.f ? '' : '，估算'}）</span><b>${ccy} ${fmt(x.units, dp)}</b></li>
-            <li><span>${TENOR_LABEL(tenor)}定期，年息 ${pct(x.r.rate)}% ${x.r.type === 'promo' ? '優惠' : '牌價'}</span><b>+${ccy} ${fmt(x.interest, dp)}</b></li>
-            <li><span>到期換返港元（銀行買入價 ${fmt(x.buy * (1 + move), ccy === 'JPY' ? 5 : 4)}${move ? `，已計外幣${move > 0 ? '升' : '跌'} ${Math.abs(move * 100)}%` : ''}）</span><b>HKD ${fmt(x.back, 0)}</b></li>
-          </ol>
-          <div class="td-sum"><span>淨賺（已扣換匯成本 HKD ${fmt(x.fxCost, 0)}）</span><b class="${x.gain >= 0 ? 'pos-c' : 'neg'}">${x.gain >= 0 ? '+' : '−'}HKD ${fmt(Math.abs(x.gain), 0)}</b></div>
-          <div class="td-sum"><span>折合實際年回報</span><b>${x.annual.toFixed(2)}%</b></div>
-          <p class="o-needs">${n.length ? '條件：' + n.map(esc).join('・') : '冇特別條件'}</p>
-          <p class="o-why">到期時${esc(CCY_NAME[ccy])}只要跌多過 ${Math.abs(x.breakeven).toFixed(2)}% 就會蝕本金。${ccy === 'USD' ? '美元同港元掛鈎，波動通常好細。' : '呢個貨幣同港元冇掛鈎，匯率升跌可以大過利息。'}</p>
+          <p class="risk-line">${esc(CCY_NAME[ccy])}只要喺到期前跌多過 ${Math.abs(x.breakeven).toFixed(2)}%，你就會攞返少過 HKD ${money(amt)}。${ccy === 'USD' ? '美元同港元掛鈎，波動通常好細。' : ''}</p>
+          <p class="o-needs">${n.length ? '要留意：' + n.map(esc).join('・') : '冇特別條件'}</p>
+          <details class="how-wrap"><summary>點計出嚟？</summary>
+            <ul class="how">
+              <li><span>利息（${esc(CCY_NAME[ccy])} ${fmt(x.units * x.r.rate / 100 * days / 365, ccy === 'JPY' ? 0 : 2)}）</span><b>約 + HKD ${money(x.interestHkd)}</b></li>
+              <li><span>換錢差價（買一次、賣一次，銀行收）</span><b>約 − HKD ${money(x.fxCost)}</b></li>
+              <li><span>${x.gain >= 0 ? '淨賺' : '淨蝕'}</span><b>${x.gain >= 0 ? '+' : '−'} HKD ${money(Math.abs(x.gain))}</b></li>
+            </ul>
+          </details>
           <p class="d-foot"><a href="${esc(x.r.url || x.b.site)}" target="_blank" rel="noopener">睇銀行原文及條款</a></p>
         </div></div>` : ''}
       </li>`;
@@ -487,7 +490,7 @@
     seg($('#tdTenor'), TENORS.map((t) => ({ v: t.d, label: t.label })), td.tenor, (v) => { td.tenor = v; td.open = null; renderTd(); });
     $('#tdAmt').addEventListener('input', renderTd);
     $('#tdAmt').addEventListener('blur', () => { $('#tdAmt').value = fmt(num($('#tdAmt').value)); });
-    $('#tdMove').addEventListener('input', renderTd);
+    $('#tdMine').addEventListener('change', renderTd);
     $('#tdList').addEventListener('click', (e) => {
       if (e.target.closest('a')) return;
       const h = e.target.closest('[data-td]'); if (!h) return;
@@ -495,51 +498,71 @@
     });
   }
 
-  // ---------- 走勢 ----------
-  const PALETTE = ['var(--accent)', 'var(--promo)'];
+  // ---------- 走勢 (HKMA monthly history) ----------
+  const trend = { years: 10, tenor: 3, hkma: null };
+  const TT = { 1: '1個月', 3: '3個月', 6: '6個月', 12: '12個月' };
+  const ym = (m) => { const [y, mo] = m.split('-'); return `${y}年${+mo}月`; };
   function renderTrend() {
-    const h = state.history;
     const el = $('#chart');
-    const key = `${state.tCcy}|${state.tTenor}`;
-    const series = [];
-    if (h && h.series) {
-      if (h.series['ALL|' + key]) series.push({ name: '全市場最高（包括有條件優惠）', pts: h.series['ALL|' + key] });
-      if (state.tBank && h.series[state.tBank + '|' + key]) {
-        const b = state.data.banks.find((x) => x.id === state.tBank);
-        series.push({ name: b ? b.name : state.tBank, pts: h.series[state.tBank + '|' + key] });
-      }
-    }
-    const n = series.reduce((a, s) => Math.max(a, s.pts.length), 0);
-    if (!series.length || n < 2) {
-      el.innerHTML = `<p class="empty-msg">${series.length ? `系統由今日開始記錄，累積幾日數據之後就會畫出走勢。目前${esc(series[0].name)}：${pct(series[0].pts[series[0].pts.length - 1][1])}%` : '暫時未有呢個貨幣／存期嘅紀錄。'}</p>`;
-      $('#trendNote').textContent = '';
+    const h = trend.hkma;
+    if (!h || !h.months || !h.months.length) {
+      el.innerHTML = '<p class="empty-msg">歷史數據準備緊，下次系統更新（大約兩個鐘內）就會出現。</p>';
+      $('#trendFacts').innerHTML = ''; $('#trendNote').textContent = '';
       return;
     }
-    const all = series.flatMap((s) => s.pts);
-    const dates = [...new Set(all.map((p) => p[0]))].sort();
-    const t0 = Date.parse(dates[0]), t1 = Date.parse(dates[dates.length - 1]) || t0 + 1;
-    let lo = Math.min(...all.map((p) => p[1])), hi = Math.max(...all.map((p) => p[1]));
-    if (hi - lo < 0.2) { hi += 0.1; lo = Math.max(0, lo - 0.1); }
-    const W = 760, H = 300, L = 48, R = 14, T = 14, B = 30;
-    const x = (d) => L + (Date.parse(d) - t0) / Math.max(t1 - t0, 1) * (W - L - R);
+    const last = h.months[h.months.length - 1][0];
+    const from = trend.years ? `${+last.slice(0, 4) - trend.years}${last.slice(4)}` : '0000';
+    const pts = h.months.filter(([m]) => m > from);
+    const series = [
+      { name: `HIBOR ${TT[trend.tenor]}（銀行優惠通常跟佢走）`, key: 'h' + trend.tenor, color: 'var(--best)' },
+      { name: `銀行港元定期牌價平均 ${TT[trend.tenor]}`, key: 'd' + trend.tenor, color: 'var(--accent)' },
+    ].map((sr) => ({ ...sr, pts: pts.filter(([, v]) => v[sr.key] != null).map(([m, v]) => [m, v[sr.key]]) }));
+    const all = series.flatMap((s) => s.pts.map((p) => p[1]));
+    if (!all.length) { el.innerHTML = '<p class="empty-msg">呢個存期暫時冇數據。</p>'; return; }
+    const lo = 0, hi = Math.max(1, Math.ceil(Math.max(...all)));
+    const W = 760, H = 320, L = 44, R = 14, T = 14, B = 30;
+    const months = pts.map((p) => p[0]);
+    const xi = (m) => months.indexOf(m);
+    const x = (m) => L + xi(m) / Math.max(months.length - 1, 1) * (W - L - R);
     const y = (v) => T + (hi - v) / (hi - lo) * (H - T - B);
     let grid = '';
-    for (let i = 0; i <= 4; i++) {
-      const v = lo + (hi - lo) * i / 4;
-      grid += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--ink-2)">${v.toFixed(2)}%</text>`;
+    const step = hi <= 2 ? 0.5 : hi <= 6 ? 1 : 2;
+    for (let v = 0; v <= hi + 1e-9; v += step) grid += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--ink-2)">${v}%</text>`;
+    const yearsShown = [...new Set(months.map((m) => m.slice(0, 4)))];
+    const every = Math.ceil(yearsShown.length / 8);
+    yearsShown.forEach((yr, i) => { if (i % every) return; const m = months.find((mm) => mm.startsWith(yr)); grid += `<text x="${x(m)}" y="${H - 8}" text-anchor="middle" font-size="11" fill="var(--ink-2)">${yr}</text>`; });
+    const paths = series.map((sr) => `<path d="${sr.pts.map((p, i) => `${i ? 'L' : 'M'}${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`).join('')}" fill="none" stroke="${sr.color}" stroke-width="2.2" stroke-linejoin="round"/>`).join('');
+    el.innerHTML = `<div class="readout" id="readout">移動或者撳圖表睇每個月嘅數字</div>
+      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="港元 ${TT[trend.tenor]} 息口走勢">${grid}${paths}<line id="cross" x1="0" x2="0" y1="${T}" y2="${H - B}" stroke="var(--ink-3)" stroke-dasharray="3 3" visibility="hidden"/></svg>
+      <div class="legend">${series.map((s) => `<span><i style="background:${s.color}"></i>${esc(s.name)}</span>`).join('')}</div>`;
+    const svg = el.querySelector('svg');
+    const show = (ev) => {
+      const r = svg.getBoundingClientRect();
+      const px = ((ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left) / r.width * W;
+      const i = Math.max(0, Math.min(months.length - 1, Math.round((px - L) / (W - L - R) * (months.length - 1))));
+      const m = months[i], v = pts[i][1];
+      const c = svg.querySelector('#cross'); c.setAttribute('x1', x(m)); c.setAttribute('x2', x(m)); c.setAttribute('visibility', 'visible');
+      $('#readout').innerHTML = `<b>${ym(m)}</b>　HIBOR ${v['h' + trend.tenor] != null ? v['h' + trend.tenor].toFixed(2) + '%' : '—'}　牌價平均 ${v['d' + trend.tenor] != null ? v['d' + trend.tenor].toFixed(2) + '%' : '—'}`;
+    };
+    svg.addEventListener('mousemove', show); svg.addEventListener('click', show); svg.addEventListener('touchmove', show, { passive: true });
+
+    // plain-language facts for the chosen period
+    const hs = series[0].pts;
+    if (hs.length) {
+      const mx = hs.reduce((a, p) => (p[1] > a[1] ? p : a)), mn = hs.reduce((a, p) => (p[1] < a[1] ? p : a)), now = hs[hs.length - 1];
+      const above3 = hs.filter((p) => p[1] >= 3).length;
+      $('#trendFacts').innerHTML = `
+        <div class="fact"><small>${trend.years ? `過去 ${trend.years} 年` : '有紀錄以來'}最高</small><b>${mx[1].toFixed(2)}%</b><span>${ym(mx[0])}</span></div>
+        <div class="fact"><small>最低</small><b>${mn[1].toFixed(2)}%</b><span>${ym(mn[0])}</span></div>
+        <div class="fact"><small>最近</small><b>${now[1].toFixed(2)}%</b><span>${ym(now[0])}</span></div>`;
+      $('#trendNote').textContent = `${TT[trend.tenor]} HIBOR 喺呢段期間有 ${above3} 個月（約 ${Math.round(above3 / hs.length * 100)}%）高過 3%，其餘時間都低過 3%。高息通常只係維持一段時間，之後會隨市況回落。`;
     }
-    grid += [...new Set([dates[0], dates[Math.floor(dates.length / 2)], dates[dates.length - 1]])].map((d) => `<text x="${x(d)}" y="${H - 8}" text-anchor="middle" font-size="11" fill="var(--ink-2)">${shortDate(d)}</text>`).join('');
-    const paths = series.map((s, i) => {
-      let dp = '';
-      s.pts.forEach((p, j) => { dp += j === 0 ? `M${x(p[0])},${y(p[1])}` : `H${x(p[0])}V${y(p[1])}`; });
-      return `<path d="${dp}" fill="none" stroke="${PALETTE[i]}" stroke-width="2.5" ${i ? 'stroke-dasharray="6 4"' : ''}/>`;
-    }).join('');
-    el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(CCY_NAME[state.tCcy])} ${TENOR_LABEL(state.tTenor)} 定期息口走勢">${grid}${paths}</svg>
-      <div class="legend">${series.map((s, i) => `<span><i style="background:${PALETTE[i]}"></i>${esc(s.name)}</span>`).join('')}</div>`;
-    const s0 = series[0].pts;
-    const peak = s0.reduce((a, p) => (p[1] > a[1] ? p : a), s0[0]);
-    const now = s0[s0.length - 1];
-    $('#trendNote').textContent = `由 ${shortDate(s0[0][0])} 開始記錄：最高 ${pct(peak[1])}%（${shortDate(peak[0])}），而家 ${pct(now[1])}%。優惠息口有限期，完結後通常會跌返牌價水平。`;
+  }
+  async function loadHkma() {
+    for (const base of [REPO_DATA, LOCAL_DATA]) {
+      try { const r = await fetch(base + 'hkma.json?t=' + Math.floor(Date.now() / 3600e3)); if (r.ok) { trend.hkma = await r.json(); break; } } catch {}
+    }
+    renderTrend();
   }
 
   // ---------- 資料來源 ----------
@@ -598,9 +621,9 @@
 
     setupTd();
 
-    seg($('#tCcy'), ccyItems, state.tCcy, (v) => { state.tCcy = v; renderTrend(); });
-    seg($('#tTenor'), tenorItems, state.tTenor, (v) => { state.tTenor = v; renderTrend(); });
-    $('#tBank').onchange = (e) => { state.tBank = e.target.value; renderTrend(); };
+    seg($('#tRange'), [{ v: 5, label: '5年' }, { v: 10, label: '10年' }, { v: 20, label: '20年' }, { v: 0, label: '全部' }], trend.years, (v) => { trend.years = v; renderTrend(); });
+    seg($('#tTenor'), [1, 3, 6, 12].map((m) => ({ v: m, label: TT[m] })), trend.tenor, (v) => { trend.tenor = v; renderTrend(); });
+    loadHkma();
 
     renderRates();
     load();
@@ -616,7 +639,6 @@
     }
     const ok = data.banks.filter((b) => b.status !== 'none').length;
     $('#updated').innerHTML = `更新於 <b>${esc(timeAgo(data.updatedAt))}</b><br>${ok} 間銀行`;
-    fillSelect($('#tBank'), [{ v: '', label: '（唔比較）' }, ...data.banks.filter((b) => b.deposits && b.deposits.length).map((b) => ({ v: b.id, label: b.name }))], state.tBank);
     if (state.banks) state.banks = state.banks.filter((id) => data.banks.some((b) => b.id === id));
     renderMe(); renderPicker(); renderRates(); renderFx(); renderTd(); renderTrend(); renderStatus();
   }

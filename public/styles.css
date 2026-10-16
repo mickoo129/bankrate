@@ -340,3 +340,32 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
 .copyright { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); color: var(--ink-2); }
 
 .o-src { display: inline-block; margin-top: 4px; font-size: .78rem; }
+
+/* trend */
+.facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+.fact { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.fact small { display: block; font-size: .78rem; color: var(--ink-2); }
+.fact b { display: block; font: 700 1.6rem var(--num); }
+.fact span { font-size: .8rem; color: var(--ink-3); }
+.readout { font-size: .86rem; color: var(--ink-2); padding: 2px 6px 8px; min-height: 1.6em; }
+.readout b { color: var(--ink); }
+.chart svg { touch-action: pan-y; cursor: crosshair; }
+.explain { margin-top: 14px; }
+@media (max-width: 720px) { .fact b { font-size: 1.25rem; } .fact { padding: 10px; } }
+
+/* FX page v3 */
+.rk-name small.cmp { color: var(--ink-2); margin-top: 2px; }
+.rk-back { text-align: right; white-space: nowrap; }
+.rk-back small { display: block; font-size: .7rem; color: var(--ink-3); }
+.rk-back b { display: block; font: 700 1.15rem var(--num); }
+.chip-g { display: inline-block; margin-top: 3px; font: 700 .8rem var(--num); padding: 1px 8px; border-radius: 999px; }
+.chip-g.up { color: var(--best); background: var(--best-bg); }
+.chip-g.dn { color: var(--down); background: color-mix(in srgb, var(--down) 12%, transparent); }
+.risk-line { margin: 0 0 8px; padding: 8px 10px; border-radius: 8px; background: var(--warn-bg); color: var(--warn); font-size: .86rem; }
+.how-wrap { margin-top: 8px; font-size: .88rem; }
+.how-wrap summary { color: var(--accent); cursor: pointer; min-height: 30px; }
+.how { list-style: none; margin: 6px 0 0; padding: 0; }
+.how li { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.how li span { color: var(--ink-2); }
+.how li b { font: 600 .95rem var(--num); white-space: nowrap; }
+#tdMineWrap { margin-top: 4px; }
