@@ -515,6 +515,7 @@
     const pts = h.months.filter(([m]) => m > from);
     const series = [
       { name: `主要銀行港元定期牌價平均 ${TT[trend.tenor]}（金管局）`, key: 'd' + trend.tenor, color: 'var(--accent)' },
+      { name: `參考：HIBOR ${TT[trend.tenor]}（唔係定期息率）`, key: 'h' + trend.tenor, color: 'var(--ink-3)', dash: true },
     ].map((sr) => ({ ...sr, pts: pts.filter(([, v]) => v[sr.key] != null).map(([m, v]) => [m, v[sr.key]]) }));
     // our own daily record of the best offer in the market, averaged per month
     const own = state.history && state.history.series && state.history.series[`ALL|HKD|${trend.tenor * 30}`];
@@ -540,11 +541,11 @@
     const yearsShown = [...new Set(months.map((m) => m.slice(0, 4)))];
     const every = Math.ceil(yearsShown.length / 8);
     yearsShown.forEach((yr, i) => { if (i % every) return; const m = months.find((mm) => mm.startsWith(yr)); grid += `<text x="${x(m)}" y="${H - 8}" text-anchor="middle" font-size="11" fill="var(--ink-2)">${yr}</text>`; });
-    const paths = series.map((sr) => `<path d="${sr.pts.map((p, i) => `${i ? 'L' : 'M'}${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`).join('')}" fill="none" stroke="${sr.color}" stroke-width="2.2" stroke-linejoin="round"/>`
+    const paths = series.map((sr) => `<path d="${sr.pts.map((p, i) => `${i ? 'L' : 'M'}${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`).join('')}" fill="none" stroke="${sr.color}" stroke-width="${sr.dash ? 1.6 : 2.2}" ${sr.dash ? 'stroke-dasharray="5 4"' : ''} stroke-linejoin="round"/>`
       + (sr.own ? sr.pts.map((p) => `<circle cx="${x(p[0]).toFixed(1)}" cy="${y(p[1]).toFixed(1)}" r="4" fill="${sr.color}"/>`).join('') : '')).join('');
     el.innerHTML = `<div class="readout" id="readout">移動或者撳圖表睇每個月嘅數字</div>
       <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="港元 ${TT[trend.tenor]} 息口走勢">${grid}${paths}<line id="cross" x1="0" x2="0" y1="${T}" y2="${H - B}" stroke="var(--ink-3)" stroke-dasharray="3 3" visibility="hidden"/></svg>
-      <div class="legend">${series.map((s) => `<span><i style="background:${s.color}"></i>${esc(s.name)}</span>`).join('')}</div>`;
+      <div class="legend">${series.map((s) => `<span><i class="${s.dash ? 'dash' : ''}" style="background:${s.color}"></i>${esc(s.name)}</span>`).join('')}</div>`;
     const svg = el.querySelector('svg');
     const show = (ev) => {
       const r = svg.getBoundingClientRect();
@@ -553,12 +554,12 @@
       const m = months[i], v = pts[i][1];
       const c = svg.querySelector('#cross'); c.setAttribute('x1', x(m)); c.setAttribute('x2', x(m)); c.setAttribute('visibility', 'visible');
       const o = series.find((sr) => sr.own); const ov = o && o.pts.find((p) => p[0] === m);
-      $('#readout').innerHTML = `<b>${ym(m)}</b>　牌價平均 ${v['d' + trend.tenor] != null ? v['d' + trend.tenor].toFixed(2) + '%' : '—'}${ov ? `　最高優惠 ${ov[1].toFixed(2)}%` : ''}`;
+      $('#readout').innerHTML = `<b>${ym(m)}</b>　牌價平均 ${v['d' + trend.tenor] != null ? v['d' + trend.tenor].toFixed(2) + '%' : '—'}${ov ? `　最高優惠 ${ov[1].toFixed(2)}%` : ''}　<span class="ref">HIBOR ${v['h' + trend.tenor] != null ? v['h' + trend.tenor].toFixed(2) + '%' : '—'}</span>`;
     };
     svg.addEventListener('mousemove', show); svg.addEventListener('click', show); svg.addEventListener('touchmove', show, { passive: true });
 
     // plain-language facts for the chosen period
-    const hs = series[0].pts;
+    const hs = series[0].pts; // facts are about real deposit rates only
     if (hs.length) {
       const mx = hs.reduce((a, p) => (p[1] > a[1] ? p : a)), mn = hs.reduce((a, p) => (p[1] < a[1] ? p : a)), now = hs[hs.length - 1];
       const above1 = hs.filter((p) => p[1] >= 1).length;

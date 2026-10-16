@@ -369,3 +369,7 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
 .how li span { color: var(--ink-2); }
 .how li b { font: 600 .95rem var(--num); white-space: nowrap; }
 #tdMineWrap { margin-top: 4px; }
+
+.red-note { margin: 12px 2px 0; color: var(--down); font-size: .9rem; font-weight: 500; line-height: 1.6; }
+.chart .legend i.dash { background: repeating-linear-gradient(90deg, var(--ink-3) 0 5px, transparent 5px 9px) !important; height: 2px; }
+.readout .ref { color: var(--ink-3); }
