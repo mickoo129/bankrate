@@ -101,3 +101,14 @@ rows = parseDeposits({ tables: [{ index: 0, context: '新資金定期存款優�
 assert.strictEqual(rows.find((r) => r.currency === 'USD').minAmount, 128000);
 assert.strictEqual(rows.find((r) => r.currency === 'HKD').minAmount, 1000000);
 console.log('all parser tests passed');
+
+
+{ // ICBC new-customer page: cap, nearest promo period
+  const { capAmounts, validUntilNear, contextMins } = require('../scraper/parse');
+  const t = '港幣3個月特惠定存年利率6% 推廣期：2026年10月2日至2026年12月31日（包括首尾兩天） 經手機銀行「e定存」功能開立3個月港元定期存款起存金額為HK$1,000，累計存款金額最高為HK$200,000； 信用卡迎新賞 推廣期：2026年4月1日至2027年3月31日';
+  const assert = require('assert');
+  assert.strictEqual(capAmounts(t).HKD, 200000);
+  assert.strictEqual(validUntilNear(t, 0), '2026-12-31');
+  assert.strictEqual(contextMins(t, { strict: true }).HKD, 1000);
+  console.log('icbc cap test ok');
+}

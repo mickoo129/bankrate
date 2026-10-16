@@ -380,3 +380,14 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
   #ccy, #tdCcy { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; max-width: 100%; }
   #ccy button, #tdCcy button { flex: none; padding: 6px 11px; }
 }
+
+.chip.more { border-style: dashed; color: var(--accent); background: transparent; }
+@media (max-width: 560px) {
+  .chart { padding: 8px 4px; }
+  .status thead { display: none; }
+  .status, .status tbody, .status tr, .status td { display: block; width: 100%; }
+  .status tr { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  .status td { border: 0; padding: 2px 0; text-align: left; }
+  .status td[data-l]::before { content: attr(data-l) '：'; color: var(--ink-2); font-size: .82rem; }
+  .status td.st-name { font-size: 1rem; padding-bottom: 4px; }
+}

@@ -11,7 +11,7 @@ const { chromium } = require('playwright');
 const { JSDOM, VirtualConsole } = require('jsdom');
 const banks = require('./banks');
 const { extractTables } = require('./extract');
-const { parseDeposits, parseFx, validUntil, parseTextRates } = require('./parse');
+const { parseDeposits, parseFx, validUntil, parseTextRates, capAmounts, validUntilNear, contextMins } = require('./parse');
 
 const DATA_DIR = path.join(__dirname, '..', 'public', 'data');
 const CURRENCIES = ['HKD', 'USD', 'CNY', 'AUD', 'GBP', 'JPY'];
@@ -164,7 +164,14 @@ async function scrapeBank(context, bank, mid, report) {
       rows.forEach((r) => {
         if (r.type === 'board') r.conditions = conditionsOnlyFromSegment(r);
         if (r.type === 'promo' && end) r.validUntil = end;
+        if (r.fromText && r.type === 'promo') { // text-only promo pages: look for the period and minimum next to the rate
+          const near = validUntilNear(data.text, (data.text || '').indexOf(r.tierLabel.slice(0, 30)));
+          if (near) r.validUntil = near;
+          if (r.minAmount == null) { const mn = contextMins(data.text, { strict: true })[r.currency]; if (mn != null) { r.minAmount = mn; r.minFrom = 'page'; } }
+        }
       });
+      const caps = capAmounts(data.text);
+      for (const r of rows) if (r.type === 'promo' && caps[r.currency] && !(r.minAmount > caps[r.currency])) r.maxAmount = caps[r.currency];
       const before = rows.length;
       const longAgo = hkDate(new Date(Date.now() - 180 * 864e5));
       for (let k = rows.length - 1; k >= 0; k--) {
@@ -211,7 +218,7 @@ async function scrapeBank(context, bank, mid, report) {
     seen.add(k); return true;
   }).map((r) => ({
     currency: r.currency, tenorDays: r.tenorDays, tenor: r.tenor, rate: r.rate,
-    minAmount: r.minAmount, minFrom: r.minFrom || null, type: r.type, conditions: r.conditions, segment: r.segment,
+    minAmount: r.minAmount, minFrom: r.minFrom || null, maxAmount: r.maxAmount || null, type: r.type, conditions: r.conditions, segment: r.segment,
     tier: r.tierLabel, validUntil: r.validUntil || null, url: r.sourceUrl,
   }));
   try {

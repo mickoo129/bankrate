@@ -468,6 +468,30 @@ function validUntil(text) {
   return best;
 }
 
+// Upper limit on how much can earn a promo rate: "累計存款金額最高為HK$200,000", "存款上限為港幣50萬"
+function capAmounts(text) {
+  const out = {};
+  const t = (text || '').replace(/\s+/g, ' ');
+  const re = /(?:(?:累計)?存款(?:金額|額)?(?:最高|上限)(?:為|是|:|：)?|最高(?:存款|可存)(?:金額|額)?(?:為|:|：)?)\s*(HK\$|US\$|港幣|港元|美元|人民幣|澳元|英鎊|日圓)?\s*([\d,]+(?:\.\d+)?)\s*(萬)?\s*(港元|港幣|美元|人民幣|澳元|英鎊|日圓)?/g;
+  const code = (w) => ({ 'HK$': 'HKD', 港幣: 'HKD', 港元: 'HKD', 'US$': 'USD', 美元: 'USD', 人民幣: 'CNY', 澳元: 'AUD', 英鎊: 'GBP', 日圓: 'JPY' }[w]);
+  let m;
+  while ((m = re.exec(t))) {
+    const c = code(m[1] || m[4]);
+    let v = parseFloat(m[2].replace(/,/g, '')); if (m[3]) v *= 1e4;
+    if (!c || !(v >= 1000)) continue;
+    if (out[c] == null || v > out[c]) out[c] = v;
+  }
+  return out;
+}
+// End date of the promotion period written closest after a given spot on the page
+// ("推廣期：2026年10月2日至2026年12月31日"), so a later credit-card offer's date isn't used.
+function validUntilNear(text, at) {
+  if (!(at >= 0)) return null;
+  const win = (text || '').slice(at, at + 500);
+  const m = win.match(/(?:推廣期|優惠期|活動期)[^。]{0,40}?(?:至|直至|-|–)\s*(20\d{2})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日/);
+  return m ? `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}` : null;
+}
+
 // ---- text fallback (pages that lay rates out with <div>s instead of <table>) ----
 // Looks for a tenor and a % rate on the same line, or a tenor line followed closely
 // by a rate line. Currency comes from the line itself or the nearest heading above.
@@ -522,4 +546,4 @@ function effectiveDate(text) {
   return null;
 }
 
-module.exports = { amountPairs, contextMins, amountCurrency, lastSegments, tenorsOf, parseTextRates, validUntil, parseDeposits, parseFx, parseTenor, parseRate, parseMinAmount, lastCurrency, effectiveDate, tenorLabel, conditionsFrom };
+module.exports = { capAmounts, validUntilNear, amountPairs, contextMins, amountCurrency, lastSegments, tenorsOf, parseTextRates, validUntil, parseDeposits, parseFx, parseTenor, parseRate, parseMinAmount, lastCurrency, effectiveDate, tenorLabel, conditionsFrom };

@@ -129,6 +129,7 @@
     if (c.includes('只限分行')) out.push('要去分行開');
     if (r.minAmount == null) out.push('起存額未有資料，請睇原文');
     else if (r.minAmount > 0) out.push(`起存 ${r.currency || state.ccy} ${fmt(r.minAmount)}`);
+    if (r.maxAmount) out.push(`最多只計 ${r.currency || state.ccy} ${fmt(r.maxAmount)}`);
     if (c.includes('含獎賞錢等值')) out.push('包括獎賞錢回贈計算');
     if (c.includes('最高息（視乎條件）')) out.push('「高達」息率，實際視乎條件');
     if (r.validUntil) out.push(`優惠至 ${shortDate(r.validUntil)}`);
@@ -141,6 +142,7 @@
     if (isExpired(r)) return '優惠已過期';
     if (c.includes('需經本行兌換')) return '要先換外幣，唔係一般定期';
     if (r.minAmount && r.minAmount > state.amount) return `要存 ${state.ccy} ${fmt(r.minAmount)} 或以上`;
+    if (r.maxAmount && state.amount > r.maxAmount) return `最多只可以存 ${state.ccy} ${fmt(r.maxAmount)}，你輸入嘅金額超出咗`;
     if (r.minAmount == null && hkdValue(state.amount, state.ccy) < TYPICAL_MIN_HKD) return `起存額未有資料，大部分銀行要 HKD ${fmt(TYPICAL_MIN_HKD)} 或以上`;
     if (!m.newCustomer && c.includes('新客戶')) return '只限新客戶，你已經有戶口';
     if (!m.newFunds && c.includes('新資金')) return '要由其他銀行轉錢過嚟，你筆錢已經喺呢間';
@@ -300,8 +302,16 @@
   // ---------- 我嘅情況 / 揀銀行 panels ----------
   function bankChips(el, list, onToggle) {
     const banks = state.data ? state.data.banks.filter((b) => b.deposits && b.deposits.length) : [];
-    el.innerHTML = banks.map((b) => `<button type="button" class="chip" aria-pressed="${list.includes(b.id)}" data-id="${b.id}">${esc(b.name)}</button>`).join('');
-    el.onclick = (e) => { const c = e.target.closest('.chip'); if (c) onToggle(c.dataset.id); };
+    const chip = (b) => `<button type="button" class="chip" aria-pressed="${list.includes(b.id)}" data-id="${b.id}">${esc(b.name)}</button>`;
+    const first = banks.filter((b) => b.group === 'major' || list.includes(b.id));
+    const rest = banks.filter((b) => !first.includes(b));
+    const open = el.dataset.more === '1' || !rest.length;
+    el.innerHTML = (open ? banks : first).map(chip).join('')
+      + (rest.length ? `<button type="button" class="chip more" data-more>${open ? '收埋' : `顯示其他 ${rest.length} 間（中型及虛擬銀行）`}</button>` : '');
+    el.onclick = (e) => {
+      if (e.target.closest('[data-more]')) { el.dataset.more = open ? '' : '1'; bankChips(el, list, onToggle); return; }
+      const c = e.target.closest('.chip'); if (c) onToggle(c.dataset.id);
+    };
   }
   function renderMe() {
     if (!state.data) return;
@@ -413,6 +423,7 @@
       if (r.currency !== ccy || r.tenorDays !== tenor || isExpired(r)) return false;
       const c = r.conditions || []; const m = me(b.id);
       if (r.minAmount && r.minAmount > units) return false;
+      if (r.maxAmount && units > r.maxAmount) return false;
       if (r.minAmount == null && hkdValue(units, ccy) < TYPICAL_MIN_HKD) return false;
       if (!m.newCustomer && c.includes('新客戶')) return false;
       if (!m.newFunds && c.includes('新資金')) return false;
@@ -500,7 +511,7 @@
   }
 
   // ---------- 走勢 (HKMA monthly history) ----------
-  const trend = { years: 20, tenor: 3, hkma: null };
+  const trend = { years: window.matchMedia('(max-width: 560px)').matches ? 10 : 20, tenor: 3, hkma: null };
   const TT = { 1: '1個月', 3: '3個月', 6: '6個月', 12: '12個月' };
   const ym = (m) => { const [y, mo] = m.split('-'); return `${y}年${+mo}月`; };
   function renderTrend() {
@@ -531,17 +542,19 @@
     const all = series.flatMap((s) => s.pts.map((p) => p[1]));
     if (!all.length) { el.innerHTML = '<p class="empty-msg">呢個存期暫時冇數據。</p>'; return; }
     const lo = 0, hi = Math.max(1, Math.ceil(Math.max(...all)));
-    const W = 760, H = 320, L = 44, R = 14, T = 14, B = 30;
+    const narrow = window.matchMedia('(max-width: 560px)').matches;
+    const W = narrow ? 400 : 760, H = narrow ? 300 : 320, L = narrow ? 36 : 44, R = narrow ? 8 : 14, T = 14, B = 30;
+    const fs = narrow ? 12 : 11;
     const months = pts.map((p) => p[0]);
     const xi = (m) => months.indexOf(m);
     const x = (m) => L + xi(m) / Math.max(months.length - 1, 1) * (W - L - R);
     const y = (v) => T + (hi - v) / (hi - lo) * (H - T - B);
     let grid = '';
     const step = hi <= 2 ? 0.5 : hi <= 6 ? 1 : 2;
-    for (let v = 0; v <= hi + 1e-9; v += step) grid += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--ink-2)">${v}%</text>`;
+    for (let v = 0; v <= hi + 1e-9; v += step) grid += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end" font-size="${fs}" fill="var(--ink-2)">${v}%</text>`;
     const yearsShown = [...new Set(months.map((m) => m.slice(0, 4)))];
-    const every = Math.ceil(yearsShown.length / 8);
-    yearsShown.forEach((yr, i) => { if (i % every) return; const m = months.find((mm) => mm.startsWith(yr)); grid += `<text x="${x(m)}" y="${H - 8}" text-anchor="middle" font-size="11" fill="var(--ink-2)">${yr}</text>`; });
+    const every = Math.ceil(yearsShown.length / (narrow ? 5 : 8));
+    yearsShown.forEach((yr, i) => { if (i % every) return; const m = months.find((mm) => mm.startsWith(yr)); grid += `<text x="${x(m)}" y="${H - 8}" text-anchor="middle" font-size="${fs}" fill="var(--ink-2)">${yr}</text>`; });
     const paths = series.map((sr) => `<path d="${sr.pts.map((p, i) => `${i ? 'L' : 'M'}${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`).join('')}" fill="none" stroke="${sr.color}" stroke-width="${sr.dash ? 1.6 : 2.2}" ${sr.dash ? 'stroke-dasharray="5 4"' : ''} stroke-linejoin="round"/>`
       + (sr.own ? sr.pts.map((p) => `<circle cx="${x(p[0]).toFixed(1)}" cy="${y(p[1]).toFixed(1)}" r="4" fill="${sr.color}"/>`).join('') : '')).join('');
     el.innerHTML = `<div class="readout" id="readout">移動或者撳圖表睇每個月嘅數字</div>
@@ -584,10 +597,10 @@
     const label = { ok: '正常', stale: '暫時讀唔到，顯示舊數據', none: '暫時未能自動讀取' };
     const order = { ok: 0, stale: 1, none: 2 };
     $('#statusTable tbody').innerHTML = state.data.banks.slice().sort((a, b) => order[a.status] - order[b.status]).map((b) => `<tr>
-      <td><b>${esc(b.name)}</b></td>
-      <td><span class="dot ${b.status}"></span>${label[b.status] || b.status}</td>
-      <td>${b.lastSuccess ? esc(timeAgo(b.lastSuccess)) : '—'}</td>
-      <td>${(b.sources || []).slice(0, 4).map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener">網頁${i + 1}</a>`).join('　') || `<a href="${esc(b.site)}" target="_blank" rel="noopener">官網</a>`}</td>
+      <td class="st-name"><b>${esc(b.name)}</b></td>
+      <td data-l="狀態"><span class="dot ${b.status}"></span>${label[b.status] || b.status}</td>
+      <td data-l="最後成功更新">${b.lastSuccess ? esc(timeAgo(b.lastSuccess)) : '—'}</td>
+      <td data-l="來源網頁">${(b.sources || []).slice(0, 4).map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener">網頁${i + 1}</a>`).join('　') || `<a href="${esc(b.site)}" target="_blank" rel="noopener">官網</a>`}</td>
     </tr>`).join('');
   }
 
@@ -615,6 +628,7 @@
       if (location.hash !== '#' + name) history.replaceState(null, '', location.pathname + location.search + '#' + name);
     };
     tabs.forEach((t) => t.addEventListener('click', () => { show(t.dataset.tab); window.scrollTo({ top: 0 }); }));
+    document.querySelectorAll('[data-go]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); show(a.dataset.go); window.scrollTo({ top: 0 }); }));
     const h = location.hash.slice(1);
     if (h && document.getElementById('tab-' + h)) show(h);
   }
