@@ -391,3 +391,23 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
   .status td[data-l]::before { content: attr(data-l) '：'; color: var(--ink-2); font-size: .82rem; }
   .status td.st-name { font-size: 1rem; padding-bottom: 4px; }
 }
+
+/* trend facts table */
+.facts { display: block; }
+.facts-head { margin: 14px 0 6px; font-size: .9rem; color: var(--ink-2); }
+.facts-t { width: 100%; border-collapse: collapse; background: var(--card, #fff); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: .9rem; }
+.facts-t th, .facts-t td { padding: 8px 10px; text-align: right; border-bottom: 1px solid var(--line); vertical-align: top; }
+.facts-t thead th { font-weight: 500; color: var(--ink-2); font-size: .8rem; background: var(--bg-2, #f4f6f9); }
+.facts-t th small, .facts-t td small { display: block; font-size: .75rem; color: var(--ink-2); font-weight: 400; }
+.facts-t th[scope=row] { text-align: left; font-weight: 700; white-space: nowrap; }
+.facts-t th[scope=row] i { display: inline-block; width: 14px; height: 3px; margin-right: 6px; vertical-align: middle; border-radius: 2px; }
+.facts-t tr.blue th i { background: var(--accent); }
+.facts-t tr.grey th i { background: repeating-linear-gradient(90deg, var(--ink-3) 0 4px, transparent 4px 7px); }
+.facts-t tr.grey td b, .facts-t tr.grey th { color: var(--ink-2); font-weight: 500; }
+.facts-t tbody tr:last-child > * { border-bottom: 0; }
+.trend-sum { margin: 12px 0 4px; line-height: 1.7; }
+@media (max-width: 560px) {
+  .facts-t { font-size: .82rem; }
+  .facts-t th, .facts-t td { padding: 7px 5px; }
+  .facts-t th[scope=row] { white-space: normal; max-width: 72px; }
+}

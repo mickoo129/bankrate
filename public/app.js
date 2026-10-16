@@ -526,19 +526,9 @@
     const from = trend.years ? `${+last.slice(0, 4) - trend.years}${last.slice(4)}` : '0000';
     const pts = h.months.filter(([m]) => m > from);
     const series = [
-      { name: `主要銀行港元定期牌價平均 ${TT[trend.tenor]}（金管局）`, key: 'd' + trend.tenor, color: 'var(--accent)' },
+      { name: `銀行定期牌價 ${TT[trend.tenor]}（金管局：主要銀行平均）`, key: 'd' + trend.tenor, color: 'var(--accent)' },
       { name: `參考：HIBOR ${TT[trend.tenor]}（唔係定期息率）`, key: 'h' + trend.tenor, color: 'var(--ink-3)', dash: true },
     ].map((sr) => ({ ...sr, pts: pts.filter(([, v]) => v[sr.key] != null).map(([m, v]) => [m, v[sr.key]]) }));
-    // our own daily record of the best offer in the market, averaged per month
-    const own = state.history && state.history.series && state.history.series[`ALL|HKD|${trend.tenor * 30}`];
-    if (own && own.length) {
-      const byM = {};
-      for (const [d, v] of own) (byM[d.slice(0, 7)] = byM[d.slice(0, 7)] || []).push(v);
-      const ownPts = Object.keys(byM).sort().filter((m) => m > from).map((m) => [m, byM[m].reduce((a, b) => a + b, 0) / byM[m].length]);
-      for (const [m] of ownPts) if (!pts.some((p) => p[0] === m)) pts.push([m, {}]);
-      pts.sort((a, b) => (a[0] < b[0] ? -1 : 1));
-      series.push({ name: `全港最高優惠息（本網站記錄，由 2026 年 10 月起）`, color: 'var(--promo)', pts: ownPts, own: true });
-    }
     const all = series.flatMap((s) => s.pts.map((p) => p[1]));
     if (!all.length) { el.innerHTML = '<p class="empty-msg">呢個存期暫時冇數據。</p>'; return; }
     const lo = 0, hi = Math.max(1, Math.ceil(Math.max(...all)));
@@ -556,7 +546,7 @@
     const every = Math.ceil(yearsShown.length / (narrow ? 5 : 8));
     yearsShown.forEach((yr, i) => { if (i % every) return; const m = months.find((mm) => mm.startsWith(yr)); grid += `<text x="${x(m)}" y="${H - 8}" text-anchor="middle" font-size="${fs}" fill="var(--ink-2)">${yr}</text>`; });
     const paths = series.map((sr) => `<path d="${sr.pts.map((p, i) => `${i ? 'L' : 'M'}${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`).join('')}" fill="none" stroke="${sr.color}" stroke-width="${sr.dash ? 1.6 : 2.2}" ${sr.dash ? 'stroke-dasharray="5 4"' : ''} stroke-linejoin="round"/>`
-      + (sr.own ? sr.pts.map((p) => `<circle cx="${x(p[0]).toFixed(1)}" cy="${y(p[1]).toFixed(1)}" r="4" fill="${sr.color}"/>`).join('') : '')).join('');
+).join('');
     el.innerHTML = `<div class="readout" id="readout">移動或者撳圖表睇每個月嘅數字</div>
       <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="港元 ${TT[trend.tenor]} 息口走勢">${grid}${paths}<line id="cross" x1="0" x2="0" y1="${T}" y2="${H - B}" stroke="var(--ink-3)" stroke-dasharray="3 3" visibility="hidden"/></svg>
       <div class="legend">${series.map((s) => `<span><i class="${s.dash ? 'dash' : ''}" style="background:${s.color}"></i>${esc(s.name)}</span>`).join('')}</div>`;
@@ -567,21 +557,33 @@
       const i = Math.max(0, Math.min(months.length - 1, Math.round((px - L) / (W - L - R) * (months.length - 1))));
       const m = months[i], v = pts[i][1];
       const c = svg.querySelector('#cross'); c.setAttribute('x1', x(m)); c.setAttribute('x2', x(m)); c.setAttribute('visibility', 'visible');
-      const o = series.find((sr) => sr.own); const ov = o && o.pts.find((p) => p[0] === m);
-      $('#readout').innerHTML = `<b>${ym(m)}</b>　牌價平均 ${v['d' + trend.tenor] != null ? v['d' + trend.tenor].toFixed(2) + '%' : '—'}${ov ? `　最高優惠 ${ov[1].toFixed(2)}%` : ''}　<span class="ref">HIBOR ${v['h' + trend.tenor] != null ? v['h' + trend.tenor].toFixed(2) + '%' : '—'}</span>`;
+      $('#readout').innerHTML = `<b>${ym(m)}</b>　牌價平均 ${v['d' + trend.tenor] != null ? v['d' + trend.tenor].toFixed(2) + '%' : '—'}　<span class="ref">HIBOR ${v['h' + trend.tenor] != null ? v['h' + trend.tenor].toFixed(2) + '%' : '—'}</span>`;
     };
     svg.addEventListener('mousemove', show); svg.addEventListener('click', show); svg.addEventListener('touchmove', show, { passive: true });
 
-    // plain-language facts for the chosen period
-    const hs = series[0].pts; // facts are about real deposit rates only
-    if (hs.length) {
-      const mx = hs.reduce((a, p) => (p[1] > a[1] ? p : a)), mn = hs.reduce((a, p) => (p[1] < a[1] ? p : a)), now = hs[hs.length - 1];
-      const above1 = hs.filter((p) => p[1] >= 1).length;
-      $('#trendFacts').innerHTML = `
-        <div class="fact"><small>${trend.years ? `過去 ${trend.years} 年` : '1997 年以來'}牌價平均最高</small><b>${mx[1].toFixed(2)}%</b><span>${ym(mx[0])}</span></div>
-        <div class="fact"><small>最低</small><b>${mn[1].toFixed(2)}%</b><span>${ym(mn[0])}</span></div>
-        <div class="fact"><small>最近</small><b>${now[1].toFixed(2)}%</b><span>${ym(now[0])}</span></div>`;
-      $('#trendNote').textContent = `${TT[trend.tenor]}港元定期牌價平均，呢段期間有 ${above1} 個月（約 ${Math.round(above1 / hs.length * 100)}%）高過 1%。由最高 ${mx[1].toFixed(2)}%（${ym(mx[0])}）跌到最低 ${mn[1].toFixed(2)}%（${ym(mn[0])}），息口會隨經濟環境大幅上落。`;
+    // plain-language facts for the chosen period, each labelled with its line and its month(s)
+    const stat = (sp) => {
+      if (!sp.length) return null;
+      const mx = sp.reduce((a, p) => (p[1] > a[1] ? p : a)), mn = sp.reduce((a, p) => (p[1] < a[1] ? p : a));
+      return { avg: sp.reduce((a, p) => a + p[1], 0) / sp.length, mx, mn, now: sp[sp.length - 1], first: sp[0][0] };
+    };
+    const bs = stat(series[0].pts), hb = stat(series[1].pts);
+    if (bs) {
+      const pc = (v) => v.toFixed(2) + '%';
+      const nr = window.matchMedia('(max-width: 560px)').matches;
+      const dm = (m) => (nr ? m.replace('-', '/') : ym(m));
+      const row = (st, label, cls) => st ? `<tr class="${cls}"><th scope="row"><i></i>${label}</th>
+        <td><b>${pc(st.avg)}</b></td>
+        <td><b>${pc(st.mx[1])}</b><small>${dm(st.mx[0])}</small></td>
+        <td><b>${pc(st.mn[1])}</b><small>${dm(st.mn[0])}</small></td>
+        <td><b>${pc(st.now[1])}</b><small>${dm(st.now[0])}</small></td></tr>` : '';
+      $('#trendFacts').innerHTML = `<p class="facts-head">${TT[trend.tenor]}・${ym(bs.first)} 至 ${ym(bs.now[0])}（每月數字）</p>
+        <table class="facts-t"><thead><tr><th></th><th>期間平均</th><th>最高${nr ? '' : '<small>（嗰個月）</small>'}</th><th>最低${nr ? '' : '<small>（嗰個月）</small>'}</th><th>${nr ? '最近' : '最近一個月'}</th></tr></thead>
+        <tbody>${row(bs, nr ? '牌價' : '銀行定期牌價', 'blue')}${row(hb, nr ? 'HIBOR<small>參考</small>' : 'HIBOR（只作參考）', 'grey')}</tbody></table>`;
+      const span = trend.years ? `過去 ${trend.years} 年` : '1997 年以來';
+      $('#trendNote').textContent = `${span}，${TT[trend.tenor]}港元定期牌價最高試過 ${pc(bs.mx[1])}（${ym(bs.mx[0])}），最低只有 ${pc(bs.mn[1])}（${ym(bs.mn[0])}），最近係 ${pc(bs.now[1])}。`
+        + (hb ? `同期 HIBOR 喺 ${pc(hb.mn[1])} 至 ${pc(hb.mx[1])} 之間上落。` : '')
+        + '息口會跟經濟環境大幅變動，高息唔會一直維持。';
     }
   }
   async function loadHkma() {
