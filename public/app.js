@@ -127,7 +127,7 @@
     if (c.includes('需經本行兌換')) out.push('要先喺呢間銀行換外幣');
     if (c.includes('網上/手機開立')) out.push('要用網上或手機開');
     if (c.includes('只限分行')) out.push('要去分行開');
-    if (r.minAmount) out.push(`起存 ${state.ccy} ${fmt(r.minAmount)}`);
+    out.push(r.minAmount ? `起存 ${r.currency || state.ccy} ${fmt(r.minAmount)}` : '起存額未有資料，請睇原文');
     if (c.includes('含獎賞錢等值')) out.push('包括獎賞錢回贈計算');
     if (c.includes('最高息（視乎條件）')) out.push('「高達」息率，實際視乎條件');
     if (r.validUntil) out.push(`優惠至 ${shortDate(r.validUntil)}`);
@@ -140,11 +140,15 @@
     if (isExpired(r)) return '優惠已過期';
     if (c.includes('需經本行兌換')) return '要先換外幣，唔係一般定期';
     if (r.minAmount && r.minAmount > state.amount) return `要存 ${state.ccy} ${fmt(r.minAmount)} 或以上`;
+    if (!r.minAmount && hkdValue(state.amount, state.ccy) < TYPICAL_MIN_HKD) return `起存額未有資料，大部分銀行要 HKD ${fmt(TYPICAL_MIN_HKD)} 或以上`;
     if (!m.newCustomer && c.includes('新客戶')) return '只限新客戶，你已經有戶口';
     if (!m.newFunds && c.includes('新資金')) return '要由其他銀行轉錢過嚟，你筆錢已經喺呢間';
     if (!m.premium && isPremium(r)) return '只限高級理財客戶';
     return '';
   }
+  // most banks need about HKD 10,000 for a time deposit; used when a rate's minimum is unknown
+  const TYPICAL_MIN_HKD = 10000;
+  const hkdValue = (amt, ccy) => (ccy === 'HKD' ? amt : amt * (mid().rates[ccy] || 0));
   const hasConditions = (r) => r.type === 'promo' || (r.conditions || []).length > 0;
 
   function cellsFor(b) {
@@ -193,7 +197,9 @@
     thead.innerHTML = `<tr><th scope="col">銀行</th>${TENORS.map((t) => `<th scope="col" class="sortable" data-d="${t.d}" ${t.d === state.sort ? 'aria-sort="descending"' : ''}>${t.label}${t.d === state.sort ? '<span class="arrow">▼</span>' : ''}</th>`).join('')}</tr>`;
     if (!state.data) { tbody.innerHTML = '<tr><td colspan="6" class="empty-msg">讀取緊數據…</td></tr>'; $('#rank').innerHTML = '<li class="empty-msg">讀取緊數據…</li>'; return; }
     const { rows, noData, best } = rowsForTable();
-    $('#caption').innerHTML = `${esc(CCY_NAME[state.ccy])}定期・存 <b>${state.ccy} ${fmt(state.amount)}</b>・數字係你攞到嘅最高年利率，撳入去睇條件同其他選擇。`;
+    const small = hkdValue(state.amount, state.ccy) < TYPICAL_MIN_HKD;
+    $('#caption').innerHTML = `${esc(CCY_NAME[state.ccy])}定期・存 <b>${state.ccy} ${fmt(state.amount)}</b>・數字係你攞到嘅最高年利率，已計各銀行起存額，撳入去睇條件同其他選擇。`
+      + (small ? `<span class="warn-line">大部分銀行定期要 HKD ${fmt(TYPICAL_MIN_HKD)} 或等值起存，金額太細可能做唔到；起存額未有資料嘅息口暫時唔計。</span>` : '');
 
     // wide screens: bank × tenor table
     const html = [];
@@ -227,7 +233,7 @@
       return `<li class="rk${i === 0 ? ' best' : ''}${open ? ' open' : ''}">
         <button type="button" class="rk-head" data-k="${k}" aria-expanded="${open}">
           <span class="rk-pos">${i + 1}</span>
-          <span class="rk-name"><b>${esc(b.name)}</b><small>${tag ? tag + '・' : ''}利息 ≈ ${state.ccy} ${fmt(state.amount * r.rate / 100 * days / 365, 0)}</small></span>
+          <span class="rk-name"><b>${esc(b.name)}</b><small>${tag ? tag + '・' : ''}利息 ≈ ${state.ccy} ${fmt(state.amount * r.rate / 100 * days / 365, 0)}・${r.minAmount ? `${fmt(r.minAmount)} 起` : '起存額未知'}</small></span>
           <span class="rk-rate">${pct(r.rate)}<small>%</small>${hasConditions(r) ? '<i class="dot-cond" aria-hidden="true"></i>' : ''}</span>
         </button>
         ${open ? `<div class="rk-detail">${detailHtml(b, state.sort)}</div>` : ''}
@@ -406,6 +412,7 @@
       if (r.currency !== ccy || r.tenorDays !== tenor || isExpired(r)) return false;
       const c = r.conditions || []; const m = me(b.id);
       if (r.minAmount && r.minAmount > units) return false;
+      if (!r.minAmount && hkdValue(units, ccy) < TYPICAL_MIN_HKD) return false;
       if (!m.newCustomer && c.includes('新客戶')) return false;
       if (!m.newFunds && c.includes('新資金')) return false;
       if (!m.premium && isPremium(r)) return false;
@@ -456,7 +463,7 @@
       return `<li class="rk${i === 0 && x.gain > 0 ? ' best' : ''}${open ? ' open' : ''}">
         <button type="button" class="rk-head" data-td="${k}" aria-expanded="${open}">
           <span class="rk-pos">${i + 1}</span>
-          <span class="rk-name"><b>${esc(x.b.name)}</b><small>${esc(CCY_NAME[ccy])}年息 ${pct(x.r.rate)}%・換匯成本 HKD ${fmt(x.fxCost, 0)}${x.f ? '' : '（估算）'}${worse ? '・<span class="worse">比做港元少</span>' : ''}</small></span>
+          <span class="rk-name"><b>${esc(x.b.name)}</b><small>${esc(CCY_NAME[ccy])}年息 ${pct(x.r.rate)}%・${x.r.minAmount ? `${ccy} ${fmt(x.r.minAmount)} 起` : '起存額未知'}・換匯成本 HKD ${fmt(x.fxCost, 0)}${x.f ? '' : '（估算）'}${worse ? '・<span class="worse">比做港元少</span>' : ''}</small></span>
           <span class="rk-rate ${x.gain >= 0 ? '' : 'neg'}">${x.gain >= 0 ? '+' : '−'}${fmt(Math.abs(x.gain), 0)}<small> HKD</small></span>
         </button>
         ${open ? `<div class="rk-detail"><div class="detail-in">

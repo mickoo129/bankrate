@@ -86,4 +86,12 @@ assert.ok(!rows[0].conditions.includes('新資金'));
 
 rows = parseDeposits({ tables: [{ index: 0, context: '定期存款優惠 查看更多 | 特優(外幣兌換)定期存款優惠', grid: [['貨幣', '存期', '年利率'], ['HKD', '7天', '6.00%']] }] }, { type: 'promo', url: 'x' });
 assert.ok(rows[0].conditions.includes('需經本行兌換'));
+// minimum deposit written as a sentence
+const { contextMins } = require('../scraper/parse');
+assert.deepStrictEqual(contextMins('最低存款金額：港幣10,000元或以上 等值年利率根據…以每1「獎賞錢」可抵銷價值港幣1元'), { HKD: 10000 });
+assert.deepStrictEqual(contextMins('最低存款金額：港元10,000/人民幣10,000/其他外幣2,000原幣'), { HKD: 10000, CNY: 10000, FOREIGN: 2000 });
+assert.deepStrictEqual(contextMins('(原幣2,000或以上 /港元10,000或以上)', { loose: true }), { FOREIGN: 2000, HKD: 10000 });
+assert.deepStrictEqual(contextMins('金額少於HKD100,000以下'), {});
+rows = parseDeposits({ tables: [{ index: 0, context: '港元新資金定期存款優惠 | [CAPTION] 最低存款金額：港幣10,000元或以上', grid: [['存款期', '定期存款年利率'], ['3個月', '2.40%']] }] }, { type: 'promo', url: 'x' });
+assert.strictEqual(rows[0].minAmount, 10000);
 console.log('all parser tests passed');

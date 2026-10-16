@@ -59,6 +59,43 @@ function amountCurrency(text) {
   while ((m = re.exec(text || ''))) last = CCY_MAP[(m[1] || m[2] || '').toUpperCase()] || CCY_MAP[m[1] || m[2]];
   return last;
 }
+// Minimum deposit written as a sentence near the table, e.g. "最低存款金額：港幣10,000元或以上",
+// "(原幣2,000或以上 /港元10,000或以上)", "不少於500,000港元及/或65,000美元", "只需HKD1".
+// Returns { HKD: 10000, USD: 2000, FOREIGN: 2000 } (FOREIGN = "原幣/其他外幣", for non-HKD).
+function contextMins(text, { loose = false, strict = false } = {}) {
+  const out = {};
+  const t = (text || '').replace(/\s+/g, ' ');
+  const CW = CCY_WORD.replace('(', '(?:') + '|原幣|其他外幣|HK\\$|US\\$';
+  const pairRe = () => new RegExp(`(${CW})\\s*([\\d,]+(?:\\.\\d+)?)\\s*(萬)?|([\\d,]+(?:\\.\\d+)?)\\s*(萬)?\\s*元?\\s*(${CW})`, 'gi');
+  const add = (word, num, wan, after) => {
+    const code = /HK\$/i.test(word) ? 'HKD' : /US\$/i.test(word) ? 'USD' : /原幣|其他外幣/.test(word) ? 'FOREIGN' : (CCY_MAP[word.toUpperCase()] || CCY_MAP[word]);
+    let v = parseFloat(String(num).replace(/,/g, ''));
+    if (wan) v *= 1e4;
+    if (!code || !(v >= 1) || v > 1e8) return;
+    if (/^\s*(?:元)?\s*(?:以下|below)/.test(after)) return; // "…以下" is an upper bound
+    if (out[code] == null || v < out[code]) out[code] = v;
+  };
+  const trig = strict
+    ? /(最低存款金額|最低存款額|最低存款|起存金額|起存額|起存|只需|Minimum deposit)/gi
+    : /(最低存款金額|最低存款額|最低存款|最低金額|起存金額|起存額|起存|新資金達|存款額|存款金額|不少於|最少|至少|只需|低至|Minimum deposit|minimum of)/gi;
+  let m;
+  while ((m = trig.exec(t))) {
+    const win = t.slice(m.index, m.index + 60);
+    const re = pairRe(); let q, lastEnd = -1;
+    // first amount after the trigger, plus any listed right after it ("港元10,000/人民幣10,000/其他外幣2,000")
+    while ((q = re.exec(win))) {
+      if (lastEnd >= 0 && !/^[\s\/／及或、和,，（(）)\u5143以上]*$/.test(win.slice(lastEnd, q.index))) break;
+      add(q[1] || q[6], q[2] || q[4], q[3] || q[5], win.slice(q.index + q[0].length, q.index + q[0].length + 4));
+      lastEnd = q.index + q[0].length;
+    }
+  }
+  if (loose) { // "(原幣2,000或以上 /港元10,000或以上)" right next to a deposit table
+    const re = new RegExp(`(?:(${CW})\\s*([\\d,]+)\\s*(萬)?|([\\d,]+)\\s*(萬)?\\s*元?\\s*(${CW}))\\s*元?\\s*或以上`, 'gi'); let q;
+    while ((q = re.exec(t))) add(q[1] || q[6], q[2] || q[4], q[3] || q[5], '');
+  }
+  return out;
+}
+
 // the text right above a table (its title / caption), not the whole page section
 function lastSegments(ctx) {
   const parts = (ctx || '').split(' | ').map((x) => x.trim()).filter(Boolean);
@@ -274,6 +311,7 @@ const FX_CONVERT = /(?:兌換|轉換)[^。]{0,40}(?:同時|並|後|再)[^。]{0,
 function parseDeposits(page, source) {
   const pageText = page.text || '';
   const pageFx = FX_CONVERT.test(pageText);
+  const pageMins = contextMins(pageText, { strict: true });
   const pageType = source.type || 'board';
   // 1st pass: read every table
   const perTable = [];
@@ -304,7 +342,8 @@ function parseDeposits(page, source) {
     const regularTier = /其他(?:個人)?客戶|一般(?:個人)?客戶|滙豐One|綜合(?:戶口|客戶)|e時代|智選理財|BEA GOAL|優進理財|自在理財|智盈理財|其他個人/.test(near.slice(-60));
     const tiered = regularTier || tags.some((t) => PREMIUM_TAGS.includes(t));
     const shortOnly = Math.max(...found.map((f) => f.tenorDays)) <= 31;
-    perTable.push({ tbl, found, type, tags, tiered, shortOnly, sig: JSON.stringify(tbl.grid), ccy: found[0].currency });
+    const mins = contextMins(near + ' ' + head + ' ' + (tbl.grid.slice(-2).flat().join(' ')) + ' ' + ctx.slice(-300), { loose: true });
+    perTable.push({ tbl, found, type, tags, tiered, shortOnly, mins, sig: JSON.stringify(tbl.grid), ccy: found[0].currency });
   }
   // the same table often appears several times (mobile copy, hidden tab). Drop copies without a
   // customer-tier label when a labelled copy exists, so a premium-only rate is not shown to everyone.
@@ -319,7 +358,17 @@ function parseDeposits(page, source) {
       if (t.type === 'promo' && pageFx && t.shortOnly && !conditions.has('新資金')) conditions.add('需經本行兌換');
       if (f.upTo) conditions.add('最高息（視乎條件）');
       if (t.type === 'promo' && f.rate < (f.currency === 'JPY' ? 0.02 : 0.2)) continue; // placeholder rates such as 0.001%
-      rows.push({ ...f, type: t.type, conditions: Array.from(conditions), sourceUrl: source.url });
+      let minAmount = f.minAmount;
+      let minFrom = minAmount != null ? 'table' : null;
+      if (minAmount == null) {
+        const v = t.mins[f.currency] ?? (f.currency !== 'HKD' ? t.mins.FOREIGN : undefined);
+        if (v != null) { minAmount = v; minFrom = 'text'; }
+      }
+      if (minAmount == null) {
+        const v = pageMins[f.currency] ?? (f.currency !== 'HKD' ? pageMins.FOREIGN : undefined);
+        if (v != null) { minAmount = v; minFrom = 'page'; }
+      }
+      rows.push({ ...f, minAmount, minFrom, type: t.type, conditions: Array.from(conditions), sourceUrl: source.url });
     }
   }
   // keep only currencies we track and dedupe exact duplicates
@@ -456,4 +505,4 @@ function effectiveDate(text) {
   return null;
 }
 
-module.exports = { amountCurrency, lastSegments, tenorsOf, parseTextRates, validUntil, parseDeposits, parseFx, parseTenor, parseRate, parseMinAmount, lastCurrency, effectiveDate, tenorLabel, conditionsFrom };
+module.exports = { contextMins, amountCurrency, lastSegments, tenorsOf, parseTextRates, validUntil, parseDeposits, parseFx, parseTenor, parseRate, parseMinAmount, lastCurrency, effectiveDate, tenorLabel, conditionsFrom };

@@ -334,3 +334,5 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
 .worse { color: var(--promo); }
 .rk-rate.neg { color: var(--down); }
 #tdList .rk-rate { font-size: 1.25rem; }
+
+.warn-line { display: block; margin-top: 6px; padding: 8px 10px; border-radius: 8px; background: var(--warn-bg); color: var(--warn); font-size: .84rem; }

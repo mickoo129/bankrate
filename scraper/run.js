@@ -211,7 +211,7 @@ async function scrapeBank(context, bank, mid, report) {
     seen.add(k); return true;
   }).map((r) => ({
     currency: r.currency, tenorDays: r.tenorDays, tenor: r.tenor, rate: r.rate,
-    minAmount: r.minAmount, type: r.type, conditions: r.conditions, segment: r.segment,
+    minAmount: r.minAmount, minFrom: r.minFrom || null, type: r.type, conditions: r.conditions, segment: r.segment,
     tier: r.tierLabel, validUntil: r.validUntil || null, url: r.sourceUrl,
   }));
   try {
