@@ -1,7 +1,6 @@
 // Downloads long-run Hong Kong interest rate history from the HKMA open API (monthly figures)
 // and writes public/data/hkma.json. Runs from GitHub Actions; skips if refreshed within 7 days.
 //   - dr_*  : average HKD time deposit rates quoted by major banks (deposits < HK$100,000)
-//   - ir_*  : HIBOR fixing, end of month (bank offers usually move with it)
 const fs = require('fs');
 const path = require('path');
 
@@ -34,11 +33,8 @@ async function all(endpoint, extra = '') {
     if (Date.now() - Date.parse(old.updatedAt) < 7 * 864e5 && !process.argv.includes('--force')) { console.log('hkma.json is fresh'); return; }
   } catch {}
   const dep = await all('hkd-ir-periodaverage');
-  await wait(2000);
-  const hib = await all('hk-interbank-ir-endperiod', '&segment=hibor.fixing');
   const byMonth = {};
   for (const r of dep) byMonth[r.end_of_month] = { ...(byMonth[r.end_of_month] || {}), d1: r.dr_1m, d3: r.dr_3m, d6: r.dr_6m, d12: r.dr_12m, sv: r.savings_deposit_rate };
-  for (const r of hib) byMonth[r.end_of_month] = { ...(byMonth[r.end_of_month] || {}), h1: r.ir_1m, h3: r.ir_3m, h6: r.ir_6m, h12: r.ir_12m };
   const months = Object.keys(byMonth).filter((m) => m >= '1997-01').sort();
   const out = { updatedAt: new Date().toISOString(), source: 'HKMA Open API', months: months.map((m) => [m, byMonth[m]]) };
   fs.writeFileSync(OUT, JSON.stringify(out));

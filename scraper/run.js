@@ -265,8 +265,17 @@ function updateHistory(history, latest) {
   const market = {};
   for (const b of latest.banks) {
     if (b.status !== 'ok') continue;
+    // record only what an ordinary customer can get: no convert-and-deposit offers, no premium-only
+    // tiers, no "up to" headline rates, and a minimum of HKD 100,000 (or equivalent) or less
+    const PREMIUM = /卓越|尊尚|優越|豐盛|Citigold|優先理財|財富|VIP|私人|貴賓|顯卓|至尊|理財金|高級理財/;
     const best = {};
     for (const r of b.deposits) {
+      const c = r.conditions || [];
+      if (c.includes('需經本行兌換') || c.includes('最高息（視乎條件）')) continue;
+      if (PREMIUM.test(c.join(' ') + ' ' + (r.segment || '') + ' ' + (r.tier || ''))) continue;
+      const hkd = r.currency === 'HKD' ? r.minAmount : r.minAmount * ((latest.mid && latest.mid.rates[r.currency]) || 8);
+      if (r.minAmount && hkd > 100000) continue;
+      if (r.validUntil && r.validUntil < day) continue;
       const k = `${r.currency}|${r.tenorDays}`;
       best[k] = Math.max(best[k] || 0, r.rate);
     }
