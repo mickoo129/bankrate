@@ -462,7 +462,7 @@
       const k = x.b.id, open = td.open === k;
       const n = needs(x.r);
       const cmp = x.hk
-        ? `同一間做港元定期：攞返 HKD ${money(x.hkBack)}（${x.hkBack > x.back ? `多 ${money(x.hkBack - x.back)}` : x.hkBack < x.back ? `少 ${money(x.back - x.hkBack)}` : '一樣'}）`
+        ? `同一間改做港元定期：攞返 HKD ${money(x.hkBack)}，${x.hkBack > x.back ? `比做${esc(CCY_NAME[ccy])}多 ${money(x.hkBack - x.back)}` : x.hkBack < x.back ? `比做${esc(CCY_NAME[ccy])}少 ${money(x.back - x.hkBack)}` : '兩者一樣'}`
         : '呢間未有合適嘅港元同期定期資料';
       return `<li class="rk${open ? ' open' : ''}">
         <button type="button" class="rk-head" data-td="${k}" aria-expanded="${open}">
