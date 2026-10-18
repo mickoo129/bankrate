@@ -423,7 +423,7 @@ function updateHistory(history, latest) {
     banks: banks.map((b) => {
       const r = results[b.id];
       const old = prevById[b.id];
-      const base = { id: b.id, name: b.name, nameEn: b.nameEn, group: b.group, site: b.site };
+      const base = { id: b.id, name: b.name, nameEn: b.nameEn, group: b.group, site: b.site, promoUrl: b.promoUrl || null };
       if (r && r.deposits.length) {
         return {
           ...base, status: 'ok', lastSuccess: now, checkedAt: now,

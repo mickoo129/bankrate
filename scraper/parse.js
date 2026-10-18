@@ -253,6 +253,8 @@ function analyseDepositTable(tbl, pageCtx) {
   if (onlyCurrency([...new Set(grid[0] || [])].join(' ')) === 'OTHER') return [];
   const ctxCcy = amountCurrency(near) || lastCurrency(near) || lastCurrency(tbl.context) || (pageCtx && pageCtx.prevCcy) || (gridOnly !== 'OTHER' && gridOnly) || null;
   const out = [];
+  // a caption like "定期存款（雲利率）" marks online-only rates
+  const capOnline = /\[CAPTION\][^|]*(雲利率|網上利率|手機利率|電子渠道)[^|]*$/.test(tbl.context || '');
 
   rows.forEach((row, r) => {
     for (const days of tenorsOf(row[tenorCol])) addRow(row, days);
@@ -278,7 +280,7 @@ function analyseDepositTable(tbl, pageCtx) {
         rate,
         minAmount: parseMinAmount(header) ?? parseMinAmount(rowLabel),
         tierLabel: [header, rowLabel].filter(Boolean).join(' ').slice(0, 100),
-        segment: [...new Set([segmentOf(header), segmentOf(rowLabel)].filter(Boolean))].join(' ').slice(0, 40),
+        segment: [...new Set([segmentOf(header), segmentOf(rowLabel), capOnline ? '網上利率' : ''].filter(Boolean))].join(' ').slice(0, 40),
         tableIndex: tbl.index,
         upTo: /高達|最高|up to/i.test(cell),
       });
@@ -289,7 +291,7 @@ function analyseDepositTable(tbl, pageCtx) {
 
 const COND_HINTS = [
   [/新資金|new fund|new money/i, '新資金'],
-  [/網上|手機|流動(?:理財|銀行)|e-?Banking|mobile app|online banking/i, '網上/手機開立'],
+  [/網上|手機|流動(?:理財|銀行)|雲利率|e-?Banking|mobile app|online banking/i, '網上/手機開立'],
   [/卓越理財尊尚|Premier Elite/i, '卓越理財尊尚'],
   [/卓越理財|Premier/i, '卓越理財'],
   [/優越理財|Prestige/i, '優越理財'],

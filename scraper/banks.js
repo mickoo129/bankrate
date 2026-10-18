@@ -94,6 +94,8 @@ module.exports = [
   {
     id: 'bocom', name: '交通銀行(香港)', nameEn: 'BOCOM (HK)', group: 'mid',
     site: 'https://www.hk.bankcomm.com',
+    // offers are published in a file the system cannot read: send people to the bank's page
+    promoUrl: 'https://www.hk.bankcomm.com/hk/hk/tw/file/getContentPath.html?fileId=2600167',
     pages: [
       // rate tables are drawn inside an iframe that only fills in when opened from these pages
       { url: 'https://www.hk.bankcomm.com/hk/shtml/hk/tw/2005155/2005178/2005179/list.shtml?channelId=2005155', type: 'board' },
@@ -110,6 +112,7 @@ module.exports = [
   {
     id: 'citic', name: '中信銀行(國際)', nameEn: 'CNCBI', group: 'mid',
     site: 'https://www.cncbinternational.com',
+    promoUrl: 'https://www.cncbinternational.com/personal/deposits/time-deposit/tc/index.jsp',
     pages: [
       { url: 'https://www.cncbinternational.com/rate-table/time_deposit_rate_tc.html', type: 'board', select: 'select' },
       { url: 'https://www.cncbinternational.com/personal/deposits/time-deposit/tc/index.jsp', type: 'promo' },],

@@ -149,6 +149,18 @@
     if (!m.premium && isPremium(r)) return '只限高級理財客戶';
     return '';
   }
+  // a few words for an empty cell: why the rates this bank does have don't apply to you
+  function shortWhy(w) {
+    if (!w) return '';
+    if (/高級理財/.test(w)) return '只限理財客戶';
+    if (/新客戶/.test(w)) return '只限新客戶';
+    if (/其他銀行轉錢/.test(w)) return '只限新資金';
+    if (/最多只可以存/.test(w)) return '金額超出上限';
+    const m = w.match(/要存 (\S+) ([\d,]+)/); if (m) return `${m[2]} 起`;
+    if (/起存額未有資料/.test(w)) return '起存額未知';
+    if (/換外幣/.test(w)) return '要先換外幣';
+    return '有條件';
+  }
   // most banks need about HKD 10,000 for a time deposit; used when a rate's minimum is unknown
   const TYPICAL_MIN_HKD = 10000;
   const hkdValue = (amt, ccy) => (ccy === 'HKD' ? amt : amt * (mid().rates[ccy] || 0));
@@ -157,17 +169,22 @@
   function cellsFor(b) {
     const mine = (b.deposits || []).filter((r) => r.currency === state.ccy);
     const cells = {};
-    for (const t of TENORS) cells[t.d] = mine.filter((r) => r.tenorDays === t.d && !whyNot(r, b.id)).sort((x, y) => y.rate - x.rate)[0] || null;
-    return { mine, cells };
+    const blocked = {};
+    for (const t of TENORS) {
+      const here = mine.filter((r) => r.tenorDays === t.d && !isExpired(r));
+      cells[t.d] = here.filter((r) => !whyNot(r, b.id)).sort((x, y) => y.rate - x.rate)[0] || null;
+      if (!cells[t.d] && here.length) blocked[t.d] = shortWhy(whyNot(here.sort((x, y) => y.rate - x.rate)[0], b.id));
+    }
+    return { mine, cells, blocked };
   }
   function rowsForTable() {
     const d = state.data;
     const rows = [], noData = [];
     for (const b of d.banks) {
       if (state.banks && !state.banks.includes(b.id)) continue;
-      const { mine, cells } = cellsFor(b);
+      const { mine, cells, blocked } = cellsFor(b);
       if (!mine.length) { noData.push(b); continue; }
-      rows.push({ b, cells });
+      rows.push({ b, cells, blocked });
     }
     const best = {};
     for (const t of TENORS) best[t.d] = Math.max(0, ...rows.map((r) => (r.cells[t.d] ? r.cells[t.d].rate : 0)));
@@ -206,17 +223,18 @@
 
     // wide screens: bank × tenor table
     const html = [];
-    for (const { b, cells } of rows) {
+    for (const { b, cells, blocked } of rows) {
       const tag = meLabel(b.id);
+      const promoLink = b.promoUrl ? `<a class="promo-link" href="${esc(b.promoUrl)}" target="_blank" rel="noopener">優惠請睇銀行網站 ↗</a>` : '';
       const stale = b.status === 'stale' ? `<small class="stale">數據截至 ${esc(timeAgo(b.lastSuccess).split('（')[0])}</small>` : '';
-      html.push(`<tr><th scope="row" class="bank-cell"><b>${esc(b.name)}</b>${tag ? `<small class="me-tag">${tag}</small>` : ''}${stale}</th>${TENORS.map((t) => {
+      html.push(`<tr><th scope="row" class="bank-cell"><b>${esc(b.name)}</b>${tag ? `<small class="me-tag">${tag}</small>` : ''}${stale}${promoLink}</th>${TENORS.map((t) => {
         const r = cells[t.d];
         const k = `${b.id}|${t.d}`;
         const open = state.open === k;
-        if (!r) return `<td class="cell empty${open ? ' open' : ''}" data-k="${k}" tabindex="0" role="button" aria-expanded="${open}" aria-label="${esc(b.name)} ${t.label}：你暫時冇合適息口，撳睇其他選擇">—</td>`;
+        if (!r) return `<td class="cell empty${open ? ' open' : ''}" data-k="${k}" tabindex="0" role="button" aria-expanded="${open}" aria-label="${esc(b.name)} ${t.label}：${blocked[t.d] ? esc(blocked[t.d]) : '你暫時冇合適息口'}，撳睇其他選擇">—${blocked[t.d] ? `<small class="why">${esc(blocked[t.d])}</small>` : ''}</td>`;
         const isBest = r.rate === best[t.d] && best[t.d] > 0;
         return `<td class="cell${isBest ? ' best' : ''}${open ? ' open' : ''}" data-k="${k}" tabindex="0" role="button" aria-expanded="${open}" aria-label="${esc(b.name)} ${t.label} ${pct(r.rate)}%${hasConditions(r) ? '，有條件' : ''}，撳睇詳情">
-          <span class="v">${pct(r.rate)}<small>%</small></span>${hasConditions(r) ? '<i class="dot-cond" aria-hidden="true"></i>' : ''}</td>`;
+          <span class="v">${pct(r.rate)}<small>%</small></span>${hasConditions(r) ? '<i class="dot-cond" aria-hidden="true"></i>' : ''}${kindTag(r)}</td>`;
       }).join('')}</tr>`);
       if (state.open && state.open.startsWith(b.id + '|')) html.push(`<tr class="detail"><td colspan="6">${detailHtml(b, +state.open.split('|')[1])}</td></tr>`);
     }
@@ -239,14 +257,16 @@
       return `<li class="rk${i === 0 ? ' best' : ''}${open ? ' open' : ''}">
         <button type="button" class="rk-head" data-k="${k}" aria-expanded="${open}">
           <span class="rk-pos">${i + 1}</span>
-          <span class="rk-name"><b>${esc(b.name)}</b><small>${tag ? tag + '・' : ''}利息 ≈ ${state.ccy} ${fmt(state.amount * r.rate / 100 * days / 365, 0)}・${r.minAmount == null ? '起存額未知' : r.minAmount > 0 ? `${fmt(r.minAmount)} 起` : '冇起存要求'}</small></span>
-          <span class="rk-rate">${pct(r.rate)}<small>%</small>${hasConditions(r) ? '<i class="dot-cond" aria-hidden="true"></i>' : ''}</span>
+          <span class="rk-name"><b>${esc(b.name)}</b>${b.promoUrl ? '<small class="promo-note">優惠未能自動讀取，請睇銀行網站</small>' : ''}<small>${tag ? tag + '・' : ''}利息 ≈ ${state.ccy} ${fmt(state.amount * r.rate / 100 * days / 365, 0)}・${r.minAmount == null ? '起存額未知' : r.minAmount > 0 ? `${fmt(r.minAmount)} 起` : '冇起存要求'}</small></span>
+          <span class="rk-rate">${pct(r.rate)}<small>%</small>${hasConditions(r) ? '<i class="dot-cond" aria-hidden="true"></i>' : ''}${kindTag(r)}</span>
         </button>
         ${open ? `<div class="rk-detail">${detailHtml(b, state.sort)}</div>` : ''}
       </li>`;
-    }).join('') + (none.length ? `<li class="rk-none">${TENOR_LABEL(state.sort)}暫時冇合適息口：${none.map((x) => esc(x.b.name)).join('、')}</li>` : '');
+    }).join('') + (none.length ? `<li class="rk-none">${TENOR_LABEL(state.sort)}暫時冇合適息口：${none.map((x) => esc(x.b.name) + (x.blocked[state.sort] ? `（${esc(x.blocked[state.sort])}）` : '')).join('、')}</li>` : '');
   }
 
+  // promo vs board at a glance
+  const kindTag = (r) => (r.type === 'promo' ? '<span class="kind promo">優惠</span>' : '<span class="kind board">牌價</span>');
   function detailHtml(b, days) {
     const all = (b.deposits || []).filter((r) => r.currency === state.ccy && r.tenorDays === days && !isExpired(r)).sort((x, y) => y.rate - x.rate);
     const ok = all.filter((r) => !whyNot(r, b.id));
@@ -680,6 +700,8 @@
 
   async function load() {
     const [data, hist] = await Promise.all([getJson('latest.json'), getJson('history.json'), loadLiveMid()]);
+    state.allBanks = data.banks;
+    data.banks = data.banks.filter((b) => b.deposits && b.deposits.length); // banks we could never read are left out
     state.data = data; state.history = hist;
     if (!data) {
       $('#updated').textContent = '暫時讀唔到數據';

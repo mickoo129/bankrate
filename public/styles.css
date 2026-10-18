@@ -416,3 +416,15 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
 .nodata-note:empty { display: none; }
 .nodata-note b { color: var(--ink); font-weight: 500; }
 .chip.nodata small { font-size: .72rem; margin-left: 2px; }
+
+/* promo vs board label */
+.kind { display: inline-block; font-size: .68rem; line-height: 1; padding: 3px 5px; border-radius: 4px; font-weight: 700; letter-spacing: .02em; vertical-align: middle; }
+.kind.promo { background: #fff1e0; color: #b45309; border: 1px solid #f6c48a; }
+.kind.board { background: #eef1f5; color: #5b6676; border: 1px solid #d6dce4; }
+.cmp td.cell .kind { display: block; width: max-content; margin: 4px auto 0; }
+.rk-rate .kind { display: block; width: max-content; margin: 3px 0 0 auto; }
+.legend-line .lg .kind { margin-right: 6px; }
+.cmp td.cell.empty .why { display: block; font-size: .7rem; color: var(--ink-2); margin-top: 3px; line-height: 1.25; white-space: normal; }
+.promo-link { display: block; font-size: .72rem; margin-top: 3px; color: var(--accent); }
+.promo-note { display: block; color: #b45309 !important; }
+.kind { font-family: var(--sans); } .rk-rate { text-align: right; }
