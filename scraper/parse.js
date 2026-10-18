@@ -165,7 +165,7 @@ function tenorLabel(days) {
 // ---- rates ----------------------------------------------------------------
 function parseRate(cell, pctTable) {
   if (!cell) return null;
-  let c = cell.replace(/\s+/g, '');
+  let c = cell.replace(/\s+/g, '').replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹†‡§¶]+$/, '');
   const pair = c.match(/^\(?(\d{1,2}\.\d{1,6})%?\)?[\/／](\d{1,2}\.\d{1,6})%?\*{0,3}$/);
   if (pair) { const a = parseFloat(pair[1]), b = parseFloat(pair[2]); const v = Math.max(a, b); return v > 0 && v < 20 ? v : null; }
   const paren = c.match(/^\((\d{1,2}\.\d{1,6})\)$/);

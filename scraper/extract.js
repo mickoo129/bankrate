@@ -80,6 +80,7 @@ function extractTables(doc) {
 
   const out = [];
   doc.querySelectorAll('table').forEach((t, i) => {
+    if (t.getAttribute('data-scrape-skip')) return;
     const grid = gridOf(t);
     if (grid.length < 2) return;
     const flat = grid.flat().join(' ');

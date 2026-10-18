@@ -115,9 +115,15 @@ async function readVariants(page, opts, data) {
   for (const label of opts.clicks || []) {
     try {
       const ok = await page.evaluate((txt) => {
+        document.querySelectorAll('[data-scrape-skip]').forEach((t) => t.removeAttribute('data-scrape-skip'));
         const el = Array.from(document.querySelectorAll('button, a, li, span, div, [role=tab]')).find((e) => e.textContent.trim() === txt && e.offsetParent !== null);
-        if (el) el.click();
-        return !!el;
+        if (!el) return false;
+        el.click();
+        // only read the tables that belong with this tab row (pages can have several tab rows, each with its own table)
+        let scope = el.parentElement;
+        while (scope && !scope.querySelector('table')) scope = scope.parentElement;
+        if (scope) document.querySelectorAll('table').forEach((t) => { if (!scope.contains(t)) t.setAttribute('data-scrape-skip', '1'); });
+        return true;
       }, label);
       if (!ok) continue;
       await page.waitForTimeout(2500);
@@ -230,6 +236,7 @@ async function scrapeBank(context, bank, mid, report) {
       rows.forEach((r) => {
         if (r.type === 'board') r.conditions = conditionsOnlyFromSegment(r);
         if (r.type === 'promo' && end) r.validUntil = end;
+        if (item.conditions) r.conditions = [...new Set([...(r.conditions || []), ...item.conditions])];
         if (r.fromText && r.type === 'promo') { // text-only promo pages: look for the period and minimum next to the rate
           const near = validUntilNear(data.text, (data.text || '').indexOf(r.tierLabel.slice(0, 30)));
           if (near) r.validUntil = near;

@@ -120,7 +120,8 @@ module.exports = [
     site: 'https://www.ocbc.com.hk',
     pages: [
       { url: 'https://www.ocbc.com.hk/personal-banking/deposits/foreign-currency-interest-rates', type: 'board' },
-      { url: 'https://www.ocbc.com.hk/iwov-resources/hk/ocbc/personal/pdf/HKD.pdf', type: 'board', pdf: true },],
+      // promo leaflet: every rate needs new funds placed at a branch
+      { url: 'https://www.ocbc.com.hk/iwov-resources/hk/ocbc/personal/pdf/HKD.pdf', type: 'promo', pdf: true, conditions: ['新資金', '只限分行'] },],
     seeds: ['https://www.ocbc.com.hk/personal-banking/deposit-services/foreign-currency-deposit'],
   },
   {
