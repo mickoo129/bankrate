@@ -1,32 +1,6 @@
 {
- "at": "2026-10-18T06:21:18.619Z",
+ "at": "2026-10-18T06:24:03.176Z",
  "pages": [
-  {
-   "bank": "ocbc",
-   "url": "https://www.ocbc.com.hk/personal-banking/deposits/foreign-currency-interest-rates",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.ocbc.com.hk/personal-banking/deposits/foreign-currency-interest-rates",
-   "tables": 1,
-   "title": "Foreign Currency Interest Rates｜OCBC Personal Banking HK",
-   "textLen": 1734,
-   "rows": 19,
-   "fx": [],
-   "sample": "AUD 7日=2.1, USD 7日=0.01, GBP 7日=0.45, JPY 7日=0.01, AUD 1個月=2.3, USD 1個月=0.5, GBP 1個月=1.25, JPY 1個月=0.01, CNY 1個月=0.01, AUD 2個月=2.35, USD 2個月=0.5, GBP 2個月=1.3, JPY 2個月=0.01, CNY 2個月=0.01"
-  },
-  {
-   "bank": "za",
-   "url": "https://bank.za.group/hk/deposit",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://bank.za.group/hk/deposit",
-   "tables": 1,
-   "title": "存款 | 逢星期二就領存款加息劵！– ZA Bank",
-   "textLen": 6149,
-   "rows": 23,
-   "fx": [],
-   "sample": "HKD 7日=0.1, CNY 7日=0.1, USD 7日=0.1, GBP 7日=0.01, AUD 7日=0.01, JPY 7日=0.001, HKD 1個月=0.1, CNY 1個月=0.1, USD 1個月=0.1, GBP 1個月=0.01, AUD 1個月=0.01, JPY 1個月=0.001, HKD 3個月=0.51, CNY 3個月=0.31"
-  },
   {
    "bank": "welab",
    "url": "https://www.welab.bank/zh/feature/gosave_2/",
@@ -39,76 +13,6 @@
    "rows": 17,
    "fx": [],
    "sample": "HKD 3個月*=3.05, HKD 6個月*=3.1, HKD 12個月*=3.15, HKD 18個月*=3.15, HKD 24個月*=3.15, USD 1個月*=3.5, USD 3個月*=3.8, USD 6個月*=3.95, USD 12個月*=4.05, USD 18個月*=4.15, CNY 3個月*=1.15, CNY 6個月*=1.15, AUD 3個月*=4, AUD 6個月*=4"
-  },
-  {
-   "bank": "airstar",
-   "url": "https://www.elebank.com/zh-hk/hkprime.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.elebank.com/zh-hk/hkprime.html",
-   "tables": 6,
-   "title": "銀行利率 | EleBank 大象銀行",
-   "textLen": 3416,
-   "rows": 24,
-   "fx": [],
-   "sample": "HKD 7日=0.01, HKD 1個月=0.1, HKD 2個月=1.75, HKD 3個月=2.55, HKD 4個月=2.8, HKD 6個月=3, HKD 9個月=3.2, HKD 12個月=3.45, USD 7日=0.05, USD 1個月=2.9, USD 2個月=3.2, USD 3個月=3.6, USD 4個月=3.7, USD 6個月=3.8"
-  },
-  {
-   "bank": "ocbc",
-   "url": "https://www.ocbc.com.hk/iwov-resources/hk/ocbc/personal/pdf/HKD.pdf",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.ocbc.com.hk/iwov-resources/hk/ocbc/personal/pdf/HKD.pdf",
-   "tables": 0,
-   "title": "PDF",
-   "textLen": 34170,
-   "mode": "text",
-   "rows": 13,
-   "fx": [],
-   "sample": "HKD 1個月*=1.85, HKD 3個月*=2.9, HKD 6個月*=3.2, HKD 9個月*=3.25, HKD 12個月*=3.35, USD 1個月*=3.2, USD 3個月*=3.9, USD 6個月*=4.1, USD 12個月*=4.2, CNY 1個月*=0.8, CNY 3個月*=1.1, CNY 6個月*=1.2, CNY 12個月*=1.3"
-  },
-  {
-   "bank": "ocbc",
-   "url": "https://www.ocbc.com.hk/personal-banking/deposit-services/foreign-currency-deposit",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.ocbc.com.hk/personal-banking/deposit-services/foreign-currency-deposit",
-   "tables": 2,
-   "title": "Foreign Exchange Services | OCBC Personal Banking HK",
-   "textLen": 5359,
-   "debug": [
-    "ncy Deposit should be over the following amount for interest ## Currency / Minimum Initial Deposit2 / Deposit should be over the following amount for interest || Australian Dollar (AUD) / 100 / 100 || Canadian Dollar (CAD) / 100 / 100",
-    "al Deposit via Internet / Telematic Banking / Mobile Banking ## Currency / Over-the-Counter Minimum Initial Deposit (Below One-Month) / Over-the-Counter Minimum Initial Deposit (Below One-Month) / Minimum Initial Deposit via Internet / Telematic Banking / Mobile Banking ||  / Below O"
-   ],
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "za",
-   "url": "https://bank.za.group/hk/app-download",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://bank.za.group/hk/app-download",
-   "tables": 0,
-   "title": "ZA Bank App | 立即下載眾安銀行 App！",
-   "textLen": 1374,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "airstar",
-   "url": "https://www.elebank.com/zh-hk/deposit",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.elebank.com/zh-hk/deposit",
-   "tables": 0,
-   "title": "存款 | EleBank 大象銀行",
-   "textLen": 739,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
   },
   {
    "bank": "welab",
@@ -124,32 +28,6 @@
    "sample": ""
   },
   {
-   "bank": "za",
-   "url": "https://bank.za.group/hk/foreignexchange",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://bank.za.group/hk/foreignexchange",
-   "tables": 0,
-   "title": "銀行唱錢 | 0手續費！實時報價，7x24外幣兌換，最簡單三步即可成功兌幣",
-   "textLen": 897,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "airstar",
-   "url": "https://www.elebank.com/zh-hk/hkprime",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.elebank.com/zh-hk/hkprime",
-   "tables": 2,
-   "title": "銀行利率 | EleBank 大象銀行",
-   "textLen": 867,
-   "rows": 8,
-   "fx": [],
-   "sample": "HKD 7日=0.01, HKD 1個月=0.1, HKD 2個月=1.75, HKD 3個月=2.55, HKD 4個月=2.8, HKD 6個月=3, HKD 9個月=3.2, HKD 12個月=3.45"
-  },
-  {
    "bank": "welab",
    "url": "https://www.welab.bank/zh/feature/fx-best-rate-guarantee",
    "ok": true,
@@ -158,19 +36,6 @@
    "tables": 0,
    "title": "最低匯率保證，慳更多 | WeLab Bank",
    "textLen": 2763,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "za",
-   "url": "https://bank.za.group/rates-list",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://bank.za.group/rates-list",
-   "tables": 0,
-   "title": "ZA Bank | 香港第一數字銀行",
-   "textLen": 1036,
    "rows": 0,
    "fx": [],
    "sample": ""
@@ -203,30 +68,6 @@
    "rows": 0,
    "fx": [],
    "sample": ""
-  },
-  {
-   "bank": "welab",
-   "url": "https://www.welab.bank/zh",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.welab.bank/zh/",
-   "tables": 0,
-   "title": "「智」慧理財 生活自在 | 香港數字銀行 | 銀行服務 | WeLab Bank",
-   "textLen": 2311,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "welab",
-   "url": "https://www.welab.bank/zh/feature",
-   "ok": false,
-   "status": 404,
-   "finalUrl": "https://www.welab.bank/zh/",
-   "tables": 0,
-   "title": "「智」慧理財 生活自在 | 香港數字銀行 | 銀行服務 | WeLab Bank",
-   "textLen": 2311,
-   "error": "HTTP 404"
   }
  ]
 }
