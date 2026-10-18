@@ -5,7 +5,7 @@ const CURRENCIES = {
   HKD: [/港元/, /港幣/, /(?<![A-Za-z])HKD(?![A-Za-z])/i, /HK\$/i, /Hong ?Kong Dollar/i],
   USD: [/美元/, /美金/, /(?<![A-Za-z])USD(?![A-Za-z])/i, /US\$/i, /US Dollar/i],
   CNY: [/人民幣/, /(?<![A-Za-z])RMB(?![A-Za-z])/i, /(?<![A-Za-z])CNY(?![A-Za-z])/i, /(?<![A-Za-z])CNH(?![A-Za-z])/i, /Renminbi/i],
-  AUD: [/澳元/, /澳幣/, /(?<![A-Za-z])AUD(?![A-Za-z])/i, /AU\$/i, /Australian Dollar/i],
+  AUD: [/澳元/, /澳幣/, /澳洲元/, /(?<![A-Za-z])AUD(?![A-Za-z])/i, /AU\$/i, /Australian Dollar/i],
   GBP: [/英鎊/, /(?<![A-Za-z])GBP(?![A-Za-z])/i, /Pound/i, /Sterling/i],
   JPY: [/日圓/, /日元/, /(?<![A-Za-z])JPY(?![A-Za-z])/i, /Japanese Yen/i, /\bYen\b/i],
 };
@@ -49,8 +49,8 @@ function currencyList(text) {
   if (!text || text.length > 60) return [];
   return currenciesIn(text).sort((a, b) => a.pos - b.pos).map((f) => f.code);
 }
-const CCY_WORD = '(港元|港幣|美元|美金|人民幣|澳元|英鎊|日圓|日元|HKD|USD|RMB|CNY|AUD|GBP|JPY)';
-const CCY_MAP = { 港元: 'HKD', 港幣: 'HKD', HKD: 'HKD', 美元: 'USD', 美金: 'USD', USD: 'USD', 人民幣: 'CNY', RMB: 'CNY', CNY: 'CNY', 澳元: 'AUD', AUD: 'AUD', 英鎊: 'GBP', GBP: 'GBP', 日圓: 'JPY', 日元: 'JPY', JPY: 'JPY' };
+const CCY_WORD = '(港元|港幣|美元|美金|人民幣|澳洲元|澳元|英鎊|日圓|日元|HKD|USD|RMB|CNY|AUD|GBP|JPY)';
+const CCY_MAP = { 港元: 'HKD', 港幣: 'HKD', HKD: 'HKD', 美元: 'USD', 美金: 'USD', USD: 'USD', 人民幣: 'CNY', RMB: 'CNY', CNY: 'CNY', 澳元: 'AUD', 澳洲元: 'AUD', AUD: 'AUD', 英鎊: 'GBP', GBP: 'GBP', 日圓: 'JPY', 日元: 'JPY', JPY: 'JPY' };
 // "最低存款金額：2,000美元" → USD. The deposit amount names the table's currency more reliably
 // than any other currency word nearby (e.g. "每1獎賞錢價值港幣1元").
 function amountCurrency(text) {
@@ -171,6 +171,10 @@ function parseRate(cell, pctTable) {
   const paren = c.match(/^\((\d{1,2}\.\d{1,6})\)$/);
   if (paren && pctTable) c = paren[1];
   if (/^(-|—|–|N\/A|不適用|不設|--)$/i.test(c)) return null;
+  // two rates side by side in one cell, e.g. branch / app columns: "0.00100 0.00100" or glued "0.001000.00100"
+  const two = cell.trim().match(/^(\d{1,2}\.\d{2,6})%?\s+(\d{1,2}\.\d{2,6})%?$/);
+  if (two && pctTable) c = two[1];
+  for (let n = 6; n >= 3 && !two; n--) { const g = c.match(new RegExp(`^(\\d\\.\\d{${n}})(\\d\\.\\d{${n}})$`)); if (g && pctTable) { c = g[1]; break; } }
   let m = c.match(/^(?:年利率|最高|高達|Upto|up to)?(\d{1,2}(?:\.\d{1,6})?)%(?:p\.?a\.?|\*+|#|\^|[\[(（]?[a-zA-Z0-9]{0,2}[\])）]?)?$/i);
   if (!m && pctTable) m = c.match(/^(\d{1,2}\.\d{1,6})\*{0,3}$/);
   if (!m) return null;
@@ -182,7 +186,8 @@ function parseRate(cell, pctTable) {
 // minimum amount from a column header like "港元10,000 至 港元29,999" / "HK$100,000 or above" / "10萬"
 function parseMinAmount(text) {
   if (!text) return null;
-  const t = text.replace(/\s+/g, '');
+  // dates and times ("更新時間:2026/10/18 12:42") are not amounts
+  const t = text.replace(/\d{4}\s*[\/\-年.]\s*\d{1,2}\s*[\/\-月.]\s*\d{1,2}\s*日?(?:\s*\d{1,2}:\d{2}(?::\d{2})?)?/g, ' ').replace(/\s+/g, '');
   let m = t.match(/(\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?)(萬|万|億|M|K|百萬|million)?/i);
   if (!m) return null;
   let v = parseFloat(m[1].replace(/,/g, ''));
@@ -219,7 +224,7 @@ function analyseDepositTable(tbl, pageCtx) {
   const nRows = grid.length;
   const nCols = Math.max(...grid.map((r) => r.length));
   const allText = grid.flat().join(' ');
-  const pctTable = /%|年利率|利率|p\.a\./i.test(allText + ' ' + tbl.context);
+  const pctTable = /%|年利率|利率|p\.a\./i.test(allText + ' ' + tbl.context) || !!(pageCtx && pageCtx.pct);
 
   // count tenor cells per column and per row
   const colScore = new Array(nCols).fill(0);
@@ -244,6 +249,8 @@ function analyseDepositTable(tbl, pageCtx) {
   const headerRows = rows.slice(0, Math.max(firstTenorRow, 0));
   const near = lastSegments(tbl.context);
   const gridOnly = onlyCurrency(allText);
+  // a table titled for a currency we don't track ("紐西蘭元定期存款利率") must not inherit one from the table before
+  if (onlyCurrency([...new Set(grid[0] || [])].join(' ')) === 'OTHER') return [];
   const ctxCcy = amountCurrency(near) || lastCurrency(near) || lastCurrency(tbl.context) || (pageCtx && pageCtx.prevCcy) || (gridOnly !== 'OTHER' && gridOnly) || null;
   const out = [];
 
@@ -310,6 +317,10 @@ function conditionsFromRaw(text) {
   if (/不論新舊資金|新舊資金|不論.{0,4}資金|新資金\s*[／\/及或]\s*現有資金|現有資金\s*[／\/及或]\s*新資金|現有資金\/續存/.test(text)) {
     const i = tags.indexOf('新資金'); if (i >= 0) tags.splice(i, 1);
   }
+  // "分行「…手機App」" column headers: available both ways, not an online-only condition
+  if (/分行[^。|]{0,6}[「『(（]?[^。|]{0,12}(手機|網上|App)/i.test(text) && !/只限|只適用於[^。]{0,6}(網上|手機)/.test(text)) {
+    const i = tags.indexOf('網上/手機開立'); if (i >= 0) tags.splice(i, 1);
+  }
   // "優惠不適用於透過網上理財…開立" means branch only
   if (/不適用於[^。]{0,30}(網上|流動|手機|電話)/.test(text)) {
     const i = tags.indexOf('網上/手機開立'); if (i >= 0) tags.splice(i, 1);
@@ -327,6 +338,7 @@ function parseDeposits(page, source) {
   const pageText = page.text || '';
   const pageFx = FX_CONVERT.test(pageText);
   const pageMins = contextMins(pageText, { strict: true });
+  const pagePct = /年利率|利率|interest rate|p\.a\./i.test(pageText);
   const pageType = source.type || 'board';
   // 1st pass: read every table
   const perTable = [];
@@ -335,10 +347,13 @@ function parseDeposits(page, source) {
     const near = lastSegments(ctx);
     // "可享以下活期儲蓄存款年利率" — a savings offer laid out like a deposit table
     if (SAVINGS.test(near) && !/定期/.test(near)) continue;
+    // a title row such as "萬利錢儲蓄存款" over the whole table (not a "儲蓄" column header)
+    const title0 = [...new Set((tbl.grid[0] || []).filter(Boolean))];
+    if (title0.length <= 2 && /儲蓄/.test(title0.join(' ')) && !tenorsOf(title0.join(' ')).length && !/定期|time deposit/i.test(title0.join(' ') + ' ' + (tbl.grid[1] || []).join(' '))) continue;
     const near0 = near;
     const weak0 = (near0.replace(/\d[\d.,%]*|[^\u4e00-\u9fff]/g, '').length < 8) || (near0.match(/%/g) || []).length >= 3;
     const prevT = perTable[perTable.length - 1];
-    const found = analyseDepositTable(tbl, { prevCcy: weak0 && prevT ? prevT.ccy : null });
+    const found = analyseDepositTable(tbl, { prevCcy: weak0 && prevT ? prevT.ccy : null, pct: pagePct });
     if (!found.length) continue;
     const head = tbl.grid.slice(0, 2).flat().join(' ');
     const weak = (near.replace(/\d[\d.,%]*|[^\u4e00-\u9fff]/g, '').length < 8) || (near.match(/%/g) || []).length >= 3;

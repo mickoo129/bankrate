@@ -65,7 +65,67 @@ async function getMid() {
   return null;
 }
 
-async function loadPage(context, url) {
+// PDF rate sheets: text laid out line by line (items grouped by their y position)
+async function loadPdf(context, url) {
+  const resp = await context.request.get(url, { timeout: 45000 });
+  const status = resp.status();
+  const buf = await resp.body();
+  if (status >= 400 || buf.slice(0, 5).toString() !== '%PDF-') return { status: status >= 400 ? status : 415, finalUrl: url, data: { title: '', url, text: '', lines: '', tables: [] }, links: [] };
+  const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
+  const doc = await pdfjs.getDocument({ data: new Uint8Array(buf), isEvalSupported: false, disableFontFace: true }).promise;
+  const out = [];
+  for (let n = 1; n <= Math.min(doc.numPages, 12); n++) {
+    const pg = await doc.getPage(n);
+    const tc = await pg.getTextContent();
+    const rows = new Map();
+    for (const it of tc.items) {
+      if (!it.str || !it.str.trim()) continue;
+      const y = Math.round(it.transform[5] / 3) * 3;
+      if (!rows.has(y)) rows.set(y, []);
+      rows.get(y).push([it.transform[4], it.str]);
+    }
+    for (const y of [...rows.keys()].sort((a, b) => b - a)) out.push(rows.get(y).sort((a, b) => a[0] - b[0]).map((x) => x[1].trim()).join(' '));
+  }
+  const lines = out.join('\n');
+  return { status, finalUrl: url, data: { title: 'PDF', url, text: lines.replace(/\s+/g, ' '), lines, tables: [], viaPdf: true }, links: [] };
+}
+
+// Pages that only show one currency / tab at a time: pick each option or click each tab and read again
+async function readVariants(page, opts, data) {
+  const add = (fd, label) => {
+    const offset = data.tables.length + 2000;
+    fd.tables.forEach((t) => { t.index += offset; if (label) t.context = t.context + ' | ' + label; });
+    data.tables.push(...fd.tables);
+    data.text += ' ' + fd.text;
+    data.lines += '\n' + fd.lines;
+  };
+  if (opts.select) {
+    const options = await page.evaluate((sel) => { const s = document.querySelector(sel); return s ? Array.from(s.options).map((o) => [o.value, o.text.trim()]) : []; }, opts.select).catch(() => []);
+    for (const [value, label] of options) {
+      if (!/港|美|人民|澳|英|日|HKD|USD|CNY|RMB|AUD|GBP|JPY/i.test(label + value)) continue;
+      try {
+        await page.evaluate(([sel, v]) => { const s = document.querySelector(sel); s.value = v; s.dispatchEvent(new Event('change', { bubbles: true })); s.dispatchEvent(new Event('input', { bubbles: true })); }, [opts.select, value]);
+        await page.waitForTimeout(2500);
+        add(await page.evaluate(extractTables), label);
+      } catch {}
+    }
+  }
+  for (const label of opts.clicks || []) {
+    try {
+      const ok = await page.evaluate((txt) => {
+        const el = Array.from(document.querySelectorAll('button, a, li, span, div, [role=tab]')).find((e) => e.textContent.trim() === txt && e.offsetParent !== null);
+        if (el) el.click();
+        return !!el;
+      }, label);
+      if (!ok) continue;
+      await page.waitForTimeout(2500);
+      add(await page.evaluate(extractTables), '');
+    } catch {}
+  }
+}
+
+async function loadPage(context, url, opts = {}) {
+  if (opts.pdf || /\.pdf(?:$|\?)/i.test(url)) return loadPdf(context, url);
   const page = await context.newPage();
   try {
     const resp = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
@@ -80,6 +140,7 @@ async function loadPage(context, url) {
       await page.waitForTimeout(1500);
     } catch {}
     const data = await page.evaluate(extractTables);
+    if (opts.select || opts.clicks) await readVariants(page, opts, data);
     for (const frame of page.frames()) {
       if (frame === page.mainFrame()) continue;
       const fu = frame.url();
@@ -123,7 +184,7 @@ function rowsFromPage(data, type, url) {
 async function scrapeBank(context, bank, mid, report) {
   const visited = new Set();
   const queue = [];
-  for (const p of bank.pages || []) queue.push({ url: p.url, type: p.type, fixed: true });
+  for (const p of bank.pages || []) queue.push({ ...p, fixed: true });
   for (const u of bank.fxPages || []) queue.push({ url: u, fx: true, fixed: true });
   for (const u of bank.seeds || []) queue.push({ url: u, seed: true, depth: 0 });
 
@@ -142,7 +203,7 @@ async function scrapeBank(context, bank, mid, report) {
     const rep = { bank: bank.id, url: item.url, ok: false };
     report.push(rep);
     try {
-      const { status, finalUrl, data, links } = await loadPage(context, item.url);
+      const { status, finalUrl, data, links } = await loadPage(context, item.url, item);
       rep.status = status;
       rep.finalUrl = finalUrl;
       rep.tables = data.tables.length;
@@ -190,6 +251,10 @@ async function scrapeBank(context, bank, mid, report) {
       if (rows.length) { deposits.push(...rows); sources.add(finalUrl); }
       if (Object.keys(f).length) { fx = { ...f, ...fx }; sources.add(finalUrl); }
       if (end && rows.some((r) => r.type === 'promo')) offerEnd = offerEnd || end;
+      if (item.followPdf) {
+        const want = new RegExp(item.followPdf);
+        for (const l of links) if (l.href && /\.pdf(?:$|\?)/i.test(l.href) && want.test(l.text)) queue.unshift({ url: l.href, type: item.type, pdf: true, fixed: true });
+      }
       // discovery: follow promising links from seed pages (and from fixed pages too)
       const depth = item.depth ?? 0;
       const strong = /定期|定存|time-?deposit|存款利率|deposit-?rate|board-?rate|匯率|exchange-?rate/i;

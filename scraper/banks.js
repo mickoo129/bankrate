@@ -95,8 +95,11 @@ module.exports = [
     id: 'bocom', name: '交通銀行(香港)', nameEn: 'BOCOM (HK)', group: 'mid',
     site: 'https://www.hk.bankcomm.com',
     pages: [
-      { url: 'https://www.hk.bankcomm.com/hk/shtml/hk/tw/2005742/2005763/2005764/list.shtml?channelId=2005742', type: 'board' },],
-    seeds: ['https://www.hk.bankcomm.com/hk/shtml/hk/cn/', 'https://www.hk.bankcomm.com/'],
+      // rate tables are drawn inside an iframe that only fills in when opened from these pages
+      { url: 'https://www.hk.bankcomm.com/hk/shtml/hk/tw/2005155/2005178/2005179/list.shtml?channelId=2005155', type: 'board' },
+      { url: 'https://www.hk.bankcomm.com/hk/shtml/hk/tw/2005155/2005178/2005180/list.shtml?channelId=2005155', type: 'board' },
+      { url: 'https://www.hk.bankcomm.com/hk/tw/file/getContentPath.do?fileId=2600167', type: 'promo', pdf: true },],
+    seeds: [],
   },
   {
     id: 'dahsing', name: '大新', nameEn: 'Dah Sing', group: 'mid',
@@ -108,14 +111,17 @@ module.exports = [
     id: 'citic', name: '中信銀行(國際)', nameEn: 'CNCBI', group: 'mid',
     site: 'https://www.cncbinternational.com',
     pages: [
-      { url: 'https://ibanking.cncbinternational.com/CKWPortal/appmanager/Portal/CKWPersonPopup?_nfpb=true&_windowLabel=rateEnquiryController_CS_popup_1&rateEnquiryController_CS_popup_1_actionOverride=%2Fportlets%2Fpersonal%2FrateEnquiry%2FdoInitFdRate&_pageLabel=ckwPopupCS_RateTables', type: 'board' },],
+      { url: 'https://www.cncbinternational.com/rate-table/time_deposit_rate_tc.html', type: 'board', select: 'select' },
+      { url: 'https://www.cncbinternational.com/personal/deposits/time-deposit/tc/index.jsp', type: 'promo' },],
     seeds: ['https://www.cncbinternational.com/personal/deposits/tc/index.jsp', 'https://www.cncbinternational.com/home/tc/index.jsp'],
   },
   {
     id: 'ocbc', name: '華僑銀行', nameEn: 'OCBC HK', group: 'mid',
     site: 'https://www.ocbc.com.hk',
-    pages: [],
-    seeds: ['https://www.ocbc.com.hk/', 'https://www.ocbc.com.hk/personal-banking/zh-hk/'],
+    pages: [
+      { url: 'https://www.ocbc.com.hk/personal-banking/deposits/foreign-currency-interest-rates', type: 'board' },
+      { url: 'https://www.ocbc.com.hk/iwov-resources/hk/ocbc/personal/pdf/HKD.pdf', type: 'board', pdf: true },],
+    seeds: ['https://www.ocbc.com.hk/personal-banking/deposit-services/foreign-currency-deposit'],
   },
   {
     id: 'cmbwl', name: '招商永隆', nameEn: 'CMB Wing Lung', group: 'mid',
@@ -153,21 +159,25 @@ module.exports = [
     id: 'ncb', name: '南洋商業', nameEn: 'Nanyang Commercial', group: 'mid',
     site: 'https://www.ncb.com.hk',
     pages: [
-      { url: 'https://www.ncb.com.hk/nanyang_bank/popup1/ncbinfo.html', type: 'promo' },],
-    seeds: ['https://www.ncb.com.hk/nanyang_bank/personal_banking/deposit_services/', 'https://www.ncb.com.hk/'],
+      { url: 'https://www.ncb.com.hk/nanyang_bank/html/14ac.html', type: 'board', select: '#currency_select' },
+      { url: 'https://www.ncb.com.hk/nanyang_bank/html/121023.html', type: 'promo' },],
+    seeds: [],
   },
   {
     id: 'chiyu', name: '集友', nameEn: 'Chiyu', group: 'mid',
     site: 'https://www.chiyubank.com',
-    pages: [],
-    seeds: ['https://www.chiyubank.com/tc/deposits.html', 'https://www.chiyubank.com/tc/home.html'],
+    pages: [
+      { url: 'https://www.chiyubank.com/cyb/index/zxxx/20230523/index.shtml', type: 'promo', followPdf: '了解更多' },
+      { url: 'https://www.chiyubank.com/wcs/trading-rate/', type: 'board' },],
+    seeds: [],
   },
   // ---------- 虛擬銀行 ----------
   {
     id: 'za', name: 'ZA Bank', nameEn: 'ZA Bank', group: 'virtual',
     site: 'https://bank.za.group',
-    pages: [],
-    seeds: ['https://bank.za.group/hk/deposit', 'https://bank.za.group/hk/'],
+    pages: [
+      { url: 'https://bank.za.group/hk/deposit', type: 'board', clicks: ['定期存款'] },],
+    seeds: [],
   },
   {
     id: 'mox', name: 'Mox', nameEn: 'Mox', group: 'virtual',
@@ -196,17 +206,18 @@ module.exports = [
     seeds: ['https://www.fusionbank.com/', 'https://www.fusionbank.com/deposit.html'],
   },
   {
-    id: 'paob', name: '平安壹賬通', nameEn: 'PAOB', group: 'virtual',
-    site: 'https://www.paob.com.hk',
-    pages: [],
-    seeds: ['https://www.paob.com.hk/tc/', 'https://www.paob.com.hk/'],
+    id: 'paob', name: '平安數字銀行', nameEn: 'Ping An Digital Bank', group: 'virtual',
+    site: 'https://www.pingandb.com',
+    pages: [
+      { url: 'https://www.pingandb.com/tc/retail-savings.html', type: 'board' },],
+    seeds: [],
   },
   {
-    id: 'airstar', name: '天星銀行', nameEn: 'Airstar Bank', group: 'virtual',
-    site: 'https://www.airstarbank.com',
+    id: 'airstar', name: '大象銀行（前天星）', nameEn: 'EleBank (formerly Airstar)', group: 'virtual',
+    site: 'https://www.elebank.com',
     pages: [
-      { url: 'https://www.airstarbank.com/zh-hk/deposit.html', type: 'promo' },],
-    seeds: ['https://www.airstarbank.com/zh-hk/', 'https://www.airstarbank.com/zh-hk/deposit.html'],
+      { url: 'https://www.elebank.com/zh-hk/hkprime.html', type: 'board', clicks: ['港幣', '美元', '人民幣'] },],
+    seeds: [],
   },
   {
     id: 'antbank', name: '螞蟻銀行', nameEn: 'Ant Bank', group: 'virtual',

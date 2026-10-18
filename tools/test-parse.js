@@ -112,3 +112,15 @@ console.log('all parser tests passed');
   assert.strictEqual(contextMins(t, { strict: true }).HKD, 1000);
   console.log('icbc cap test ok');
 }
+
+{ // glued branch/app rates, page-level 年利率, untracked-currency title, savings-plan title
+  const assert = require('assert');
+  const { parseRate, parseDeposits } = require('../scraper/parse');
+  assert.strictEqual(parseRate('0.001000.00100', true), 0.001);
+  assert.strictEqual(parseRate('0.25000 0.30000', true), 0.25);
+  const page = (grid, ctx = '') => parseDeposits({ tables: [{ index: 0, context: ctx, grid }], text: '單位: 年利率' }, { type: 'board', url: 'x' });
+  assert.ok(page([['貨幣', '最低存款額 (人民幣)', '存款期', '存款期'], ['貨幣', '最低存款額 (人民幣)', '1 個月', '3 個月'], ['人民幣', '10,000', '0.4500', '0.5000']]).some((r) => r.currency === 'CNY' && r.rate === 0.5));
+  assert.strictEqual(page([['紐西蘭元定期存款利率', '紐西蘭元定期存款利率'], ['存款期', '年利率'], ['1 個月', '0.20%'], ['3 個月', '0.30%']], '美元').length, 0);
+  assert.strictEqual(page([['萬利錢儲蓄存款', '更新時間'], ['存款期', '年利率〈%〉'], ['12 個月', '1.00000'], ['18 個月', '1.00000']], '港元').length, 0);
+  console.log('format tests ok');
+}

@@ -7,6 +7,19 @@ function extractTables(doc) {
   doc = doc || document;
   const clean = (s) => (s || '').replace(/[ \s]+/g, ' ').trim();
 
+  // cell text with a space between block elements ("<div>0.1</div><div>0.2</div>" -> "0.1 0.2"),
+  // and spaced-out Chinese names joined back ("港 元" -> "港元")
+  const BLOCK = /^(DIV|P|BR|LI|UL|OL|H[1-6]|SECTION|TABLE|TR|TD|TH|DL|DT|DD)$/;
+  function cellText(node) {
+    let out = '';
+    node.childNodes.forEach((ch) => {
+      if (ch.nodeType === 3) out += ch.nodeValue;
+      else if (ch.nodeType === 1) { const b = BLOCK.test(ch.tagName); out += (b ? ' ' : '') + cellText(ch) + (b ? ' ' : ''); }
+    });
+    return out;
+  }
+  const joinCjk = (t) => (/^[\u4e00-\u9fff](?: [\u4e00-\u9fff])+$/.test(t) ? t.replace(/ /g, '') : t);
+
   function gridOf(table) {
     const grid = [];
     const rows = Array.from(table.rows || []);
@@ -15,7 +28,7 @@ function extractTables(doc) {
       let c = 0;
       Array.from(tr.cells).forEach((cell) => {
         while (grid[r][c] !== undefined) c++;
-        const text = clean(cell.textContent);
+        const text = joinCjk(clean(cellText(cell)));
         const cs = Math.min(parseInt(cell.colSpan, 10) || 1, 30);
         const rs = Math.min(parseInt(cell.rowSpan, 10) || 1, 60);
         for (let i = 0; i < rs; i++) {
