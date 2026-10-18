@@ -411,3 +411,8 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
   .facts-t th, .facts-t td { padding: 7px 5px; }
   .facts-t th[scope=row] { white-space: normal; max-width: 72px; }
 }
+
+.nodata-note { font-size: .85rem; color: var(--ink-2); line-height: 1.7; margin: 10px 0 0; }
+.nodata-note:empty { display: none; }
+.nodata-note b { color: var(--ink); font-weight: 500; }
+.chip.nodata small { font-size: .72rem; margin-left: 2px; }

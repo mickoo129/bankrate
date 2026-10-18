@@ -221,7 +221,10 @@
       if (state.open && state.open.startsWith(b.id + '|')) html.push(`<tr class="detail"><td colspan="6">${detailHtml(b, +state.open.split('|')[1])}</td></tr>`);
     }
     if (!rows.length) html.push(`<tr><td colspan="6" class="empty-msg">${state.banks ? '你揀嘅銀行未有呢個貨幣嘅定期數據，撳「揀銀行」加多幾間。' : '暫時未有數據。'}</td></tr>`);
-    if (noData.length) html.push(`<tr class="group"><td colspan="6">未有${esc(CCY_NAME[state.ccy])}定期數據：${noData.map((b) => esc(b.name)).join('、')}</td></tr>`);
+    const nd = $('#noDataNote');
+    if (nd) nd.innerHTML = noData.length
+      ? `<b>系統暫時讀唔到以下銀行網頁上嘅${esc(CCY_NAME[state.ccy])}定期息口</b>（唔代表佢哋冇做），可以撳名去銀行網站睇：${noData.map((b) => `<a href="${esc((b.sources && b.sources[0]) || b.site)}" target="_blank" rel="noopener">${esc(b.name)}</a>`).join('、')}`
+      : '';
     tbody.innerHTML = html.join('');
 
     // phones: ranking for the chosen tenor
@@ -338,7 +341,7 @@
       <div class="pg"><h4>${name}</h4><div class="chips">${groups[g].map((b) => {
         const on = !state.banks || state.banks.includes(b.id);
         const has = b.deposits && b.deposits.length;
-        return `<button type="button" class="chip${has ? '' : ' nodata'}" aria-pressed="${on}" data-pick="${b.id}" ${has ? '' : 'title="暫未有數據"'}>${esc(b.name)}</button>`;
+        return `<button type="button" class="chip${has ? '' : ' nodata'}" aria-pressed="${on}" data-pick="${b.id}" ${has ? '' : 'title="系統暫時讀唔到呢間銀行嘅網頁"'}>${esc(b.name)}${has ? '' : '<small>（暫時讀唔到）</small>'}</button>`;
       }).join('')}</div></div>`).join('');
   }
   function setupPanels() {

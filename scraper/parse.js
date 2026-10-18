@@ -321,6 +321,7 @@ function conditionsFromRaw(text) {
   if (/分行[^。|]{0,6}[「『(（]?[^。|]{0,12}(手機|網上|App)/i.test(text) && !/只限|只適用於[^。]{0,6}(網上|手機)/.test(text)) {
     const i = tags.indexOf('網上/手機開立'); if (i >= 0) tags.splice(i, 1);
   }
+  if (/只適用於分行|只限分行|只限親臨分行/.test(text) && !tags.includes('只限分行')) tags.push('只限分行');
   // "優惠不適用於透過網上理財…開立" means branch only
   if (/不適用於[^。]{0,30}(網上|流動|手機|電話)/.test(text)) {
     const i = tags.indexOf('網上/手機開立'); if (i >= 0) tags.splice(i, 1);
@@ -473,9 +474,12 @@ function parseFx(page, mid) {
 
 // "至2026年10月31日" / "until 31 Oct 2026" → validity end date of an offer
 function validUntil(text) {
-  const t = text || '';
+  // PDFs space out digits ("2026 年 10 月 1 7 日 至 20 日")
+  const t = (text || '').replace(/(\d)\s+(?=\d\s*[年月日])/g, '$1');
+  // "2026年10月17日至20日": end date in the same month
+  const same = t.match(/(20\d{2})\s*年\s*(\d{1,2})\s*月\s*\d{1,2}\s*日\s*(?:至|-|–)\s*(\d{1,2})\s*日/);
   const re = /(?:至|直至|截至|止|until|till|to)\s*(20\d{2})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日/gi;
-  let m, best = null;
+  let m, best = same ? `${same[1]}-${same[2].padStart(2, '0')}-${same[3].padStart(2, '0')}` : null;
   while ((m = re.exec(t))) {
     const d = `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`;
     if (!best || d > best) best = d;
@@ -512,9 +516,48 @@ function validUntilNear(text, at) {
 // by a rate line. Currency comes from the line itself or the nearest heading above.
 const RATE_IN_TEXT = /(\d{1,2}(?:\.\d{1,4})?)\s*%/g;
 const TENOR_IN_TEXT = /(\d{1,2}|[一二兩三六九十]{1,3})\s*(?:個)?\s*(日|天|星期|週|個月|月|年|days?|weeks?|months?|M\b)/gi;
+// PDF text often spaces out numbers ("3. 5 5 厘", "2.90 %") and uses 厘 for %
+function normaliseRateText(l) {
+  return l
+    .replace(/(?<![\d.])(\d{1,2})\s*\.\s*((?:\d\s*){1,4})(%|厘)/g, (m, a, b) => `${a}.${b.replace(/\s+/g, '')}%`)
+    .replace(/(\d)\s+%/g, '$1%')
+    .replace(/(\d)\s*厘/g, '$1%');
+}
 function parseTextRates(text, source) {
-  const lines = (text || '').split(/\n+/).map((l) => l.replace(/\s+/g, ' ').trim()).filter(Boolean);
+  const lines = (text || '').split(/\n+/).map((l) => normaliseRateText(l.replace(/\s+/g, ' ').trim())).filter(Boolean);
   const out = [];
+  // rate sheets laid out as a row of tenors with a row of rates under it (common in PDFs):
+  //   存款金額 港幣 20 萬元至 100 萬元以下 港幣 100 萬元至 1000 萬元
+  //   存 款 期 1 個月 3 個月 … 12 個月 1 個月 … 12 個月
+  //   年 利 率 2.10% 2.85% … 3.20%
+  let blockStart = 0;
+  for (let i = 0; i < lines.length; i++) {
+    const rates = [...lines[i].matchAll(RATE_IN_TEXT)].map((m) => parseFloat(m[1]));
+    const tenorLine = (k) => (k >= 0 ? [...lines[k].matchAll(TENOR_IN_TEXT)].map((m) => parseTenor(m[0])).filter(Boolean) : []);
+    if (rates.length < 2 || tenorLine(i).length) continue;
+    let k = i - 1, tenors = tenorLine(k);
+    if (!tenors.length || [...lines[k].matchAll(RATE_IN_TEXT)].length) { blockStart = i + 1; continue; }
+    // a short tenor line just above can belong at the end (drawn slightly higher in the PDF)
+    if (tenors.length < rates.length && k - 1 >= 0) { const extra = tenorLine(k - 1); if (extra.length && !/%/.test(lines[k - 1]) && tenors.length + extra.length === rates.length) tenors = tenors.concat(extra); }
+    if (tenors.length !== rates.length) { blockStart = i + 1; continue; }
+    const block = lines.slice(blockStart, i + 1);
+    const amtLine = [...block].reverse().find((l) => /存款金額|存款額|金額/.test(l)) || '';
+    const head = block.filter((l) => l.length <= 40);
+    const own = onlyCurrency(amtLine.replace(/存款金額|存款額|金額/g, ''));
+    const ccy = own && own !== 'OTHER' ? own : (() => { for (let j = head.length - 1; j >= 0; j--) { const c = onlyCurrency(head[j]); if (c && c !== 'OTHER') return c; } for (let j = blockStart - 1; j >= Math.max(0, blockStart - 8); j--) { const c = lines[j].length <= 40 && onlyCurrency(lines[j]); if (c && c !== 'OTHER') return c; } return null; })();
+    // groups restart when tenors go back down ("…12 個月 1 個月…"); one minimum per group
+    const groupOf = []; let g = 0;
+    tenors.forEach((d, n) => { if (n && d < tenors[n - 1]) g++; groupOf.push(g); });
+    const nums = [...amtLine.matchAll(/(\d+(?:\.\d+)?)\s*萬/g)].map((m) => parseFloat(m[1]) * 1e4);
+    const starts = nums.length === 2 * (g + 1) ? nums.filter((_, n) => n % 2 === 0) : nums.slice(0, g + 1);
+    const near = block.join(' ');
+    tenors.forEach((d, n) => {
+      if (!ccy || !CURRENCIES[ccy] || d < 7 || d > 1100 || !(rates[n] > 0.01 && rates[n] < 15)) return;
+      out.push({ currency: ccy, tenorDays: d, tenor: tenorLabel(d), rate: rates[n], minAmount: starts[groupOf[n]] ?? null, minFrom: starts[groupOf[n]] != null ? 'table' : null, tierLabel: (amtLine || head.join(' ')).slice(0, 80), segment: '', fromText: true, near });
+    });
+    blockStart = i + 1;
+  }
+  const paired = new Set(out.map((r) => r.currency + r.tenorDays));
   let ctxCcy = null;
   let ctxLine = -99;
   const push = (ccy, days, rate, i, raw) => {
@@ -536,7 +579,13 @@ function parseTextRates(text, source) {
     const own = onlyCurrency(line);
     const ccy = own && own !== 'OTHER' ? own : (i - ctxLine <= 12 ? ctxCcy : null);
     if (own === 'OTHER') continue;
-    if (tenors.length === 1 && rates.length >= 1) { push(ccy, tenors[0], Math.max(...rates), i, line); continue; }
+    if (tenors.length === 1 && rates.length >= 1) {
+      if (paired.has((ccy || '') + tenors[0])) continue;
+      // several rates on one line are usually customer tiers (private / premier / ordinary): use the lowest,
+      // which an ordinary customer can get
+      push(ccy, tenors[0], Math.min(...rates), i, line);
+      continue;
+    }
     if (tenors.length > 1 && rates.length === tenors.length) { tenors.forEach((d, k) => push(ccy, d, rates[k], i, line)); continue; }
     // tenor alone on its line, rate on one of the next 3 lines
     if (tenors.length === 1 && rates.length === 0 && line.length <= 20) {
@@ -551,7 +600,10 @@ function parseTextRates(text, source) {
   return out.filter((r) => {
     const k = r.currency + r.tenorDays + '|' + r.rate;
     if (seen.has(k)) return false; seen.add(k); return true;
-  }).map((r) => ({ ...r, type: source.type || 'promo', conditions: conditionsFrom(r.near.slice(-200)), sourceUrl: source.url, near: undefined }));
+  }).map((r) => {
+    const conditions = conditionsFrom(r.near.slice(-300));
+    return { ...r, type: source.type || 'promo', conditions, sourceUrl: source.url, near: undefined, upTo: undefined };
+  });
 }
 function effectiveDate(text) {
   const m = (text || '').match(/(20\d{2})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日/);
