@@ -189,7 +189,7 @@ module.exports = [
     id: 'welab', name: 'WeLab Bank', nameEn: 'WeLab Bank', group: 'virtual',
     site: 'https://www.welab.bank',
     pages: [
-      { url: 'https://www.welab.bank/zh/feature/gosave_2/', type: 'promo' },],
+      { url: 'https://www.welab.bank/zh/feature/gosave_2/', type: 'promo', clicks: ['港元', '美元', '人民幣', '澳元', '英鎊', '日圓'] },],
     seeds: ['https://www.welab.bank/zh/', 'https://www.welab.bank/zh/feature/'],
   },
   {

@@ -72,7 +72,7 @@ async function loadPdf(context, url) {
   const buf = await resp.body();
   if (status >= 400 || buf.slice(0, 5).toString() !== '%PDF-') return { status: status >= 400 ? status : 415, finalUrl: url, data: { title: '', url, text: '', lines: '', tables: [] }, links: [] };
   const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
-  const doc = await pdfjs.getDocument({ data: new Uint8Array(buf), isEvalSupported: false, disableFontFace: true }).promise;
+  const doc = await pdfjs.getDocument({ data: new Uint8Array(buf), isEvalSupported: false, disableFontFace: true, cMapUrl: path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'cmaps') + '/', cMapPacked: true, standardFontDataUrl: path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'standard_fonts') + '/' }).promise;
   const out = [];
   for (let n = 1; n <= Math.min(doc.numPages, 12); n++) {
     const pg = await doc.getPage(n);
@@ -110,6 +110,8 @@ async function readVariants(page, opts, data) {
       } catch {}
     }
   }
+  // with tabs, the page's starting state is ambiguous (which tab is showing?), so keep only what each click shows
+  const clicked = { tables: [], text: '', lines: '' };
   for (const label of opts.clicks || []) {
     try {
       const ok = await page.evaluate((txt) => {
@@ -119,9 +121,12 @@ async function readVariants(page, opts, data) {
       }, label);
       if (!ok) continue;
       await page.waitForTimeout(2500);
-      add(await page.evaluate(extractTables), '');
+      const fd = await page.evaluate(extractTables);
+      fd.tables.forEach((t) => { t.index += clicked.tables.length + 3000; t.context = t.context + ' | ' + label; });
+      clicked.tables.push(...fd.tables); clicked.text += ' ' + fd.text; clicked.lines += '\n' + fd.lines;
     } catch {}
   }
+  if (clicked.tables.length) { data.tables = clicked.tables; data.text += clicked.text; data.lines += clicked.lines; }
 }
 
 async function loadPage(context, url, opts = {}) {
@@ -244,7 +249,7 @@ async function scrapeBank(context, bank, mid, report) {
       const f = mid ? parseFx(data, mid.rates) : {};
       rep.rows = rows.length;
       // keep what was read, so every number can be traced back to its table
-      debugPages.push({ url: finalUrl, type, title: data.title, text: (data.text || '').slice(0, 6000), tables: data.tables.map((t) => ({ i: t.index, ctx: t.context.slice(-240), grid: t.grid.slice(0, 40).map((r) => r.slice(0, 12).map((c) => c.slice(0, 60))) })), textRows: rep.mode === 'text' ? rows.length : 0 });
+      debugPages.push({ url: finalUrl, type, title: data.title, text: (data.text || '').slice(0, 6000), lines: data.viaPdf ? String(data.lines).slice(0, 12000) : undefined, tables: data.tables.map((t) => ({ i: t.index, ctx: t.context.slice(-240), grid: t.grid.slice(0, 40).map((r) => r.slice(0, 12).map((c) => c.slice(0, 60))) })), textRows: rep.mode === 'text' ? rows.length : 0 });
       rep.fx = Object.keys(f);
       rep.ok = true;
       rep.sample = summarise(rows);
