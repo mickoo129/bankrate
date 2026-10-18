@@ -223,7 +223,7 @@
     if (!rows.length) html.push(`<tr><td colspan="6" class="empty-msg">${state.banks ? '你揀嘅銀行未有呢個貨幣嘅定期數據，撳「揀銀行」加多幾間。' : '暫時未有數據。'}</td></tr>`);
     const nd = $('#noDataNote');
     if (nd) nd.innerHTML = noData.length
-      ? `<b>系統暫時讀唔到以下銀行網頁上嘅${esc(CCY_NAME[state.ccy])}定期息口</b>（唔代表佢哋冇做），可以撳名去銀行網站睇：${noData.map((b) => `<a href="${esc((b.sources && b.sources[0]) || b.site)}" target="_blank" rel="noopener">${esc(b.name)}</a>`).join('、')}`
+      ? `<b>以下銀行嘅網頁搵唔到${esc(CCY_NAME[state.ccy])}定期息口</b>（可能冇提供呢種貨幣，亦可能係系統暫時讀唔到），可以撳名去銀行網站確認：${noData.map((b) => `<a href="${esc((b.sources && b.sources[0]) || b.site)}" target="_blank" rel="noopener">${esc(b.name)}</a>`).join('、')}`
       : '';
     tbody.innerHTML = html.join('');
 
