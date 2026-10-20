@@ -223,11 +223,13 @@
 
     // wide screens: bank × tenor table
     const html = [];
+    let rowNo = 0;
     for (const { b, cells, blocked } of rows) {
+      const alt = rowNo++ % 2 ? ' class="alt"' : '';
       const tag = meLabel(b.id);
       const promoLink = b.promoUrl ? `<a class="promo-link" href="${esc(b.promoUrl)}" target="_blank" rel="noopener">優惠請睇銀行網站 ↗</a>` : '';
       const stale = b.status === 'stale' ? `<small class="stale">數據截至 ${esc(timeAgo(b.lastSuccess).split('（')[0])}</small>` : '';
-      html.push(`<tr><th scope="row" class="bank-cell"><b>${esc(b.name)}</b>${tag ? `<small class="me-tag">${tag}</small>` : ''}${stale}${promoLink}</th>${TENORS.map((t) => {
+      html.push(`<tr${alt}><th scope="row" class="bank-cell"><b>${esc(b.name)}</b>${tag ? `<small class="me-tag">${tag}</small>` : ''}${stale}${promoLink}</th>${TENORS.map((t) => {
         const r = cells[t.d];
         const k = `${b.id}|${t.d}`;
         const open = state.open === k;
@@ -236,7 +238,7 @@
         return `<td class="cell${isBest ? ' best' : ''}${open ? ' open' : ''}" data-k="${k}" tabindex="0" role="button" aria-expanded="${open}" aria-label="${esc(b.name)} ${t.label} ${pct(r.rate)}%${hasConditions(r) ? '，有條件' : ''}，撳睇詳情">
           <span class="v">${pct(r.rate)}<small>%</small></span>${hasConditions(r) ? '<i class="dot-cond" aria-hidden="true"></i>' : ''}${kindTag(r)}</td>`;
       }).join('')}</tr>`);
-      if (state.open && state.open.startsWith(b.id + '|')) html.push(`<tr class="detail"><td colspan="6">${detailHtml(b, +state.open.split('|')[1])}</td></tr>`);
+      if (state.open && state.open.startsWith(b.id + '|')) html.push(`<tr class="detail${alt ? ' alt' : ''}"><td colspan="6">${detailHtml(b, +state.open.split('|')[1])}</td></tr>`);
     }
     if (!rows.length) html.push(`<tr><td colspan="6" class="empty-msg">${state.banks ? '你揀嘅銀行未有呢個貨幣嘅定期數據，撳「揀銀行」加多幾間。' : '暫時未有數據。'}</td></tr>`);
     const nd = $('#noDataNote');

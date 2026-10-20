@@ -428,3 +428,12 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
 .promo-link { display: block; font-size: .72rem; margin-top: 3px; color: var(--accent); }
 .promo-note { display: block; color: #b45309 !important; }
 .kind { font-family: var(--sans); } .rk-rate { text-align: right; }
+
+/* alternate row shading so each bank's row is easy to follow */
+:root { --zebra: #f3f6fa; }
+.cmp#cmp tbody tr.alt > th, .cmp#cmp tbody tr.alt > td { background: var(--zebra); }
+.cmp#cmp tbody tr.alt > td.cell.best { background: var(--best-bg); }
+.ranklist .rk:nth-child(even):not(.best) { background: var(--zebra); }
+.cmp#fxTable tbody tr:nth-child(even) > * { background: var(--zebra); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) { --zebra: rgba(255,255,255,.045); } }
+:root[data-theme='dark'] { --zebra: rgba(255,255,255,.045); }
