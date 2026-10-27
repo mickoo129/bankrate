@@ -1,0 +1,23 @@
+{
+  "name": "定存息口通｜香港銀行定期息口比較",
+  "short_name": "定存息口通",
+  "lang": "zh-HK",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#F6F9F8",
+  "theme_color": "#0E5E57",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

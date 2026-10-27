@@ -27,7 +27,7 @@
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 var(--sans); }
-.wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+.wrap { max-width: calc(1320px + 2 * clamp(16px, 3vw, 32px)); margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px); }
 a { color: var(--accent); }
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 [hidden] { display: none !important; }
@@ -36,7 +36,6 @@ a { color: var(--accent); }
 .top { background: var(--navy); color: #fff; position: sticky; top: 0; z-index: 10; }
 .top-in { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; }
 .brand { display: inline-flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font-weight: 900; font-size: 1.15rem; letter-spacing: .03em; }
-.mark { width: 26px; height: 26px; border-radius: 7px; background: var(--navy-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M8 22 L14 15 L18 19 L24 10' stroke='%237FE0AE' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat; }
 .updated { margin: 0; font-size: .8rem; color: #C9DDD8; text-align: right; }
 .updated b { color: #fff; font-weight: 500; }
 .tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
@@ -445,7 +444,13 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
   --mk-warn:#8A5B00; --mk-warn-soft:#FFF5DC; --mk-danger:#C62828; --mk-danger-soft:#FDECEC;
   --mk-sans:"Noto Sans HK","PingFang HK","Microsoft JhengHei",system-ui,sans-serif;
   --mk-num:"Barlow","Noto Sans HK",system-ui,sans-serif;
+  --mk-max:1320px;                        /* 內容最闊 */
+  --mk-gutter:clamp(16px,3vw,32px);       /* 兩邊留白：手機 16px → 桌面 32px */
 }
+/* 版面外框：工具可以用自己嘅 class，但數值要一樣 */
+.mk-wrap{width:100%;max-width:calc(var(--mk-max) + 2 * var(--mk-gutter));margin:0 auto;padding-left:var(--mk-gutter);padding-right:var(--mk-gutter);box-sizing:border-box}
+/* 標題旁 icon */
+.mk-logo{width:32px;height:32px;flex:none;display:block}
 .mk-ecard{display:flex;align-items:center;gap:16px 24px;flex-wrap:wrap;margin:28px 0 0;padding:20px 22px;border-radius:14px;border:1px solid var(--mk-brand-line);background:var(--mk-brand-soft);font-family:var(--mk-sans);color:var(--mk-ink);text-align:left}
 .mk-ecard-txt{flex:1;min-width:200px}
 .mk-ecard-txt b{display:block;font-size:17px;font-weight:700;margin-bottom:2px;color:var(--mk-ink)}
@@ -469,3 +474,4 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
 }
 /* ===== MKPA 統一標準 完 ===== */
 
+.top .mk-logo { width: 28px; height: 28px; border-radius: 7px; }
