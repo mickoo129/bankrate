@@ -1,5 +1,5 @@
 {
- "at": "2026-10-27T20:53:35.577Z",
+ "at": "2026-10-28T01:35:48.168Z",
  "pages": [
   {
    "bank": "hsbc",
@@ -54,6 +54,19 @@
    "sample": "HKD 3個月*=2.4, HKD 6個月*=2.4, HKD 12個月*=3.3, USD 3個月*=3.3, USD 6個月*=3.4, USD 12個月*=3.4, CNY 3個月*=1, CNY 6個月*=1.1, CNY 12個月*=1.2, GBP 3個月*=3.3, GBP 6個月*=3.3, GBP 12個月*=3.3, AUD 3個月*=3.3, AUD 6個月*=3.4"
   },
   {
+   "bank": "hangseng",
+   "url": "https://www.hangseng.com/zh-hk/online/account/time-deposits/set-up-fixed-deposit",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.hangseng.com/zh-hk/security?targetAuthLevel=30&destinationURL=/online/dashboard/&__EntryPageParams=returnUrl:https://www.hangseng.com/bin/epep/postback.html?url=/zh-hk/online/account/time-deposits/set-up-fixed-deposit&rid=9f5aa5dde0b0",
+   "tables": 0,
+   "title": "用戶名稱 | 登入 | 恒生銀行",
+   "textLen": 260,
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
    "bank": "bochk",
    "url": "https://www.bochk.com/tc/deposits/savings/time.html",
    "ok": true,
@@ -62,19 +75,6 @@
    "tables": 0,
    "title": "定期存款 | 存款 | 中國銀行(香港)有限公司",
    "textLen": 1875,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "hangseng",
-   "url": "https://www.hangseng.com/zh-hk/online/account/time-deposits/set-up-fixed-deposit",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.hangseng.com/zh-hk/security?targetAuthLevel=30&destinationURL=/online/dashboard/&__EntryPageParams=returnUrl:https://www.hangseng.com/bin/epep/postback.html?url=/zh-hk/online/account/time-deposits/set-up-fixed-deposit&rid=1617bf632d46",
-   "tables": 0,
-   "title": "用戶名稱 | 登入 | 恒生銀行",
-   "textLen": 260,
    "rows": 0,
    "fx": [],
    "sample": ""
@@ -123,10 +123,10 @@
   },
   {
    "bank": "hangseng",
-   "url": "https://www.hangseng.com/zh-hk/security?targetAuthLevel=30&destinationURL=/online/dashboard/&__EntryPageParams=returnUrl:https://www.hangseng.com/bin/epep/postback.html?url=/zh-hk/online/account/time-deposits/set-up-fixed-deposit&rid=1617bf632d46",
+   "url": "https://www.hangseng.com/zh-hk/security?targetAuthLevel=30&destinationURL=/online/dashboard/&__EntryPageParams=returnUrl:https://www.hangseng.com/bin/epep/postback.html?url=/zh-hk/online/account/time-deposits/set-up-fixed-deposit&rid=9f5aa5dde0b0",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.hangseng.com/zh-hk/security?targetAuthLevel=30&destinationURL=/online/dashboard/&__EntryPageParams=returnUrl:https://www.hangseng.com/bin/epep/postback.html?url=/zh-hk/online/account/time-deposits/set-up-fixed-deposit&rid=1617bf632d46",
+   "finalUrl": "https://www.hangseng.com/zh-hk/security?targetAuthLevel=30&destinationURL=/online/dashboard/&__EntryPageParams=returnUrl:https://www.hangseng.com/bin/epep/postback.html?url=/zh-hk/online/account/time-deposits/set-up-fixed-deposit&rid=9f5aa5dde0b0",
    "tables": 0,
    "title": "用戶名稱 | 登入 | 恒生銀行",
    "textLen": 278,
@@ -148,6 +148,19 @@
    "sample": ""
   },
   {
+   "bank": "hangseng",
+   "url": "https://www.hangseng.com/cms/emkt/pmo/grp03/p97/chi/index.html?view=d2g",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.hangseng.com/cms/emkt/pmo/grp03/p97/chi/index.html?view=d2g",
+   "tables": 10,
+   "title": "兌換外幣兼賺息，滿足三大需求 | 恒生銀行",
+   "textLen": 1063,
+   "rows": 33,
+   "fx": [],
+   "sample": "AUD 7日*=17, GBP 7日*=15, CNY 7日*=12, USD 7日*=12, JPY 7日*=5, HKD 7日*=6, AUD 1個月*=4.5, GBP 1個月*=4, CNY 1個月*=3.5, USD 1個月*=6, HKD 1個月*=3"
+  },
+  {
    "bank": "hsbc",
    "url": "https://www.hsbc.com.hk/zh-hk/campaigns/fx-time-deposit",
    "ok": true,
@@ -166,19 +179,6 @@
    "sample": ""
   },
   {
-   "bank": "hangseng",
-   "url": "https://www.hangseng.com/cms/emkt/pmo/grp03/p97/chi/index.html?view=d2g",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.hangseng.com/cms/emkt/pmo/grp03/p97/chi/index.html?view=d2g",
-   "tables": 10,
-   "title": "兌換外幣兼賺息，滿足三大需求 | 恒生銀行",
-   "textLen": 1063,
-   "rows": 33,
-   "fx": [],
-   "sample": "AUD 7日*=17, GBP 7日*=15, CNY 7日*=12, USD 7日*=12, JPY 7日*=5, HKD 7日*=6, AUD 1個月*=4.5, GBP 1個月*=4, CNY 1個月*=3.5, USD 1個月*=6, HKD 1個月*=3"
-  },
-  {
    "bank": "sc",
    "url": "https://www.sc.com/hk/zh/deposits/board-rates",
    "ok": true,
@@ -190,6 +190,19 @@
    "rows": 196,
    "fx": [],
    "sample": "HKD 7日=0.1, HKD 14日=0.1, HKD 1個月=0.1, HKD 2個月=0.1, HKD 3個月=0.125, HKD 6個月=0.125, HKD 9個月=0.15, HKD 12個月=0.15, USD 7日=0.5, USD 14日=0.5, USD 1個月=0.5, USD 2個月=0.5, USD 3個月=0.525, USD 6個月=0.55"
+  },
+  {
+   "bank": "bochk",
+   "url": "https://www.bochk.com/whk/rates/depositRates/depositRates-input.action?lang=hk",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.bochk.com/whk/rates/depositRates/depositRates-input.action?lang=hk",
+   "tables": 3,
+   "title": "存款利率",
+   "textLen": 1174,
+   "rows": 38,
+   "fx": [],
+   "sample": "HKD 7日=0.1, HKD 14日=0.1, HKD 1個月=0.1, HKD 2個月=0.1, HKD 3個月=0.125, HKD 6個月=0.125, HKD 9個月=0.15, HKD 12個月=0.15, HKD 15個月=0.15, HKD 18個月=0.15, HKD 24個月=0.15, HKD 36個月=0.15"
   },
   {
    "bank": "hsbc",
@@ -206,19 +219,6 @@
   },
   {
    "bank": "bochk",
-   "url": "https://www.bochk.com/whk/rates/depositRates/depositRates-input.action?lang=hk",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.bochk.com/whk/rates/depositRates/depositRates-input.action?lang=hk",
-   "tables": 3,
-   "title": "存款利率",
-   "textLen": 1174,
-   "rows": 38,
-   "fx": [],
-   "sample": "HKD 7日=0.1, HKD 14日=0.1, HKD 1個月=0.1, HKD 2個月=0.1, HKD 3個月=0.125, HKD 6個月=0.125, HKD 9個月=0.15, HKD 12個月=0.15, HKD 15個月=0.15, HKD 18個月=0.15, HKD 24個月=0.15, HKD 36個月=0.15"
-  },
-  {
-   "bank": "bochk",
    "url": "https://www.bochk.com/whk/rates/exchangeRatesForCurrency/exchangeRatesForCurrency-input.action?lang=hk",
    "ok": true,
    "status": 200,
@@ -228,7 +228,7 @@
    "textLen": 611,
    "debug": [
     "te).getTime(); | 各類貨幣兌港元現鈔牌價 請即時預訂外幣現鈔，挑選最方便您的分行提取現鈔。 預訂外幣現鈔 ## 貨幣 / 客戶賣出 / 客戶買入 ||  || 人民幣 / 1.165000 / 1.194000",
-    " ## 資料更新於香港時間： 2026/10/28 04:42:59 || 如有需要旅遊保障，請即投保「環宇智選旅遊保障計劃」 *上述兌換價是以每1外幣單位兌港元計算。 *上述資料僅供參考，更新時間請參閱「資料更新於香港時間」。"
+    " ## 資料更新於香港時間： 2026/10/28 09:22:57 || 如有需要旅遊保障，請即投保「環宇智選旅遊保障計劃」 *上述兌換價是以每1外幣單位兌港元計算。 *上述資料僅供參考，更新時間請參閱「資料更新於香港時間」。"
    ],
    "rows": 0,
    "fx": [
@@ -239,6 +239,19 @@
     "USD"
    ],
    "sample": ""
+  },
+  {
+   "bank": "bea",
+   "url": "https://www.hkbea.com/html/tc/bea-personal-banking-supremegold-time-deposit.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.hkbea.com/html/tc/bea-personal-banking-supremegold-time-deposit.html",
+   "tables": 4,
+   "title": "特惠定期存款利率",
+   "textLen": 3410,
+   "rows": 69,
+   "fx": [],
+   "sample": "HKD 3個月*=2.95, HKD 6個月*=3.3, HKD 12個月*=3.3, USD 3個月*=3.85, USD 6個月*=3.95, USD 12個月*=3.95, CNY 3個月*=1.4, CNY 6個月*=1.45, CNY 12個月*=1.45, AUD 1個月*=2.75, AUD 3個月*=3.5, AUD 6個月*=3.5"
   },
   {
    "bank": "hangseng",
@@ -267,19 +280,6 @@
    "sample": ""
   },
   {
-   "bank": "bea",
-   "url": "https://www.hkbea.com/html/tc/bea-personal-banking-supremegold-time-deposit.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.hkbea.com/html/tc/bea-personal-banking-supremegold-time-deposit.html",
-   "tables": 4,
-   "title": "特惠定期存款利率",
-   "textLen": 3410,
-   "rows": 69,
-   "fx": [],
-   "sample": "HKD 3個月*=2.95, HKD 6個月*=3.3, HKD 12個月*=3.3, USD 3個月*=3.85, USD 6個月*=3.95, USD 12個月*=3.95, CNY 3個月*=1.4, CNY 6個月*=1.45, CNY 12個月*=1.45, AUD 1個月*=2.75, AUD 3個月*=3.5, AUD 6個月*=3.5"
-  },
-  {
    "bank": "sc",
    "url": "https://www.sc.com/hk/zh/deposits/time-deposits-promotion",
    "ok": true,
@@ -291,19 +291,6 @@
    "rows": 0,
    "fx": [],
    "sample": ""
-  },
-  {
-   "bank": "hsbc",
-   "url": "https://www.hsbc.com.hk/zh-hk/investments/market-information/hk/deposit-rate/",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.hsbc.com.hk/zh-hk/investments/market-information/hk/deposit-rate/",
-   "tables": 48,
-   "title": "存款利率 | 香港市場資訊 - 香港滙豐",
-   "textLen": 5476,
-   "rows": 176,
-   "fx": [],
-   "sample": "AUD 7日=0.15, AUD 14日=0.15, AUD 1個月=0.25, AUD 2個月=0.25, AUD 3個月=0.3, AUD 6個月=0.4, AUD 9個月=0.5, AUD 12個月=0.6, HKD 7日=0.1, HKD 14日=0.1, HKD 1個月=0.1, HKD 2個月=0.1, HKD 3個月=0.125, HKD 6個月=0.125"
   },
   {
    "bank": "hangseng",
@@ -320,16 +307,16 @@
   },
   {
    "bank": "hsbc",
-   "url": "https://www.hsbc.com.hk/online/dashboard?initialAccess=true",
+   "url": "https://www.hsbc.com.hk/zh-hk/investments/market-information/hk/deposit-rate/",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.hsbc.com.hk/zh-hk/security",
-   "tables": 0,
-   "title": "用戶名稱 | 登入 | 滙豐",
-   "textLen": 394,
-   "rows": 0,
+   "finalUrl": "https://www.hsbc.com.hk/zh-hk/investments/market-information/hk/deposit-rate/",
+   "tables": 48,
+   "title": "存款利率 | 香港市場資訊 - 香港滙豐",
+   "textLen": 5476,
+   "rows": 176,
    "fx": [],
-   "sample": ""
+   "sample": "AUD 7日=0.15, AUD 14日=0.15, AUD 1個月=0.25, AUD 2個月=0.25, AUD 3個月=0.3, AUD 6個月=0.4, AUD 9個月=0.5, AUD 12個月=0.6, HKD 7日=0.1, HKD 14日=0.1, HKD 1個月=0.1, HKD 2個月=0.1, HKD 3個月=0.125, HKD 6個月=0.125"
   },
   {
    "bank": "bea",
@@ -340,6 +327,32 @@
    "tables": 0,
    "title": "利率、匯率、金價",
    "textLen": 1304,
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
+   "bank": "hangseng",
+   "url": "https://www.hangseng.com/zh-hk/personal/rates",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.hangseng.com/zh-hk/personal/rates/",
+   "tables": 0,
+   "title": "利率/匯率 - 恒生銀行",
+   "textLen": 1626,
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
+   "bank": "hsbc",
+   "url": "https://www.hsbc.com.hk/online/dashboard?initialAccess=true",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.hsbc.com.hk/zh-hk/security",
+   "tables": 0,
+   "title": "用戶名稱 | 登入 | 滙豐",
+   "textLen": 394,
    "rows": 0,
    "fx": [],
    "sample": ""
@@ -359,19 +372,6 @@
    "sample": "HKD 7日*=6, HKD 14日*=5"
   },
   {
-   "bank": "hangseng",
-   "url": "https://www.hangseng.com/zh-hk/personal/rates",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.hangseng.com/zh-hk/personal/rates/",
-   "tables": 0,
-   "title": "利率/匯率 - 恒生銀行",
-   "textLen": 1626,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
    "bank": "bea",
    "url": "https://www.hkbea.com/hk-form/?formId=RATE&rateType=hkddr&language=tc#/forms/MISC",
    "ok": true,
@@ -383,6 +383,30 @@
    "rows": 32,
    "fx": [],
    "sample": "HKD 7日=0.1, HKD 14日=0.1, HKD 1個月=0.1, HKD 2個月=0.1, HKD 3個月=0.125, HKD 6個月=0.125, HKD 9個月=0.15, HKD 12個月=0.15"
+  },
+  {
+   "bank": "hangseng",
+   "url": "https://www.hangseng.com/zh-hk/personal/banking/rates/foreign-exchange-rates",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.hangseng.com/zh-hk/personal/banking/rates/foreign-exchange-rates/",
+   "tables": 3,
+   "title": "外幣兌換價 - 恒生銀行",
+   "textLen": 2078,
+   "debug": [
+    "bile App登入以加強保安。請到「保安資訊中心」查看保安提示。 | 截至 28/10/2026 09:21 香港時間 ## 貨幣 / 代號 / 電匯兌換價 / 電匯兌換價 / 現鈔兌換價 || 貨幣 / 代號 / 買入 (HKD) / 賣出 (HKD) / 買入 (HKD) || 美元 / USD / 7.8200 / 7.8690 / 7.7680",
+    "特ZAR0.45500.48700.39800.4950新台幣TWD未有資料提供-未有資料提供-0.23700.2650 ## 電匯兌換價 / 電匯兌換價 || 買入 (USD) / 7.8200 || 賣出 (USD) / 7.8690",
+    "料提供-未有資料提供-0.23700.2650 | 電匯兌換價 買入 (USD)7.8200賣出 (USD)7.8690 ## 現鈔兌換價 / 現鈔兌換價 || 買入 (USD) / 7.7680 || 賣出 (USD) / 7.8910"
+   ],
+   "rows": 0,
+   "fx": [
+    "USD",
+    "CNY",
+    "AUD",
+    "GBP",
+    "JPY"
+   ],
+   "sample": ""
   },
   {
    "bank": "hsbc",
@@ -399,47 +423,10 @@
   },
   {
    "bank": "hangseng",
-   "url": "https://www.hangseng.com/zh-hk/personal/banking/rates/foreign-exchange-rates",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.hangseng.com/zh-hk/personal/banking/rates/foreign-exchange-rates/",
-   "tables": 3,
-   "title": "外幣兌換價 - 恒生銀行",
-   "textLen": 2078,
-   "debug": [
-    "bile App登入以加強保安。請到「保安資訊中心」查看保安提示。 | 截至 27/10/2026 23:56 香港時間 ## 貨幣 / 代號 / 電匯兌換價 / 電匯兌換價 / 現鈔兌換價 || 貨幣 / 代號 / 買入 (HKD) / 賣出 (HKD) / 買入 (HKD) || 美元 / USD / 7.8210 / 7.8710 / 7.7690",
-    "特ZAR0.45700.48800.40000.4960新台幣TWD未有資料提供-未有資料提供-0.23700.2650 ## 電匯兌換價 / 電匯兌換價 || 買入 (USD) / 7.8210 || 賣出 (USD) / 7.8710",
-    "料提供-未有資料提供-0.23700.2650 | 電匯兌換價 買入 (USD)7.8210賣出 (USD)7.8710 ## 現鈔兌換價 / 現鈔兌換價 || 買入 (USD) / 7.7690 || 賣出 (USD) / 7.8930"
-   ],
-   "rows": 0,
-   "fx": [
-    "USD",
-    "CNY",
-    "AUD",
-    "GBP",
-    "JPY"
-   ],
-   "sample": ""
-  },
-  {
-   "bank": "citi",
-   "url": "https://www.citibank.com.hk/chinese/personal-banking/time-deposit",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.citibank.com.hk/chinese/personal-banking/time-deposit/",
-   "tables": 0,
-   "title": "定期存款戶口 - 享受更優惠利率至到期日 | Citibank Hong Kong",
-   "textLen": 3624,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "hangseng",
    "url": "https://www.hangseng.com/zh-hk/online/account/time-deposits/set-up-fixed-deposit?fromPWS=1&currency=HKD",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.hangseng.com/zh-hk/security?targetAuthLevel=30&destinationURL=/online/dashboard/&__EntryPageParams=returnUrl:https://www.hangseng.com/bin/epep/postback.html?url=/zh-hk/online/account/time-deposits/set-up-fixed-deposit?ZnJvbVBXUz0xJmN1cnJlbmN5PUhLRA&rid=1525bc2cf1f4",
+   "finalUrl": "https://www.hangseng.com/zh-hk/security?targetAuthLevel=30&destinationURL=/online/dashboard/&__EntryPageParams=returnUrl:https://www.hangseng.com/bin/epep/postback.html?url=/zh-hk/online/account/time-deposits/set-up-fixed-deposit?ZnJvbVBXUz0xJmN1cnJlbmN5PUhLRA&rid=794c4c1a97fe",
    "tables": 0,
    "title": "用戶名稱 | 登入 | 恒生銀行",
    "textLen": 278,
@@ -466,13 +453,13 @@
   },
   {
    "bank": "citi",
-   "url": "https://mobile.citibank.com.hk/GMP/JSO/presignon/deeplink.action?page=OTD",
+   "url": "https://www.citibank.com.hk/chinese/personal-banking/time-deposit",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.citibank.com.hk/HKGCB/JSO/username/signon/flow.action?ts=1793133911425",
+   "finalUrl": "https://www.citibank.com.hk/chinese/personal-banking/time-deposit/",
    "tables": 0,
-   "title": "Access Denied",
-   "textLen": 235,
+   "title": "定期存款戶口 - 享受更優惠利率至到期日 | Citibank Hong Kong",
+   "textLen": 3624,
    "rows": 0,
    "fx": [],
    "sample": ""
@@ -510,16 +497,16 @@
   },
   {
    "bank": "citi",
-   "url": "https://www.citibank.com.hk/chinese/info/rates.html?lid=HKZHCBLGNLNTLInterestRateOfTheDayBABN",
+   "url": "https://mobile.citibank.com.hk/GMP/JSO/presignon/deeplink.action?page=OTD",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.citibank.com.hk/chinese/personal-banking/interest-and-foreign-exchange-rates/?lid=HKZHCBLGNLNTLInterestRateOfTheDayBABN",
-   "tables": 5,
-   "title": "是日存款外幣匯率及利率 - 提供即時報價 | Citibank Hong Kong",
-   "textLen": 4414,
-   "rows": 12,
+   "finalUrl": "https://www.citibank.com.hk/HKGCB/JSO/username/signon/flow.action?ts=1793150840564",
+   "tables": 0,
+   "title": "Access Denied",
+   "textLen": 233,
+   "rows": 0,
    "fx": [],
-   "sample": "HKD 3個月*=3.2, USD 3個月*=4, CNY 3個月*=1.3"
+   "sample": ""
   },
   {
    "bank": "hangseng",
@@ -536,7 +523,7 @@
   },
   {
    "bank": "citi",
-   "url": "https://www.citibank.com.hk/chinese/personal-banking/interest-and-foreign-exchange-rates/?lid=HKZHCBLGNLNTLInterestRateOfTheDayBABN",
+   "url": "https://www.citibank.com.hk/chinese/info/rates.html?lid=HKZHCBLGNLNTLInterestRateOfTheDayBABN",
    "ok": true,
    "status": 200,
    "finalUrl": "https://www.citibank.com.hk/chinese/personal-banking/interest-and-foreign-exchange-rates/?lid=HKZHCBLGNLNTLInterestRateOfTheDayBABN",
@@ -561,6 +548,38 @@
    "sample": ""
   },
   {
+   "bank": "citi",
+   "url": "https://www.citibank.com.hk/chinese/personal-banking/interest-and-foreign-exchange-rates/?lid=HKZHCBLGNLNTLInterestRateOfTheDayBABN",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.citibank.com.hk/chinese/personal-banking/interest-and-foreign-exchange-rates/?lid=HKZHCBLGNLNTLInterestRateOfTheDayBABN",
+   "tables": 5,
+   "title": "是日存款外幣匯率及利率 - 提供即時報價 | Citibank Hong Kong",
+   "textLen": 4414,
+   "rows": 12,
+   "fx": [],
+   "sample": "HKD 3個月*=3.2, USD 3個月*=4, CNY 3個月*=1.3"
+  },
+  {
+   "bank": "hangseng",
+   "url": "https://www.hangseng.com/zh-hk/personal/banking",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.hangseng.com/zh-hk/personal/banking-services/",
+   "tables": 1,
+   "title": "銀行服務 - 恒生銀行",
+   "textLen": 393,
+   "debug": [
+    "ent().css('visibility','visible'); } }, 5000); }); | 外幣電匯兌換價 ##  / 買入 / 賣出 || 澳元 / 5.4840 / 5.5610 || 加元 / 5.5370 / 5.6220"
+   ],
+   "rows": 0,
+   "fx": [
+    "AUD",
+    "GBP"
+   ],
+   "sample": ""
+  },
+  {
    "bank": "bea",
    "url": "https://www.hkbea.com/hk-form/?formId=RATE&rateType=ttfx&language=tc#/forms/MISC",
    "ok": true,
@@ -570,7 +589,7 @@
    "title": "外幣電匯兌換率 | 東亞銀行",
    "textLen": 1655,
    "debug": [
-    "pageId=\"101\"; 主頁利率、匯率、金價外幣兌換率電匯 外幣電匯兌換率 電匯現鈔 globalUpdate(); ## 貨幣 / 單位 / 買入 / 賣出 || 澳洲元 (AUD) / 100 / 549.2000 / 554.3000 || 加拿大元 (CAD) / 100 / 557.7000 / 561.5000"
+    "pageId=\"101\"; 主頁利率、匯率、金價外幣兌換率電匯 外幣電匯兌換率 電匯現鈔 globalUpdate(); ## 貨幣 / 單位 / 買入 / 賣出 || 澳洲元 (AUD) / 100 / 549.9000 / 555.0000 || 加拿大元 (CAD) / 100 / 556.4000 / 559.4000"
    ],
    "rows": 0,
    "fx": [
@@ -597,22 +616,61 @@
   },
   {
    "bank": "hangseng",
-   "url": "https://www.hangseng.com/zh-hk/personal/banking",
+   "url": "https://www.hangseng.com/zh-hk/rates/foreign-currency-tt-exchange-rates",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.hangseng.com/zh-hk/personal/banking-services/",
+   "finalUrl": "https://www.hangseng.com/zh-hk/rates/foreign-currency-tt-exchange-rates/",
    "tables": 1,
-   "title": "銀行服務 - 恒生銀行",
-   "textLen": 393,
+   "title": "電匯兌換價 - 各外幣最新電匯價及外幣匯率走勢圖 - 恒生銀行",
+   "textLen": 952,
    "debug": [
-    "ent().css('visibility','visible'); } }, 5000); }); | 外幣電匯兌換價 ##  / 買入 / 賣出 || 澳元 / 5.4790 / 5.5580 || 加元 / 5.5450 / 5.6310"
+    "匯率走勢圖。優越私人理財 / 優越理財 / 優進理財 / 商業綜合戶口客戶更可享額外優惠匯價。 請按此參閱更多外匯優惠。 ## (直至28-10-2026 09:21為止) / (直至28-10-2026 09:21為止) / (直至28-10-2026 09:21為止) / (直至28-10-2026 09:21為止) / (直至28-10-2026 09:21為止) || 貨幣 / 代號 / 買入 / 賣出 / 圖表 || 美元 / USD / 7.8200 / 7.8690 / "
    ],
    "rows": 0,
    "fx": [
+    "USD",
+    "CNY",
     "AUD",
-    "GBP"
+    "GBP",
+    "JPY"
    ],
    "sample": ""
+  },
+  {
+   "bank": "hangseng",
+   "url": "https://www.hangseng.com/zh-hk/rates/foreign-currency-notes-exchange-rates",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.hangseng.com/zh-hk/rates/foreign-currency-notes-exchange-rates/",
+   "tables": 1,
+   "title": "現鈔兌換價 - 各外幣兌港元現鈔價格 - 恒生銀行",
+   "textLen": 877,
+   "debug": [
+    " left; } 利率 / 匯價 > 外幣現鈔兌換價 | 外幣現鈔兌換價 | 對不起，你的要求現暫未能執行。請稍候再試。 ## (直至28-10-2026 09:21為止) || 貨幣 / 買入 / 賣出 || 美元(USD) / 7.7680 / 7.8910"
+   ],
+   "rows": 0,
+   "fx": [
+    "USD",
+    "CNY",
+    "AUD",
+    "GBP",
+    "JPY"
+   ],
+   "sample": ""
+  },
+  {
+   "bank": "sc",
+   "url": "https://www.sc.com/hk/zh/deposits/foreign-exchange-time-deposit/",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.sc.com/hk/zh/deposits/foreign-exchange-time-deposit/",
+   "tables": 1,
+   "title": "高息外匯定期存款｜靈活存款期短至7天，兌換外幣同時享特高年利率 – 渣打銀行香港",
+   "textLen": 25866,
+   "mode": "text",
+   "rows": 4,
+   "fx": [],
+   "sample": "HKD 7日*=6, HKD 14日*=5"
   },
   {
    "bank": "citi",
@@ -634,24 +692,15 @@
   },
   {
    "bank": "hangseng",
-   "url": "https://www.hangseng.com/zh-hk/rates/foreign-currency-tt-exchange-rates",
+   "url": "https://www.hangseng.com/zh-hk/online/foreign-currency/foreign-exchange",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.hangseng.com/zh-hk/rates/foreign-currency-tt-exchange-rates/",
-   "tables": 1,
-   "title": "電匯兌換價 - 各外幣最新電匯價及外幣匯率走勢圖 - 恒生銀行",
-   "textLen": 952,
-   "debug": [
-    "匯率走勢圖。優越私人理財 / 優越理財 / 優進理財 / 商業綜合戶口客戶更可享額外優惠匯價。 請按此參閱更多外匯優惠。 ## (直至27-10-2026 23:56為止) / (直至27-10-2026 23:56為止) / (直至27-10-2026 23:56為止) / (直至27-10-2026 23:56為止) / (直至27-10-2026 23:56為止) || 貨幣 / 代號 / 買入 / 賣出 / 圖表 || 美元 / USD / 7.8210 / 7.8710 / "
-   ],
+   "finalUrl": "https://www.hangseng.com/zh-hk/security?targetAuthLevel=30&destinationURL=/online/dashboard/&__EntryPageParams=returnUrl:https://www.hangseng.com/bin/epep/postback.html?url=/zh-hk/online/foreign-currency/foreign-exchange&rid=262879d4466c",
+   "tables": 0,
+   "title": "用戶名稱 | 登入 | 恒生銀行",
+   "textLen": 278,
    "rows": 0,
-   "fx": [
-    "USD",
-    "CNY",
-    "AUD",
-    "GBP",
-    "JPY"
-   ],
+   "fx": [],
    "sample": ""
   },
   {
@@ -668,39 +717,20 @@
    "sample": ""
   },
   {
-   "bank": "sc",
-   "url": "https://www.sc.com/hk/zh/deposits/foreign-exchange-time-deposit/",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.sc.com/hk/zh/deposits/foreign-exchange-time-deposit/",
-   "tables": 1,
-   "title": "高息外匯定期存款｜靈活存款期短至7天，兌換外幣同時享特高年利率 – 渣打銀行香港",
-   "textLen": 25866,
-   "mode": "text",
-   "rows": 4,
-   "fx": [],
-   "sample": "HKD 7日*=6, HKD 14日*=5"
-  },
-  {
    "bank": "hangseng",
-   "url": "https://www.hangseng.com/zh-hk/rates/foreign-currency-notes-exchange-rates",
+   "url": "https://www.hangseng.com/zh-hk/personal/banking/rates/gold-prices",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.hangseng.com/zh-hk/rates/foreign-currency-notes-exchange-rates/",
-   "tables": 1,
-   "title": "現鈔兌換價 - 各外幣兌港元現鈔價格 - 恒生銀行",
-   "textLen": 877,
+   "finalUrl": "https://www.hangseng.com/zh-hk/personal/banking/rates/gold-prices/",
+   "tables": 2,
+   "title": "黃金價格 - 恒生銀行",
+   "textLen": 3106,
    "debug": [
-    " left; } 利率 / 匯價 > 外幣現鈔兌換價 | 外幣現鈔兌換價 | 對不起，你的要求現暫未能執行。請稍候再試。 ## (直至27-10-2026 23:56為止) || 貨幣 / 買入 / 賣出 || 美元(USD) / 7.7690 / 7.8930"
+    "bile App登入以加強保安。請到「保安資訊中心」查看保安提示。 | 截至 28/10/2026 09:15 香港時間 ## 黃金產品 / 買入(HKD) / 賣出(HKD) || 黃金結單 (一「錢」) / 3,783.19 / 3,802.96 || 紙金粒 (一金粒) / 3,176.77 / 3,190.98",
+    "果客戶沒有在預定日期及時間到達分行，此網上預約時段將會被取消 確認 | 截至 28/10/2026 09:15 香港時間 ## 黃金產品 / 買入(HKD) / 賣出(HKD) || 恒生千足金條 (每一金衡盎司) 頁底備註 2 / 31,932.00 / 32,388.00 || 恒生千足金條 (每一克) 頁底備註 2 / 1,022.90 / 1,044.90"
    ],
    "rows": 0,
-   "fx": [
-    "USD",
-    "CNY",
-    "AUD",
-    "GBP",
-    "JPY"
-   ],
+   "fx": [],
    "sample": ""
   },
   {
@@ -717,30 +747,17 @@
    "sample": ""
   },
   {
-   "bank": "citi",
-   "url": "https://www.citibank.com.hk/chinese/banking/promotions-special-time-deposit.htm",
+   "bank": "sc",
+   "url": "https://www.sc.com/hk/zh/deposits/board-rates/",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.citibank.com.hk/chinese/personal-banking/time-deposit/",
-   "tables": 0,
-   "title": "定期存款戶口 - 享受更優惠利率至到期日 | Citibank Hong Kong",
-   "textLen": 3623,
-   "rows": 0,
+   "finalUrl": "https://www.sc.com/hk/zh/deposits/board-rates/",
+   "tables": 24,
+   "title": "存款利率 | 定期存款及儲蓄 – 渣打銀行香港",
+   "textLen": 30269,
+   "rows": 196,
    "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "hangseng",
-   "url": "https://www.hangseng.com/zh-hk/online/foreign-currency/foreign-exchange",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.hangseng.com/zh-hk/security?targetAuthLevel=30&destinationURL=/online/dashboard/&__EntryPageParams=returnUrl:https://www.hangseng.com/bin/epep/postback.html?url=/zh-hk/online/foreign-currency/foreign-exchange&rid=1fc11645dc1d",
-   "tables": 0,
-   "title": "用戶名稱 | 登入 | 恒生銀行",
-   "textLen": 278,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
+   "sample": "HKD 7日=0.1, HKD 14日=0.1, HKD 1個月=0.1, HKD 2個月=0.1, HKD 3個月=0.125, HKD 6個月=0.125, HKD 9個月=0.15, HKD 12個月=0.15, USD 7日=0.5, USD 14日=0.5, USD 1個月=0.5, USD 2個月=0.5, USD 3個月=0.525, USD 6個月=0.55"
   },
   {
    "bank": "dbs",
@@ -761,30 +778,46 @@
    "sample": ""
   },
   {
-   "bank": "sc",
-   "url": "https://www.sc.com/hk/zh/deposits/board-rates/",
+   "bank": "hangseng",
+   "url": "https://www.hangseng.com/zh-hk/personal/banking/rates/prime-rates",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.sc.com/hk/zh/deposits/board-rates/",
-   "tables": 24,
-   "title": "存款利率 | 定期存款及儲蓄 – 渣打銀行香港",
-   "textLen": 30269,
-   "rows": 196,
+   "finalUrl": "https://www.hangseng.com/zh-hk/personal/banking/rates/prime-rates/",
+   "tables": 1,
+   "title": "最優惠利率 - 恒生銀行",
+   "textLen": 784,
+   "debug": [
+    "a. 客户請留意市場另有其他港元最優惠利率。; 更多按揭服務詳情 更多信用透支服務詳情 | 最近五次港元最優惠利率之變動 ## 生效日 / 港元最優惠利率 || 31/10/2025 / 5.000% p.a. || 19/09/2025 / 5.125% p.a."
+   ],
+   "rows": 0,
    "fx": [],
-   "sample": "HKD 7日=0.1, HKD 14日=0.1, HKD 1個月=0.1, HKD 2個月=0.1, HKD 3個月=0.125, HKD 6個月=0.125, HKD 9個月=0.15, HKD 12個月=0.15, USD 7日=0.5, USD 14日=0.5, USD 1個月=0.5, USD 2個月=0.5, USD 3個月=0.525, USD 6個月=0.55"
+   "sample": ""
+  },
+  {
+   "bank": "citi",
+   "url": "https://www.citibank.com.hk/chinese/banking/promotions-special-time-deposit.htm",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.citibank.com.hk/chinese/personal-banking/time-deposit/",
+   "tables": 0,
+   "title": "定期存款戶口 - 享受更優惠利率至到期日 | Citibank Hong Kong",
+   "textLen": 3623,
+   "rows": 0,
+   "fx": [],
+   "sample": ""
   },
   {
    "bank": "hangseng",
-   "url": "https://www.hangseng.com/zh-hk/personal/banking/rates/gold-prices",
+   "url": "https://www.hangseng.com/zh-hk/personal/banking/rates/hibor",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.hangseng.com/zh-hk/personal/banking/rates/gold-prices/",
+   "finalUrl": "https://www.hangseng.com/zh-hk/personal/banking/rates/hibor/",
    "tables": 2,
-   "title": "黃金價格 - 恒生銀行",
-   "textLen": 3106,
+   "title": "香港銀行同業拆息 - 恒生銀行",
+   "textLen": 1114,
    "debug": [
-    "bile App登入以加強保安。請到「保安資訊中心」查看保安提示。 | 截至 27/10/2026 23:50 香港時間 ## 黃金產品 / 買入(HKD) / 賣出(HKD) || 黃金結單 (一「錢」) / 3,786.38 / 3,806.16 || 紙金粒 (一金粒) / 3,179.45 / 3,193.66",
-    "果客戶沒有在預定日期及時間到達分行，此網上預約時段將會被取消 確認 | 截至 27/10/2026 23:50 香港時間 ## 黃金產品 / 買入(HKD) / 賣出(HKD) || 恒生千足金條 (每一金衡盎司) 頁底備註 2 / 31,962.00 / 32,418.00 || 恒生千足金條 (每一克) 頁底備註 2 / 1,023.90 / 1,045.90"
+    " | 香港銀行同業拆息 | 查看由恒生銀行釐定之香港銀行同業拆息。 | 截至 28/10/2026 09:25 香港時間 ## 檔期 / 利率 頁底備註 1 || 隔夜 / 2.48000% || 一星期 / 2.60000%",
+    "- 2029下一頁20202021202220232024202520262027202820292020 - 2029 ## 日期 / 1個月香港銀行同業拆息 || 27/10/2026 / 2.70000% || 26/10/2026 / 2.75000%"
    ],
    "rows": 0,
    "fx": [],
@@ -804,33 +837,17 @@
    "sample": "HKD 3個月*=3.2, USD 3個月*=4, CNY 3個月*=1.3"
   },
   {
-   "bank": "hangseng",
-   "url": "https://www.hangseng.com/zh-hk/personal/banking/rates/prime-rates",
+   "bank": "icbc",
+   "url": "https://www.icbcasia.com/hk/tc/personal/default.html",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.hangseng.com/zh-hk/personal/banking/rates/prime-rates/",
-   "tables": 1,
-   "title": "最優惠利率 - 恒生銀行",
-   "textLen": 784,
-   "debug": [
-    "a. 客户請留意市場另有其他港元最優惠利率。; 更多按揭服務詳情 更多信用透支服務詳情 | 最近五次港元最優惠利率之變動 ## 生效日 / 港元最優惠利率 || 31/10/2025 / 5.000% p.a. || 19/09/2025 / 5.125% p.a."
-   ],
+   "finalUrl": "https://www.icbcasia.com/hk/tc/personal/default.html",
+   "tables": 0,
+   "title": "個人金融 | 跨境金融 首選銀行 - 中國工商銀行（亞洲）",
+   "textLen": 5305,
    "rows": 0,
    "fx": [],
    "sample": ""
-  },
-  {
-   "bank": "dbs",
-   "url": "https://www.dbs.com.hk/personal-zh/promotion/OnlineTD-promo",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.dbs.com.hk/personal-zh/promotion/OnlineTD-promo",
-   "tables": 27,
-   "title": "網上定存優惠 | 星展香港",
-   "textLen": 3617,
-   "rows": 102,
-   "fx": [],
-   "sample": "HKD 3個月*=2.8, USD 3個月*=3.8, HKD 1個月*=2.5, HKD 2個月*=2.5, HKD 4個月*=2.8, HKD 6個月*=2.75, HKD 9個月*=2.7, HKD 12個月*=2.7, AUD 1個月*=3, AUD 3個月*=3.3, AUD 6個月*=3.2, AUD 12個月*=3, USD 1個月*=3.5, USD 2個月*=3.5"
   },
   {
    "bank": "citi",
@@ -846,34 +863,17 @@
    "sample": "HKD 3個月*=3.2, USD 3個月*=4, CNY 3個月*=1.3"
   },
   {
-   "bank": "hangseng",
-   "url": "https://www.hangseng.com/zh-hk/personal/banking/rates/hibor",
+   "bank": "dbs",
+   "url": "https://www.dbs.com.hk/personal-zh/promotion/OnlineTD-promo",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.hangseng.com/zh-hk/personal/banking/rates/hibor/",
-   "tables": 2,
-   "title": "香港銀行同業拆息 - 恒生銀行",
-   "textLen": 1114,
-   "debug": [
-    " | 香港銀行同業拆息 | 查看由恒生銀行釐定之香港銀行同業拆息。 | 截至 28/10/2026 04:45 香港時間 ## 檔期 / 利率 頁底備註 1 || 隔夜 / 2.48000% || 一星期 / 2.60000%",
-    "- 2029下一頁20202021202220232024202520262027202820292020 - 2029 ## 日期 / 1個月香港銀行同業拆息 || 27/10/2026 / 2.70000% || 26/10/2026 / 2.75000%"
-   ],
-   "rows": 0,
+   "finalUrl": "https://www.dbs.com.hk/personal-zh/promotion/OnlineTD-promo",
+   "tables": 27,
+   "title": "網上定存優惠 | 星展香港",
+   "textLen": 3603,
+   "rows": 102,
    "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "icbc",
-   "url": "https://www.icbcasia.com/hk/tc/personal/default.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.icbcasia.com/hk/tc/personal/default.html",
-   "tables": 0,
-   "title": "個人金融 | 跨境金融 首選銀行 - 中國工商銀行（亞洲）",
-   "textLen": 5293,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
+   "sample": "HKD 3個月*=2.8, USD 3個月*=3.8, HKD 1個月*=2.5, HKD 2個月*=2.5, HKD 4個月*=2.8, HKD 6個月*=2.75, HKD 9個月*=2.7, HKD 12個月*=2.7, AUD 1個月*=3, AUD 3個月*=3.3, AUD 6個月*=3.2, AUD 12個月*=3, USD 1個月*=3.5, USD 2個月*=3.5"
   },
   {
    "bank": "sc",
@@ -884,33 +884,6 @@
    "tables": 0,
    "title": "外幣兌換買賣平台 | 外幣投資 – 渣打銀行香港 – 渣打銀行香港",
    "textLen": 2501,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "ccb",
-   "url": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/dep_rates.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/dep_rates.html",
-   "tables": 30,
-   "title": "存款利率 | 銀行利息一覽 | 戶口 - 中國建設銀行(亞洲)",
-   "textLen": 2035,
-   "rows": 178,
-   "fx": [],
-   "sample": "HKD 3個月*=7.88, CNY 3個月*=7.88, USD 3個月*=8.88, AUD 3個月*=8.88, GBP 3個月*=8.88, HKD 7日=0.375, HKD 14日=0.375, HKD 1個月=0.375, HKD 2個月=0.375, HKD 3個月=0.375, HKD 4個月=0.375, HKD 5個月=0.375, HKD 6個月=0.4, HKD 9個月=0.4"
-  },
-  {
-   "bank": "dbs",
-   "url": "https://www.dbs.com.hk/personal-zh/promotion/foreign-exchange-time-deposit",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.dbs.com.hk/personal-zh/promotion/foreign-exchange-time-deposit",
-   "tables": 13,
-   "title": "星展外幣兌換及定期存款優惠 | 星展香港",
-   "textLen": 2809,
-   "note": "offer expired 2026-09-30",
    "rows": 0,
    "fx": [],
    "sample": ""
@@ -951,6 +924,19 @@
    "sample": ""
   },
   {
+   "bank": "ccb",
+   "url": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/dep_rates.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/dep_rates.html",
+   "tables": 30,
+   "title": "存款利率 | 銀行利息一覽 | 戶口 - 中國建設銀行(亞洲)",
+   "textLen": 2035,
+   "rows": 178,
+   "fx": [],
+   "sample": "HKD 3個月*=7.88, CNY 3個月*=7.88, USD 3個月*=8.88, AUD 3個月*=8.88, GBP 3個月*=8.88, HKD 7日=0.375, HKD 14日=0.375, HKD 1個月=0.375, HKD 2個月=0.375, HKD 3個月=0.375, HKD 4個月=0.375, HKD 5個月=0.375, HKD 6個月=0.4, HKD 9個月=0.4"
+  },
+  {
    "bank": "icbc",
    "url": "https://www.icbcasia.com/hk/tc/personal/banking/rate/default.html",
    "ok": true,
@@ -962,6 +948,33 @@
    "rows": 0,
    "fx": [],
    "sample": ""
+  },
+  {
+   "bank": "dbs",
+   "url": "https://www.dbs.com.hk/personal-zh/promotion/foreign-exchange-time-deposit",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.dbs.com.hk/personal-zh/promotion/foreign-exchange-time-deposit",
+   "tables": 13,
+   "title": "星展外幣兌換及定期存款優惠 | 星展香港",
+   "textLen": 2809,
+   "note": "offer expired 2026-09-30",
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
+   "bank": "icbc",
+   "url": "https://www.icbcasia.com/hk/tc/personal/banking/rate/deposit-interest-rate/default.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.icbcasia.com/hk/tc/personal/banking/rate/deposit-interest-rate/default.html",
+   "tables": 1,
+   "title": "存款利率 - 中國工商銀行（亞洲）",
+   "textLen": 1397,
+   "rows": 42,
+   "fx": [],
+   "sample": "HKD 7日=0.01, USD 7日=0.01, CNY 7日=0.1, AUD 7日=0.01, GBP 7日=0.01, JPY 7日=0.01, HKD 14日=0.01, USD 14日=0.01, CNY 14日=0.1, AUD 14日=0.01, GBP 14日=0.01, JPY 14日=0.01, HKD 1個月=0.01, USD 1個月=0.01"
   },
   {
    "bank": "sc",
@@ -981,30 +994,30 @@
    "sample": ""
   },
   {
-   "bank": "ccb",
-   "url": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/time_deposit_calculator.html",
+   "bank": "icbc",
+   "url": "https://www.icbcasia.com/hk/tc/personal/banking/deposits/time-deposit/default.html",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/time_deposit_calculator.html",
+   "finalUrl": "https://www.icbcasia.com/hk/tc/personal/banking/deposits/time-deposit/default.html",
    "tables": 0,
-   "title": "定期存款利息收入計算機 | 綜合理財 | 戶口 - 中國建設銀行(亞洲)",
-   "textLen": 503,
+   "title": "定期存款 - 中國工商銀行（亞洲）",
+   "textLen": 871,
    "rows": 0,
    "fx": [],
    "sample": ""
   },
   {
    "bank": "icbc",
-   "url": "https://www.icbcasia.com/hk/tc/personal/banking/rate/deposit-interest-rate/default.html",
+   "url": "https://www.icbcasia.com/hk/tc/personal/latest-promotion/online-time-deposit.html",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.icbcasia.com/hk/tc/personal/banking/rate/deposit-interest-rate/default.html",
-   "tables": 1,
-   "title": "存款利率 - 中國工商銀行（亞洲）",
-   "textLen": 1397,
-   "rows": 42,
+   "finalUrl": "https://www.icbcasia.com/hk/tc/personal/latest-promotion/online-time-deposit.html",
+   "tables": 2,
+   "title": "網上定期存款優惠 - 中國工商銀行（亞洲）",
+   "textLen": 2014,
+   "rows": 80,
    "fx": [],
-   "sample": "HKD 7日=0.01, USD 7日=0.01, CNY 7日=0.1, AUD 7日=0.01, GBP 7日=0.01, JPY 7日=0.01, HKD 14日=0.01, USD 14日=0.01, CNY 14日=0.1, AUD 14日=0.01, GBP 14日=0.01, JPY 14日=0.01, HKD 1個月=0.01, USD 1個月=0.01"
+   "sample": "HKD 1個月*=1.7, USD 1個月*=3.3, CNY 1個月*=0.8, AUD 1個月*=3.4, GBP 1個月*=3, HKD 2個月*=2.3, USD 2個月*=3.55, CNY 2個月*=1.1, AUD 2個月*=3.7, GBP 2個月*=3.2, HKD 3個月*=3, USD 3個月*=4.1, CNY 3個月*=1.2, AUD 3個月*=4"
   },
   {
    "bank": "dbs",
@@ -1026,16 +1039,17 @@
   },
   {
    "bank": "icbc",
-   "url": "https://www.icbcasia.com/hk/tc/personal/banking/deposits/time-deposit/default.html",
+   "url": "https://www.icbcasia.com/hk/tc/promotion/new-customer-and-time-deposit-promotion.html",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.icbcasia.com/hk/tc/personal/banking/deposits/time-deposit/default.html",
-   "tables": 0,
-   "title": "定期存款 - 中國工商銀行（亞洲）",
-   "textLen": 871,
-   "rows": 0,
+   "finalUrl": "https://www.icbcasia.com/hk/tc/promotion/new-customer-and-time-deposit-promotion.html",
+   "tables": 1,
+   "title": "港幣3個月特惠定存年利率6% - 中國工商銀行（亞洲）",
+   "textLen": 1928,
+   "mode": "text",
+   "rows": 1,
    "fx": [],
-   "sample": ""
+   "sample": "HKD 3個月*=6"
   },
   {
    "bank": "dbs",
@@ -1056,31 +1070,30 @@
    "sample": ""
   },
   {
-   "bank": "icbc",
-   "url": "https://www.icbcasia.com/hk/tc/personal/latest-promotion/online-time-deposit.html",
+   "bank": "ccb",
+   "url": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/time_deposit_calculator.html",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.icbcasia.com/hk/tc/personal/latest-promotion/online-time-deposit.html",
-   "tables": 2,
-   "title": "網上定期存款優惠 - 中國工商銀行（亞洲）",
-   "textLen": 2014,
-   "rows": 80,
+   "finalUrl": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/time_deposit_calculator.html",
+   "tables": 0,
+   "title": "定期存款利息收入計算機 | 綜合理財 | 戶口 - 中國建設銀行(亞洲)",
+   "textLen": 503,
+   "rows": 0,
    "fx": [],
-   "sample": "HKD 1個月*=1.7, USD 1個月*=3.3, CNY 1個月*=0.8, AUD 1個月*=3.4, GBP 1個月*=3, HKD 2個月*=2.3, USD 2個月*=3.55, CNY 2個月*=1.1, AUD 2個月*=3.7, GBP 2個月*=3.2, HKD 3個月*=3, USD 3個月*=4.1, CNY 3個月*=1.2, AUD 3個月*=4"
+   "sample": ""
   },
   {
    "bank": "icbc",
-   "url": "https://www.icbcasia.com/hk/tc/promotion/new-customer-and-time-deposit-promotion.html",
+   "url": "https://www.icbcasia.com/hk/tc/promotion/mobile-banking-e-deposit-operation-manual.html",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.icbcasia.com/hk/tc/promotion/new-customer-and-time-deposit-promotion.html",
-   "tables": 1,
-   "title": "港幣3個月特惠定存年利率6% - 中國工商銀行（亞洲）",
-   "textLen": 1928,
-   "mode": "text",
-   "rows": 1,
+   "finalUrl": "https://www.icbcasia.com/hk/tc/promotion/mobile-banking-e-deposit-operation-manual.html",
+   "tables": 0,
+   "title": "手機銀行「e定存」操作指引​ - 中國工商銀行（亞洲）",
+   "textLen": 40,
+   "rows": 0,
    "fx": [],
-   "sample": "HKD 3個月*=6"
+   "sample": ""
   },
   {
    "bank": "bocom",
@@ -1096,41 +1109,26 @@
    "sample": "HKD 7日=0.01, HKD 14日=0.01, HKD 1個月=0.1, HKD 2個月=0.1, HKD 3個月=0.125, HKD 9個月=0.15, HKD 12個月=0.15, HKD 24個月=0.4, HKD 36個月=0.4"
   },
   {
-   "bank": "ccb",
-   "url": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/exchange_rate_enquiry.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/exchange_rate_enquiry.html",
-   "tables": 4,
-   "title": "外幣匯率 | 個人銀行服務| 戶口 - 中國建設銀行(亞洲)",
-   "textLen": 1355,
-   "debug": [
-    "銀行查看。以上優惠受條款及細則約束，詳情請向本行職員查詢。 | 外幣匯率 更新日期：2026年10月27日， 23:39 ## 貨幣 / 貨幣 / 銀行買入匯率 / 銀行賣出匯率 || 美元 / USD / 7.827 / 7.8628 || 人民幣 / CNH / 1.1722 / 1.1814",
-    "西蘭元NZD4.441 4.4887 新加坡元SGD6.0997 6.1455 南非蘭特ZAR0.4667 0.4778 ## 貨幣 / 貨幣 / 銀行買入匯率 / 銀行賣出匯率 || 美元 / USD / 7.8258 / 7.864 || 人民幣 / CNH / 1.172 / 1.1816",
-    "蘭元NZD4.4397 4.4894 新加坡元SGD6.0985 6.1464 南非蘭特ZAR0.4663 0.4782 ## 貨幣 / 貨幣 / 銀行買入匯率 / 銀行賣出匯率 || 美元 / USD / 7.8233 / 7.8665 || 人民幣 / CNH / 1.1715 / 1.182"
-   ],
-   "rows": 0,
-   "fx": [
-    "USD",
-    "CNY",
-    "AUD",
-    "GBP",
-    "JPY"
-   ],
-   "sample": ""
+   "bank": "icbc",
+   "url": "https://www.icbcasia.com/hk/tc/default.html",
+   "ok": false,
+   "status": 404,
+   "finalUrl": "https://www.icbcasia.com/",
+   "tables": 0,
+   "title": "個人金融 | 跨境金融 首選銀行 - 中國工商銀行（亞洲）",
+   "textLen": 5293,
+   "error": "HTTP 404"
   },
   {
    "bank": "icbc",
-   "url": "https://www.icbcasia.com/hk/tc/promotion/mobile-banking-e-deposit-operation-manual.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.icbcasia.com/hk/tc/promotion/mobile-banking-e-deposit-operation-manual.html",
+   "url": "https://www.icbcasia.com/hk/tc",
+   "ok": false,
+   "status": 404,
+   "finalUrl": "https://www.icbcasia.com/",
    "tables": 0,
-   "title": "手機銀行「e定存」操作指引​ - 中國工商銀行（亞洲）",
-   "textLen": 40,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
+   "title": "個人金融 | 跨境金融 首選銀行 - 中國工商銀行（亞洲）",
+   "textLen": 5305,
+   "error": "HTTP 404"
   },
   {
    "bank": "dbs",
@@ -1165,35 +1163,53 @@
   },
   {
    "bank": "icbc",
-   "url": "https://www.icbcasia.com/hk/tc/default.html",
-   "ok": false,
-   "status": 404,
-   "finalUrl": "https://www.icbcasia.com/",
-   "tables": 0,
-   "title": "個人金融 | 跨境金融 首選銀行 - 中國工商銀行（亞洲）",
-   "textLen": 5305,
-   "error": "HTTP 404"
-  },
-  {
-   "bank": "icbc",
-   "url": "https://www.icbcasia.com/hk/tc",
-   "ok": false,
-   "status": 404,
-   "finalUrl": "https://www.icbcasia.com/",
-   "tables": 0,
-   "title": "個人金融 | 跨境金融 首選銀行 - 中國工商銀行（亞洲）",
-   "textLen": 5293,
-   "error": "HTTP 404"
+   "url": "https://www.icbcasia.com/hk/tc/personal/banking/rate/prime-rate/default.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.icbcasia.com/hk/tc/personal/banking/rate/prime-rate/default.html",
+   "tables": 1,
+   "title": "優惠利率 - 中國工商銀行（亞洲）",
+   "textLen": 563,
+   "debug": [
+    "earch box | 中國工商銀行（亞洲） | 最優惠利率 最優惠利率 | 個人金融 銀行服務 利率及匯率 最優惠利率 ## 货币 / 最优惠利率 || 貨幣 / 最優惠利率 || Currency / The prime rate"
+   ],
+   "rows": 0,
+   "fx": [],
+   "sample": ""
   },
   {
    "bank": "ccb",
-   "url": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/time_deposit.html",
+   "url": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/exchange_rate_enquiry.html",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/time_deposit.html",
+   "finalUrl": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/exchange_rate_enquiry.html",
+   "tables": 4,
+   "title": "外幣匯率 | 個人銀行服務| 戶口 - 中國建設銀行(亞洲)",
+   "textLen": 1358,
+   "debug": [
+    "銀行查看。以上優惠受條款及細則約束，詳情請向本行職員查詢。 | 外幣匯率 更新日期：2026年10月28日， 09:24 ## 貨幣 / 貨幣 / 銀行買入匯率 / 銀行賣出匯率 || 美元 / USD / 7.8254 / 7.8612 || 人民幣 / CNH / 1.1716 / 1.181",
+    "蘭元NZD4.3633 4.4109 新加坡元SGD6.0955 6.1414 南非蘭特ZAR0.4654 0.4767 ## 貨幣 / 貨幣 / 銀行買入匯率 / 銀行賣出匯率 || 美元 / USD / 7.8242 / 7.8624 || 人民幣 / CNH / 1.1714 / 1.1812",
+    "紐西蘭元NZD4.362 4.4116 新加坡元SGD6.0943 6.1423 南非蘭特ZAR0.465 0.4771 ## 貨幣 / 貨幣 / 銀行買入匯率 / 銀行賣出匯率 || 美元 / USD / 7.8217 / 7.8649 || 人民幣 / CNH / 1.1709 / 1.1816"
+   ],
+   "rows": 0,
+   "fx": [
+    "USD",
+    "CNY",
+    "AUD",
+    "GBP",
+    "JPY"
+   ],
+   "sample": ""
+  },
+  {
+   "bank": "dahsing",
+   "url": "https://www.dahsing.com/html/tc/personal_banking/deposits.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.dahsing.com/html/tc/personal_banking/deposits.html",
    "tables": 0,
-   "title": "港幣及外幣定期存款 人民幣美元等多種選擇| 定期存款| 戶口 - 中國建設銀行(亞洲)",
-   "textLen": 1475,
+   "title": "大新銀行",
+   "textLen": 545,
    "rows": 0,
    "fx": [],
    "sample": ""
@@ -1212,20 +1228,17 @@
    "sample": ""
   },
   {
-   "bank": "icbc",
-   "url": "https://www.icbcasia.com/hk/tc/personal/banking/rate/prime-rate/default.html",
+   "bank": "bocom",
+   "url": "https://www.hk.bankcomm.com/hk/shtml/hk/tw/2005155/2005178/2005180/list.shtml?channelId=2005155",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.icbcasia.com/hk/tc/personal/banking/rate/prime-rate/default.html",
-   "tables": 1,
-   "title": "優惠利率 - 中國工商銀行（亞洲）",
-   "textLen": 563,
-   "debug": [
-    "earch box | 中國工商銀行（亞洲） | 最優惠利率 最優惠利率 | 個人金融 銀行服務 利率及匯率 最優惠利率 ## 货币 / 最优惠利率 || 貨幣 / 最優惠利率 || Currency / The prime rate"
-   ],
-   "rows": 0,
+   "finalUrl": "https://www.hk.bankcomm.com/hk/shtml/hk/tw/2005155/2005178/2005180/list.shtml?channelId=2005155",
+   "tables": 2,
+   "title": "外幣存款 - 交通銀行（香港）有限公司",
+   "textLen": 1441,
+   "rows": 48,
    "fx": [],
-   "sample": ""
+   "sample": "CNY 7日=0.1, USD 7日=0.1, AUD 7日=0.01, GBP 7日=0.01, JPY 7日=0.001, CNY 14日=0.1, USD 14日=0.1, AUD 14日=0.01, GBP 14日=0.01, JPY 14日=0.001, CNY 1個月=0.45, USD 1個月=0.125, AUD 1個月=0.01, GBP 1個月=0.01"
   },
   {
    "bank": "dbs",
@@ -1247,29 +1260,17 @@
   },
   {
    "bank": "dahsing",
-   "url": "https://www.dahsing.com/html/tc/personal_banking/deposits.html",
+   "url": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/monthly_gain_fixed_deposit.html",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.dahsing.com/html/tc/personal_banking/deposits.html",
-   "tables": 0,
-   "title": "大新銀行",
-   "textLen": 545,
-   "rows": 0,
+   "finalUrl": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/monthly_gain_fixed_deposit.html",
+   "tables": 1,
+   "title": "",
+   "textLen": 7051,
+   "mode": "html",
+   "rows": 3,
    "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "bocom",
-   "url": "https://www.hk.bankcomm.com/hk/shtml/hk/tw/2005155/2005178/2005180/list.shtml?channelId=2005155",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.hk.bankcomm.com/hk/shtml/hk/tw/2005155/2005178/2005180/list.shtml?channelId=2005155",
-   "tables": 2,
-   "title": "外幣存款 - 交通銀行（香港）有限公司",
-   "textLen": 1441,
-   "rows": 48,
-   "fx": [],
-   "sample": "CNY 7日=0.1, USD 7日=0.1, AUD 7日=0.01, GBP 7日=0.01, JPY 7日=0.001, CNY 14日=0.1, USD 14日=0.1, AUD 14日=0.01, GBP 14日=0.01, JPY 14日=0.001, CNY 1個月=0.45, USD 1個月=0.125, AUD 1個月=0.01, GBP 1個月=0.01"
+   "sample": "HKD 12個月*=3.2"
   },
   {
    "bank": "bocom",
@@ -1281,6 +1282,50 @@
    "title": "",
    "textLen": 0,
    "error": "HTTP 415"
+  },
+  {
+   "bank": "dahsing",
+   "url": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/hkd_and_foreign_currency_fixed_deposit.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/hkd_and_foreign_currency_fixed_deposit.html",
+   "tables": 1,
+   "title": "",
+   "textLen": 6890,
+   "mode": "html",
+   "debug": [
+    "提供24小時通知至12個月的靈活存款期 | 可透過我們各分行、網上或電話理財服務設立定期存款及續期指示 | 多款續期指示 ## 貨幣 / 最低開戶存款額（原幣計算） || 美元 (USD) / 2,000 || 人民幣 (CNY) / 10,000"
+   ],
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
+   "bank": "ccb",
+   "url": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/time_deposit.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/time_deposit.html",
+   "tables": 0,
+   "title": "港幣及外幣定期存款 人民幣美元等多種選擇| 定期存款| 戶口 - 中國建設銀行(亞洲)",
+   "textLen": 1476,
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
+   "bank": "dahsing",
+   "url": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/usd_fixed_deposit.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/usd_fixed_deposit.html",
+   "tables": 3,
+   "title": "",
+   "textLen": 8341,
+   "mode": "html",
+   "rows": 28,
+   "fx": [],
+   "sample": "USD 3個月*=4, USD 6個月*=4.1, USD 12個月*=3.3"
   },
   {
    "bank": "bocom",
@@ -1296,47 +1341,64 @@
    "sample": ""
   },
   {
-   "bank": "ccb",
-   "url": "https://www.asia.ccb.com/hongkong_tc/personal",
+   "bank": "dahsing",
+   "url": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/rmb_fixed_deposit.html",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.asia.ccb.com/hongkong_tc/personal/",
-   "tables": 1,
-   "title": "主頁 | 個人銀行服務 | 信用卡 | 投資理財 | 借貸 | 保險 - 中國建設銀行(亞洲)",
-   "textLen": 2131,
-   "mode": "text",
-   "note": "offer expired 2026-07-31",
-   "rows": 0,
+   "finalUrl": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/rmb_fixed_deposit.html",
+   "tables": 2,
+   "title": "",
+   "textLen": 7735,
+   "mode": "html",
+   "rows": 8,
    "fx": [],
+   "sample": "CNY 1個月*=0.25, CNY 3個月*=1.5, CNY 6個月*=1.6, CNY 12個月*=0.35"
+  },
+  {
+   "bank": "bocom",
+   "url": "https://www.hk.bankcomm.com/hk/shtml/hk/tw/2005155/2005175/2005176/list.shtml?channelId=2005155",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.hk.bankcomm.com/hk/shtml/hk/tw/2005155/2005175/2005176/list.shtml?channelId=2005155",
+   "tables": 1,
+   "title": "外幣兌港元 - 交通銀行（香港）有限公司",
+   "textLen": 838,
+   "debug": [
+    ": 5px 2px; } .contact_table thead th { padding: 5px 2px; } } ## 貨幣 / 銀行買入 / 銀行賣出 || 美元 (USD) / 7.8196490 / 7.8675560 || 英鎊 (GBP) / 10.3801767 / 10.4887554"
+   ],
+   "rows": 0,
+   "fx": [
+    "USD",
+    "GBP",
+    "JPY",
+    "AUD",
+    "CNY"
+   ],
    "sample": ""
   },
   {
    "bank": "dahsing",
-   "url": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/monthly_gain_fixed_deposit.html",
+   "url": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/hkd_fixed_deposit.html",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/monthly_gain_fixed_deposit.html",
-   "tables": 1,
+   "finalUrl": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/hkd_fixed_deposit.html",
+   "tables": 2,
    "title": "",
-   "textLen": 7048,
+   "textLen": 7766,
    "mode": "html",
-   "rows": 3,
+   "rows": 18,
    "fx": [],
-   "sample": "HKD 12個月*=3.2"
+   "sample": "HKD 3個月*=3.1, HKD 6個月*=3.3, HKD 12個月*=3.2"
   },
   {
    "bank": "dahsing",
-   "url": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/hkd_and_foreign_currency_fixed_deposit.html",
+   "url": "https://www.dahsing.com/html/tc/index.html",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/hkd_and_foreign_currency_fixed_deposit.html",
-   "tables": 1,
+   "finalUrl": "https://www.dahsing.com/html/tc/index.html",
+   "tables": 0,
    "title": "",
-   "textLen": 6887,
-   "mode": "html",
-   "debug": [
-    "提供24小時通知至12個月的靈活存款期 | 可透過我們各分行、網上或電話理財服務設立定期存款及續期指示 | 多款續期指示 ## 貨幣 / 最低開戶存款額（原幣計算） || 美元 (USD) / 2,000 || 人民幣 (CNY) / 10,000"
-   ],
+   "textLen": 1188,
    "rows": 0,
    "fx": [],
    "sample": ""
@@ -1360,56 +1422,6 @@
    "sample": ""
   },
   {
-   "bank": "bocom",
-   "url": "https://www.hk.bankcomm.com/hk/shtml/hk/tw/2005155/2005175/2005176/list.shtml?channelId=2005155",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.hk.bankcomm.com/hk/shtml/hk/tw/2005155/2005175/2005176/list.shtml?channelId=2005155",
-   "tables": 1,
-   "title": "外幣兌港元 - 交通銀行（香港）有限公司",
-   "textLen": 838,
-   "debug": [
-    ": 5px 2px; } .contact_table thead th { padding: 5px 2px; } } ## 貨幣 / 銀行買入 / 銀行賣出 || 美元 (USD) / 7.8214240 / 7.8693310 || 英鎊 (GBP) / 10.3868246 / 10.4954600"
-   ],
-   "rows": 0,
-   "fx": [
-    "USD",
-    "GBP",
-    "JPY",
-    "AUD",
-    "CNY"
-   ],
-   "sample": ""
-  },
-  {
-   "bank": "dahsing",
-   "url": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/usd_fixed_deposit.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/usd_fixed_deposit.html",
-   "tables": 3,
-   "title": "",
-   "textLen": 8338,
-   "mode": "html",
-   "rows": 28,
-   "fx": [],
-   "sample": "USD 3個月*=4, USD 6個月*=4.1, USD 12個月*=3.3"
-  },
-  {
-   "bank": "dahsing",
-   "url": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/rmb_fixed_deposit.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/rmb_fixed_deposit.html",
-   "tables": 2,
-   "title": "",
-   "textLen": 7732,
-   "mode": "html",
-   "rows": 8,
-   "fx": [],
-   "sample": "CNY 1個月*=0.25, CNY 3個月*=1.5, CNY 6個月*=1.6, CNY 12個月*=0.35"
-  },
-  {
    "bank": "citic",
    "url": "https://www.cncbinternational.com/rate-table/time_deposit_rate_tc.html",
    "ok": true,
@@ -1424,40 +1436,13 @@
   },
   {
    "bank": "dahsing",
-   "url": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/hkd_fixed_deposit.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.dahsing.com/html/tc/deposit/fixed_deposit/hkd_fixed_deposit.html",
-   "tables": 2,
-   "title": "",
-   "textLen": 7763,
-   "mode": "html",
-   "rows": 18,
-   "fx": [],
-   "sample": "HKD 3個月*=3.1, HKD 6個月*=3.3, HKD 12個月*=3.2"
-  },
-  {
-   "bank": "dahsing",
-   "url": "https://www.dahsing.com/html/tc/index.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.dahsing.com/html/tc/index.html",
-   "tables": 0,
-   "title": "",
-   "textLen": 1185,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "dahsing",
    "url": "https://www.dahsing.com/html/tc/deposit/deposit_account/hkd_and_foreign_currency_saving_accounts.html",
    "ok": true,
    "status": 200,
    "finalUrl": "https://www.dahsing.com/html/tc/deposit/deposit_account/hkd_and_foreign_currency_saving_accounts.html",
    "tables": 1,
    "title": "",
-   "textLen": 6857,
+   "textLen": 6860,
    "mode": "html",
    "debug": [
     " | Close | Close | Close | Close | Close | 開戶存款額低之餘，手續亦簡便快捷。 ## 貨幣 / 最低存款額 「易存寶」存摺戶口 || 港元 (HKD) / 100 || 美元 (USD) / 100"
@@ -1467,17 +1452,46 @@
    "sample": ""
   },
   {
-   "bank": "ccb",
-   "url": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/foreign_exchange.html",
+   "bank": "ocbc",
+   "url": "https://www.ocbc.com.hk/personal-banking/deposits/foreign-currency-interest-rates",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/foreign_exchange.html",
-   "tables": 0,
-   "title": "比較各種外幣戶口 拓展環球投資視野 - 中國建設銀行(亞洲)",
-   "textLen": 1767,
+   "finalUrl": "https://www.ocbc.com.hk/personal-banking/deposits/foreign-currency-interest-rates",
+   "tables": 1,
+   "title": "Foreign Currency Interest Rates｜OCBC Personal Banking HK",
+   "textLen": 1734,
+   "rows": 19,
+   "fx": [],
+   "sample": "AUD 7日=2.2, USD 7日=0.01, GBP 7日=0.6, JPY 7日=0.01, AUD 1個月=2.45, USD 1個月=0.5, GBP 1個月=1.35, JPY 1個月=0.01, CNY 1個月=0.01, AUD 2個月=2.55, USD 2個月=0.5, GBP 2個月=1.45, JPY 2個月=0.01, CNY 2個月=0.01"
+  },
+  {
+   "bank": "ccb",
+   "url": "https://www.asia.ccb.com/hongkong_tc/personal",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.asia.ccb.com/hongkong_tc/personal/",
+   "tables": 1,
+   "title": "主頁 | 個人銀行服務 | 信用卡 | 投資理財 | 借貸 | 保險 - 中國建設銀行(亞洲)",
+   "textLen": 2093,
+   "mode": "text",
+   "note": "offer expired 2026-07-31",
    "rows": 0,
    "fx": [],
    "sample": ""
+  },
+  {
+   "bank": "ocbc",
+   "url": "https://www.ocbc.com.hk/iwov-resources/hk/ocbc/personal/pdf/HKD.pdf",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.ocbc.com.hk/iwov-resources/hk/ocbc/personal/pdf/HKD.pdf",
+   "tables": 0,
+   "title": "PDF",
+   "textLen": 34170,
+   "mode": "text",
+   "rows": 13,
+   "fx": [],
+   "sample": "HKD 1個月*=1.85, HKD 3個月*=2.9, HKD 6個月*=3.2, HKD 9個月*=3.25, HKD 12個月*=3.35, USD 1個月*=3.2, USD 3個月*=3.9, USD 6個月*=4.1, USD 12個月*=4.2, CNY 1個月*=0.8, CNY 3個月*=1.1, CNY 6個月*=1.2, CNY 12個月*=1.3"
   },
   {
    "bank": "dbs",
@@ -1499,16 +1513,20 @@
   },
   {
    "bank": "ocbc",
-   "url": "https://www.ocbc.com.hk/personal-banking/deposits/foreign-currency-interest-rates",
+   "url": "https://www.ocbc.com.hk/personal-banking/deposit-services/foreign-currency-deposit",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.ocbc.com.hk/personal-banking/deposits/foreign-currency-interest-rates",
-   "tables": 1,
-   "title": "Foreign Currency Interest Rates｜OCBC Personal Banking HK",
-   "textLen": 1734,
-   "rows": 19,
+   "finalUrl": "https://www.ocbc.com.hk/personal-banking/deposit-services/foreign-currency-deposit",
+   "tables": 2,
+   "title": "Foreign Exchange Services | OCBC Personal Banking HK",
+   "textLen": 5359,
+   "debug": [
+    "ncy Deposit should be over the following amount for interest ## Currency / Minimum Initial Deposit2 / Deposit should be over the following amount for interest || Australian Dollar (AUD) / 100 / 100 || Canadian Dollar (CAD) / 100 / 100",
+    "al Deposit via Internet / Telematic Banking / Mobile Banking ## Currency / Over-the-Counter Minimum Initial Deposit (Below One-Month) / Over-the-Counter Minimum Initial Deposit (Below One-Month) / Minimum Initial Deposit via Internet / Telematic Banking / Mobile Banking ||  / Below O"
+   ],
+   "rows": 0,
    "fx": [],
-   "sample": "AUD 7日=2.2, USD 7日=0.01, GBP 7日=0.6, JPY 7日=0.01, AUD 1個月=2.45, USD 1個月=0.5, GBP 1個月=1.35, JPY 1個月=0.01, CNY 1個月=0.01, AUD 2個月=2.55, USD 2個月=0.5, GBP 2個月=1.45, JPY 2個月=0.01, CNY 2個月=0.01"
+   "sample": ""
   },
   {
    "bank": "citic",
@@ -1521,7 +1539,7 @@
    "textLen": 600,
    "debug": [
     "d =='NOK') { return currCd = '挪威克郎'; } else { return ''; } } ## <!--// **** This section contains code that will run when the page is loaded ****// Build the netui_names table to map the tagId attributes// to the real id written into the HTMLif (netui_names == null) var netui_names =",
-    "戶口利率 | 一戶通“存款”利率 | 定期存款利率 | 外幣兌換率 | 更新日期／時間﹕ 28/10/2026 4:48 ##  /  || 港元最優惠利率 / 5.2500% || 美元最優惠利率 / 7.7500%",
+    "戶口利率 | 一戶通“存款”利率 | 定期存款利率 | 外幣兌換率 | 更新日期／時間﹕ 28/10/2026 9:30 ##  /  || 港元最優惠利率 / 5.2500% || 美元最優惠利率 / 7.7500%",
     "港元 人民幣 美元 歐羅 英鎊 日圓 加元 澳元 紐元 瑞士法郎 新加坡元 挪威克郎 ## 儲蓄存款利率 - 港元 / 儲蓄存款利率 - 港元 || 貨幣 / 儲蓄存款 || 港元500,000.00 或以上 / 0.0010"
    ],
    "rows": 0,
@@ -1529,18 +1547,52 @@
    "sample": ""
   },
   {
-   "bank": "ocbc",
-   "url": "https://www.ocbc.com.hk/iwov-resources/hk/ocbc/personal/pdf/HKD.pdf",
+   "bank": "cmbwl",
+   "url": "https://www.cmbwinglungbank.com/wlb_corporate/hk/personal/investments/financial-information/interest-rates/deposit-interest-rates.html",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.ocbc.com.hk/iwov-resources/hk/ocbc/personal/pdf/HKD.pdf",
-   "tables": 0,
-   "title": "PDF",
-   "textLen": 34170,
-   "mode": "text",
-   "rows": 13,
+   "finalUrl": "https://www.cmbwinglungbank.com/wlb_corporate/hk/personal/investments/financial-information/interest-rates/deposit-interest-rates.html",
+   "tables": 13,
+   "title": "存款息率 - 招商永隆銀行",
+   "textLen": 9064,
+   "rows": 164,
    "fx": [],
-   "sample": "HKD 1個月*=1.85, HKD 3個月*=2.9, HKD 6個月*=3.2, HKD 9個月*=3.25, HKD 12個月*=3.35, USD 1個月*=3.2, USD 3個月*=3.9, USD 6個月*=4.1, USD 12個月*=4.2, CNY 1個月*=0.8, CNY 3個月*=1.1, CNY 6個月*=1.2, CNY 12個月*=1.3"
+   "sample": "HKD 7日=0.001, HKD 14日=0.001, HKD 1個月=0.25, HKD 2個月=0.25, HKD 3個月=0.25, HKD 6個月=0.25, HKD 9個月=0.25, HKD 12個月=0.25, HKD 24個月=0.15, USD 7日=0.1, USD 14日=0.1, USD 1個月=1.1, USD 2個月=1.1, USD 3個月=1.1"
+  },
+  {
+   "bank": "citic",
+   "url": "https://www.cncbinternational.com/personal/deposits/time-deposit/tc/index.jsp",
+   "ok": false,
+   "status": 403,
+   "finalUrl": "https://www.cncbinternational.com/personal/deposits/time-deposit/tc/index.jsp",
+   "tables": 0,
+   "title": "Access Denied",
+   "textLen": 246,
+   "error": "HTTP 403"
+  },
+  {
+   "bank": "ccb",
+   "url": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/foreign_exchange.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.asia.ccb.com/hongkong_tc/personal/accounts/foreign_exchange.html",
+   "tables": 0,
+   "title": "比較各種外幣戶口 拓展環球投資視野 - 中國建設銀行(亞洲)",
+   "textLen": 1765,
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
+   "bank": "citic",
+   "url": "https://www.cncbinternational.com/personal/deposits/tc/index.jsp",
+   "ok": false,
+   "status": 403,
+   "finalUrl": "https://www.cncbinternational.com/personal/deposits/tc/index.jsp",
+   "tables": 0,
+   "title": "Access Denied",
+   "textLen": 233,
+   "error": "HTTP 403"
   },
   {
    "bank": "dbs",
@@ -1557,17 +1609,118 @@
    "sample": "HKD 3個月*=1.5"
   },
   {
-   "bank": "ocbc",
-   "url": "https://www.ocbc.com.hk/personal-banking/deposit-services/foreign-currency-deposit",
+   "bank": "citic",
+   "url": "https://www.cncbinternational.com/home/tc/index.jsp",
+   "ok": false,
+   "status": 403,
+   "finalUrl": "https://www.cncbinternational.com/home/tc/index.jsp",
+   "tables": 0,
+   "title": "Access Denied",
+   "textLen": 220,
+   "error": "HTTP 403"
+  },
+  {
+   "bank": "citic",
+   "url": "https://www.cncbinternational.com/rate-table/now_rate_tc.html",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.ocbc.com.hk/personal-banking/deposit-services/foreign-currency-deposit",
-   "tables": 2,
-   "title": "Foreign Exchange Services | OCBC Personal Banking HK",
-   "textLen": 5359,
+   "finalUrl": "https://www.cncbinternational.com/rate-table/now_rate_tc.html",
+   "tables": 0,
+   "title": "China CITIC Bank International i-banking",
+   "textLen": 282,
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
+   "bank": "cmbwl",
+   "url": "https://www.cmbwinglungbank.com/wlb_corporate/hk/personal/deposit.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.cmbwinglungbank.com/wlb_corporate/hk/personal/deposit.html",
+   "tables": 0,
+   "title": "招商永隆銀行 – CMB Wing Lung Bank",
+   "textLen": 387,
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
+   "bank": "citic",
+   "url": "https://www.cncbinternational.com/rate-table/one_rate_tc.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.cncbinternational.com/rate-table/one_rate_tc.html",
+   "tables": 0,
+   "title": "China CITIC Bank International i-banking",
+   "textLen": 282,
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
+   "bank": "citic",
+   "url": "https://www.cncbinternational.com/rate-table/exchange_rate_tc.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.cncbinternational.com/rate-table/exchange_rate_tc.html",
+   "tables": 3,
+   "title": "China CITIC Bank International i-banking",
+   "textLen": 392,
    "debug": [
-    "ncy Deposit should be over the following amount for interest ## Currency / Minimum Initial Deposit2 / Deposit should be over the following amount for interest || Australian Dollar (AUD) / 100 / 100 || Canadian Dollar (CAD) / 100 / 100",
-    "al Deposit via Internet / Telematic Banking / Mobile Banking ## Currency / Over-the-Counter Minimum Initial Deposit (Below One-Month) / Over-the-Counter Minimum Initial Deposit (Below One-Month) / Minimum Initial Deposit via Internet / Telematic Banking / Mobile Banking ||  / Below O"
+    "mentById('content').innerHTML +='currCd = '+currCd+'<br>'; } ## Rate Enquiry 最優惠利率及儲蓄存款利率 | 劃時理財戶口利率 | 一戶通“存款”利率 | 定期存款利率 | 外幣兌換率 更新日期／時間﹕ 28/10/2026 9:30 貨幣 銀行買入 銀行賣出 人民幣 1.16910 1.18410 美元 7.82710 7.86010 歐羅 8.67790 8.77420 英鎊 10.38230 10.48660 日圓 0.04940 0.04996 加元 5.55030 5.60870",
+    "戶口利率 | 一戶通“存款”利率 | 定期存款利率 | 外幣兌換率 | 更新日期／時間﹕ 28/10/2026 9:30 ##  /  /  || 貨幣 / 銀行買入 / 銀行賣出 || 人民幣 / 1.16910 / 1.18410",
+    " ## 備注: / 備注: || 1. / 以上外幣兌換率以每一外幣單位折算。 || 2. / 兌換率以外幣電匯兌港元計算及只供參考。外幣兌換率不時按市場變化而調整，所有交易將以交易時最新的外幣兌換率為準。"
+   ],
+   "rows": 0,
+   "fx": [
+    "CNY",
+    "USD",
+    "GBP",
+    "JPY",
+    "AUD"
+   ],
+   "sample": ""
+  },
+  {
+   "bank": "cmbwl",
+   "url": "https://www.cmbwinglungbank.com/wlb_corporate/hk/index.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.cmbwinglungbank.com/wlb_corporate/hk/index.html",
+   "tables": 0,
+   "title": "招商永隆銀行 – CMB Wing Lung Bank",
+   "textLen": 8931,
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
+   "bank": "chonghing",
+   "url": "https://www.chbank.com/tc/personal/banking-services/useful-information/deposit-rates/index.shtml",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.chbank.com/tc/personal/banking-services/useful-information/deposit-rates/index.shtml",
+   "tables": 3,
+   "title": "創興銀行 - 存款利率",
+   "textLen": 3470,
+   "rows": 236,
+   "fx": [],
+   "sample": "HKD 7日=0.01, CNY 7日=0.35, AUD 7日=3.9, GBP 7日=2.6, USD 7日=0.8, HKD 14日=0.01, CNY 14日=0.35, AUD 14日=4.1, GBP 14日=2.8, USD 14日=0.8, HKD 1個月=2.55, CNY 1個月=1, AUD 1個月=4.2, GBP 1個月=2.9"
+  },
+  {
+   "bank": "dbs",
+   "url": "https://www.dbs.com.hk/personal-zh/promotion/esaver",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.dbs.com.hk/personal-zh/promotion/esaver",
+   "tables": 13,
+   "title": "星展eSaver | 星展香港",
+   "textLen": 5122,
+   "debug": [
+    "所有儲蓄存款合計年利率截至2026年9月30日並僅供參考。基本儲蓄存款年利率並非保證， 詳情請按此。 | 存款月份時間表 ## 基準日期 (升級客戶) / 成為新客戶月份 / 存款月份及 獎賞計算期 / 條款及細則5 || 2026年9月30日 / 2026年10月1日 – 2026年10月31日 / 2026年10月1日 – 2026年12月31日 / 詳情請按此",
+    " | digibot | 信用卡銀行服務一般協助數碼服務 | Deal Details | 2026 | January ## Su / Mo / Tu / We / Th ||  /  /  /  / 1 || 4 / 5 / 6 / 7 / 8",
+    "5678910111213141516171819202122232425262728293031 | February ## Su / Mo / Tu / We / Th || 1 / 2 / 3 / 4 / 5 || 8 / 9 / 10 / 11 / 12"
    ],
    "rows": 0,
    "fx": [],
@@ -1591,128 +1744,41 @@
    "sample": ""
   },
   {
-   "bank": "citic",
-   "url": "https://www.cncbinternational.com/personal/deposits/time-deposit/tc/index.jsp",
-   "ok": false,
-   "status": 403,
-   "finalUrl": "https://www.cncbinternational.com/personal/deposits/time-deposit/tc/index.jsp",
-   "tables": 0,
-   "title": "Access Denied",
-   "textLen": 248,
-   "error": "HTTP 403"
-  },
-  {
-   "bank": "citic",
-   "url": "https://www.cncbinternational.com/personal/deposits/tc/index.jsp",
-   "ok": false,
-   "status": 403,
-   "finalUrl": "https://www.cncbinternational.com/personal/deposits/tc/index.jsp",
-   "tables": 0,
-   "title": "Access Denied",
-   "textLen": 235,
-   "error": "HTTP 403"
-  },
-  {
-   "bank": "citic",
-   "url": "https://www.cncbinternational.com/home/tc/index.jsp",
-   "ok": false,
-   "status": 403,
-   "finalUrl": "https://www.cncbinternational.com/home/tc/index.jsp",
-   "tables": 0,
-   "title": "Access Denied",
-   "textLen": 222,
-   "error": "HTTP 403"
-  },
-  {
-   "bank": "citic",
-   "url": "https://www.cncbinternational.com/rate-table/now_rate_tc.html",
+   "bank": "fubon",
+   "url": "https://www.fubonbank.com.hk/tc/deposit/fixed-deposit/home.html",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.cncbinternational.com/rate-table/now_rate_tc.html",
+   "finalUrl": "https://www.fubonbank.com.hk/tc/deposit/fixed-deposit/home.html",
    "tables": 0,
-   "title": "China CITIC Bank International i-banking",
-   "textLen": 284,
+   "title": "定期存款 | 富邦銀行",
+   "textLen": 1224,
    "rows": 0,
    "fx": [],
    "sample": ""
-  },
-  {
-   "bank": "cmbwl",
-   "url": "https://www.cmbwinglungbank.com/wlb_corporate/hk/personal/investments/financial-information/interest-rates/deposit-interest-rates.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.cmbwinglungbank.com/wlb_corporate/hk/personal/investments/financial-information/interest-rates/deposit-interest-rates.html",
-   "tables": 13,
-   "title": "存款息率 - 招商永隆銀行",
-   "textLen": 9064,
-   "rows": 164,
-   "fx": [],
-   "sample": "HKD 7日=0.001, HKD 14日=0.001, HKD 1個月=0.25, HKD 2個月=0.25, HKD 3個月=0.25, HKD 6個月=0.25, HKD 9個月=0.25, HKD 12個月=0.25, HKD 24個月=0.15, USD 7日=0.1, USD 14日=0.1, USD 1個月=1.1, USD 2個月=1.1, USD 3個月=1.1"
   },
   {
    "bank": "dbs",
-   "url": "https://www.dbs.com.hk/personal-zh/promotion/esaver",
+   "url": "https://www.dbs.com.hk/personal-zh/deposits/accounts/prosaver-account",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.dbs.com.hk/personal-zh/promotion/esaver",
-   "tables": 13,
-   "title": "星展eSaver | 星展香港",
-   "textLen": 5122,
-   "debug": [
-    "所有儲蓄存款合計年利率截至2026年9月30日並僅供參考。基本儲蓄存款年利率並非保證， 詳情請按此。 | 存款月份時間表 ## 基準日期 (升級客戶) / 成為新客戶月份 / 存款月份及 獎賞計算期 / 條款及細則5 || 2026年9月30日 / 2026年10月1日 – 2026年10月31日 / 2026年10月1日 – 2026年12月31日 / 詳情請按此",
-    " | digibot | 信用卡銀行服務一般協助數碼服務 | Deal Details | 2026 | January ## Su / Mo / Tu / We / Th ||  /  /  /  / 1 || 4 / 5 / 6 / 7 / 8",
-    "5678910111213141516171819202122232425262728293031 | February ## Su / Mo / Tu / We / Th || 1 / 2 / 3 / 4 / 5 || 8 / 9 / 10 / 11 / 12"
-   ],
-   "rows": 0,
+   "finalUrl": "https://www.dbs.com.hk/personal-zh/deposits/accounts/prosaver-account",
+   "tables": 12,
+   "title": "ProSaver戶口 | 星展香港",
+   "textLen": 1939,
+   "mode": "text",
+   "rows": 1,
    "fx": [],
-   "sample": ""
+   "sample": "HKD 18個月*=0.135"
   },
   {
-   "bank": "citic",
-   "url": "https://www.cncbinternational.com/rate-table/one_rate_tc.html",
+   "bank": "chonghing",
+   "url": "https://www.chbank.com/tc/personal/banking-services/account-services/fixed-deposit-account/index.shtml",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.cncbinternational.com/rate-table/one_rate_tc.html",
+   "finalUrl": "https://www.chbank.com/tc/personal/banking-services/account-services/fixed-deposit-account/index.shtml",
    "tables": 0,
-   "title": "China CITIC Bank International i-banking",
-   "textLen": 284,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "citic",
-   "url": "https://www.cncbinternational.com/rate-table/exchange_rate_tc.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.cncbinternational.com/rate-table/exchange_rate_tc.html",
-   "tables": 3,
-   "title": "China CITIC Bank International i-banking",
-   "textLen": 392,
-   "debug": [
-    "mentById('content').innerHTML +='currCd = '+currCd+'<br>'; } ## Rate Enquiry 最優惠利率及儲蓄存款利率 | 劃時理財戶口利率 | 一戶通“存款”利率 | 定期存款利率 | 外幣兌換率 更新日期／時間﹕ 28/10/2026 4:48 貨幣 銀行買入 銀行賣出 人民幣 1.16840 1.18600 美元 7.82900 7.86200 歐羅 8.67840 8.79360 英鎊 10.38710 10.50250 日圓 0.04934 0.05000 加元 5.55010 5.61650",
-    "戶口利率 | 一戶通“存款”利率 | 定期存款利率 | 外幣兌換率 | 更新日期／時間﹕ 28/10/2026 4:48 ##  /  /  || 貨幣 / 銀行買入 / 銀行賣出 || 人民幣 / 1.16840 / 1.18600",
-    " ## 備注: / 備注: || 1. / 以上外幣兌換率以每一外幣單位折算。 || 2. / 兌換率以外幣電匯兌港元計算及只供參考。外幣兌換率不時按市場變化而調整，所有交易將以交易時最新的外幣兌換率為準。"
-   ],
-   "rows": 0,
-   "fx": [
-    "CNY",
-    "USD",
-    "GBP",
-    "JPY",
-    "AUD"
-   ],
-   "sample": ""
-  },
-  {
-   "bank": "cmbwl",
-   "url": "https://www.cmbwinglungbank.com/wlb_corporate/hk/personal/deposit.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.cmbwinglungbank.com/wlb_corporate/hk/personal/deposit.html",
-   "tables": 0,
-   "title": "招商永隆銀行 – CMB Wing Lung Bank",
-   "textLen": 387,
+   "title": "創興銀行 - 定期存款戶口",
+   "textLen": 1110,
    "rows": 0,
    "fx": [],
    "sample": ""
@@ -1734,83 +1800,6 @@
    "sample": ""
   },
   {
-   "bank": "chonghing",
-   "url": "https://www.chbank.com/tc/personal/banking-services/useful-information/deposit-rates/index.shtml",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.chbank.com/tc/personal/banking-services/useful-information/deposit-rates/index.shtml",
-   "tables": 3,
-   "title": "創興銀行 - 存款利率",
-   "textLen": 3470,
-   "rows": 236,
-   "fx": [],
-   "sample": "HKD 7日=0.01, CNY 7日=0.35, AUD 7日=3.9, GBP 7日=2.6, USD 7日=0.8, HKD 14日=0.01, CNY 14日=0.35, AUD 14日=4.1, GBP 14日=2.8, USD 14日=0.8, HKD 1個月=2.55, CNY 1個月=1, AUD 1個月=4.2, GBP 1個月=2.8"
-  },
-  {
-   "bank": "cmbwl",
-   "url": "https://www.cmbwinglungbank.com/wlb_corporate/hk/index.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.cmbwinglungbank.com/wlb_corporate/hk/index.html",
-   "tables": 0,
-   "title": "招商永隆銀行 – CMB Wing Lung Bank",
-   "textLen": 8931,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "dbs",
-   "url": "https://www.dbs.com.hk/personal-zh/deposits/accounts/prosaver-account",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.dbs.com.hk/personal-zh/deposits/accounts/prosaver-account",
-   "tables": 12,
-   "title": "ProSaver戶口 | 星展香港",
-   "textLen": 1939,
-   "mode": "text",
-   "rows": 1,
-   "fx": [],
-   "sample": "HKD 18個月*=0.135"
-  },
-  {
-   "bank": "fubon",
-   "url": "https://www.fubonbank.com.hk/tc/deposit/fixed-deposit/home.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.fubonbank.com.hk/tc/deposit/fixed-deposit/home.html",
-   "tables": 0,
-   "title": "定期存款 | 富邦銀行",
-   "textLen": 1224,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "publicbank",
-   "url": "https://www.publicbank.com.hk/tc/personal/deposits",
-   "ok": false,
-   "status": 404,
-   "finalUrl": "https://www.publicbank.com.hk/tc/personal/deposits",
-   "tables": 0,
-   "title": "",
-   "textLen": 179,
-   "error": "HTTP 404"
-  },
-  {
-   "bank": "chonghing",
-   "url": "https://www.chbank.com/tc/personal/banking-services/account-services/fixed-deposit-account/index.shtml",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.chbank.com/tc/personal/banking-services/account-services/fixed-deposit-account/index.shtml",
-   "tables": 0,
-   "title": "創興銀行 - 定期存款戶口",
-   "textLen": 1110,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
    "bank": "dbs",
    "url": "https://www.dbs.com.hk/i-bank-zh/ratesfees.page",
    "ok": true,
@@ -1820,72 +1809,12 @@
    "title": "利率及收費 | 星展個人銀行",
    "textLen": 1044,
    "debug": [
-    " | digibot | 信用卡銀行服務一般協助數碼服務 | Deal Details | 2026 | January ## Su / Mo / Tu / We / Th ||  /  /  /  / 1 || 4 / 5 / 6 / 7 / 8",
+    "tom(); | 有什麽可以幫到你？ | digibot | Deal Details | 2026 | January ## Su / Mo / Tu / We / Th ||  /  /  /  / 1 || 4 / 5 / 6 / 7 / 8",
     "5678910111213141516171819202122232425262728293031 | February ## Su / Mo / Tu / We / Th || 1 / 2 / 3 / 4 / 5 || 8 / 9 / 10 / 11 / 12",
     "hFrSa12345678910111213141516171819202122232425262728 | March ## Su / Mo / Tu / We / Th || 1 / 2 / 3 / 4 / 5 || 8 / 9 / 10 / 11 / 12"
    ],
    "rows": 0,
    "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "publicbank",
-   "url": "https://www.publicbank.com.hk/tc",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.publicbank.com.hk/tc/",
-   "tables": 0,
-   "title": "大眾銀行(香港)有限公司 | 大眾銀行（香港）",
-   "textLen": 1223,
-   "mode": "text",
-   "rows": 4,
-   "fx": [],
-   "sample": "HKD 12個月*=3.35, CNY 3個月*=1.1, USD 12個月*=4.2, AUD 12個月*=3.1"
-  },
-  {
-   "bank": "dbs",
-   "url": "https://www.dbs.com.hk/personal-zh/ExchangeRate.page",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.dbs.com.hk/personal-zh/rates-online/foreign-currency-foreign-exchange.page",
-   "tables": 26,
-   "title": "外幣匯率 | 星展香港",
-   "textLen": 1096,
-   "debug": [
-    "DKKEURGBPJPYNOKNZDSEKSGDUSD | 生效日期 :28/10/2026 最後更新 :04:40AM ## 貨幣 / AUD || 買入價 (港元) / 5.467217 || 賣出價 (港元) / 5.553874",
-    " ## 貨幣 / CAD || 買入價 (港元) / 5.544971 || 賣出價 (港元) / 5.619899",
-    " ## 貨幣 / CHF || 買入價 (港元) / 9.403503 || 賣出價 (港元) / 9.515432"
-   ],
-   "rows": 0,
-   "fx": [
-    "AUD",
-    "CNY",
-    "GBP",
-    "JPY",
-    "USD"
-   ],
-   "sample": ""
-  },
-  {
-   "bank": "publicbank",
-   "url": "https://www.publicbank.com.hk/tc/usefultools/rates/foreignexchangerates",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.publicbank.com.hk/tc/usefultools/rates/foreignexchangerates",
-   "tables": 1,
-   "title": "外幣兌換價 | 大眾銀行（香港）",
-   "textLen": 996,
-   "debug": [
-    " | 已導航到主內容 | 外幣兌換價 | 最後更新時間：(香港時間) 27-10-2026 17:59 | 電匯電匯現鈔 ## 貨幣 / 買入（電匯） / 賣出（電匯） / 買入（現鈔） / 賣出（現鈔） ||  || 美元 / 7.8373 / 7.8523 / 7.7703 / 7.9463"
-   ],
-   "rows": 0,
-   "fx": [
-    "USD",
-    "JPY",
-    "GBP",
-    "AUD",
-    "CNY"
-   ],
    "sample": ""
   },
   {
@@ -1919,16 +1848,65 @@
   },
   {
    "bank": "publicbank",
-   "url": "https://www.publicbank.com.hk/tc/retailbanking/deposit/RetailBanking-RetailDeposit-FixedDeposit-FixedDeposit",
+   "url": "https://www.publicbank.com.hk/tc/personal/deposits",
+   "ok": false,
+   "status": 404,
+   "finalUrl": "https://www.publicbank.com.hk/tc/personal/deposits",
+   "tables": 0,
+   "title": "",
+   "textLen": 179,
+   "error": "HTTP 404"
+  },
+  {
+   "bank": "dbs",
+   "url": "https://www.dbs.com.hk/personal-zh/ExchangeRate.page",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.publicbank.com.hk/tc/retailbanking/deposit/RetailBanking-RetailDeposit-FixedDeposit-FixedDeposit",
-   "tables": 0,
-   "title": "定期存款 | 大眾銀行（香港）",
-   "textLen": 678,
+   "finalUrl": "https://www.dbs.com.hk/personal-zh/rates-online/foreign-currency-foreign-exchange.page",
+   "tables": 26,
+   "title": "外幣匯率 | 星展香港",
+   "textLen": 1096,
+   "debug": [
+    "DKKEURGBPJPYNOKNZDSEKSGDUSD | 生效日期 :28/10/2026 最後更新 :09:30AM ## 貨幣 / AUD || 買入價 (港元) / 5.478213 || 賣出價 (港元) / 5.566097",
+    " ## 貨幣 / CAD || 買入價 (港元) / 5.541381 || 賣出價 (港元) / 5.617146",
+    " ## 貨幣 / CHF || 買入價 (港元) / 9.395325 || 賣出價 (港元) / 9.511074"
+   ],
    "rows": 0,
-   "fx": [],
+   "fx": [
+    "AUD",
+    "CNY",
+    "GBP",
+    "JPY",
+    "USD"
+   ],
    "sample": ""
+  },
+  {
+   "bank": "publicbank",
+   "url": "https://www.publicbank.com.hk/tc",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.publicbank.com.hk/tc/",
+   "tables": 0,
+   "title": "大眾銀行(香港)有限公司 | 大眾銀行（香港）",
+   "textLen": 1291,
+   "mode": "text",
+   "rows": 5,
+   "fx": [],
+   "sample": "HKD 7日*=11, HKD 12個月*=3.35, CNY 3個月*=1.1, USD 12個月*=4.2, AUD 12個月*=3.1"
+  },
+  {
+   "bank": "fubon",
+   "url": "https://www.fubonbank.com.hk/tc/deposit/latest-promotions/new-customers-promotion.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.fubonbank.com.hk/tc/deposit/latest-promotions/new-customers-promotion.html",
+   "tables": 5,
+   "title": "定期存款優惠 | 富邦銀行",
+   "textLen": 4538,
+   "rows": 97,
+   "fx": [],
+   "sample": "HKD 3個月*=3.2, USD 3個月*=4.45, AUD 3個月*=4.8, HKD 6個月*=3.4, AUD 6個月*=4.8, HKD 9個月*=3.4, AUD 9個月*=4.8, HKD 12個月*=3.55, AUD 12個月*=4.8, HKD 1個月*=2.55, HKD 2個月*=2.65, HKD 4個月*=3.1, USD 1個月*=4.05, USD 2個月*=4.2"
   },
   {
    "bank": "dbs",
@@ -1949,16 +1927,38 @@
    "sample": ""
   },
   {
-   "bank": "publicbank",
-   "url": "https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_PremierSavingsPromotion",
+   "bank": "chonghing",
+   "url": "https://www.chbank.com/tc/personal/deposits",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_PremierSavingsPromotion",
+   "finalUrl": "https://www.chbank.com/tc/personal/deposits",
    "tables": 0,
-   "title": "尊尚儲蓄推廣 | 大眾銀行（香港）",
-   "textLen": 1129,
+   "title": "",
+   "textLen": 152,
    "rows": 0,
    "fx": [],
+   "sample": ""
+  },
+  {
+   "bank": "publicbank",
+   "url": "https://www.publicbank.com.hk/tc/usefultools/rates/foreignexchangerates",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.publicbank.com.hk/tc/usefultools/rates/foreignexchangerates",
+   "tables": 1,
+   "title": "外幣兌換價 | 大眾銀行（香港）",
+   "textLen": 996,
+   "debug": [
+    " | 已導航到主內容 | 外幣兌換價 | 最後更新時間：(香港時間) 28-10-2026 09:29 | 電匯電匯現鈔 ## 貨幣 / 買入（電匯） / 賣出（電匯） / 買入（現鈔） / 賣出（現鈔） ||  || 美元 / 7.8370 / 7.8520 / 7.7700 / 7.9460"
+   ],
+   "rows": 0,
+   "fx": [
+    "USD",
+    "JPY",
+    "GBP",
+    "AUD",
+    "CNY"
+   ],
    "sample": ""
   },
   {
@@ -1980,69 +1980,6 @@
    "sample": ""
   },
   {
-   "bank": "dbs",
-   "url": "https://www.dbs.com.hk/personal/ExchangeRate.page",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.dbs.com.hk/personal/rates-online/foreign-currency-foreign-exchange.page",
-   "tables": 26,
-   "title": "Currency Exchange Rate | DBS Hong Kong",
-   "textLen": 1888,
-   "debug": [
-    "SEKSGDUSD | Effective Date :28/10/2026 Last Updated :04:40AM ## Currency / AUD || Buy Rate (HKD) / 5.467217 || Sell Rate (HKD) / 5.553874",
-    " ## Currency / CAD || Buy Rate (HKD) / 5.544971 || Sell Rate (HKD) / 5.619899",
-    " ## Currency / CHF || Buy Rate (HKD) / 9.403503 || Sell Rate (HKD) / 9.515432"
-   ],
-   "rows": 0,
-   "fx": [
-    "AUD",
-    "CNY",
-    "GBP",
-    "JPY",
-    "USD"
-   ],
-   "sample": ""
-  },
-  {
-   "bank": "fubon",
-   "url": "https://www.fubonbank.com.hk/tc/deposit/latest-promotions/new-customers-promotion.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.fubonbank.com.hk/tc/deposit/latest-promotions/new-customers-promotion.html",
-   "tables": 5,
-   "title": "定期存款優惠 | 富邦銀行",
-   "textLen": 4538,
-   "rows": 97,
-   "fx": [],
-   "sample": "HKD 3個月*=3.2, USD 3個月*=4.45, AUD 3個月*=4.8, HKD 6個月*=3.4, AUD 6個月*=4.8, HKD 9個月*=3.4, AUD 9個月*=4.8, HKD 12個月*=3.55, AUD 12個月*=4.8, HKD 1個月*=2.55, HKD 2個月*=2.65, HKD 4個月*=3.1, USD 1個月*=4.05, USD 2個月*=4.2"
-  },
-  {
-   "bank": "chonghing",
-   "url": "https://www.chbank.com/tc/personal/deposits",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.chbank.com/tc/personal/deposits",
-   "tables": 0,
-   "title": "",
-   "textLen": 150,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "publicbank",
-   "url": "https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_FixedDeposit",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_FixedDeposit",
-   "tables": 0,
-   "title": "定期存款 | 大眾銀行（香港）",
-   "textLen": 795,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
    "bank": "chonghing",
    "url": "https://www.chbank.com/tc/personal/index.shtml",
    "ok": true,
@@ -2057,26 +1994,93 @@
   },
   {
    "bank": "publicbank",
-   "url": "https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_ForeignExchangeGrowthBonus",
+   "url": "https://www.publicbank.com.hk/tc/retailbanking/deposit/RetailBanking-RetailDeposit-FixedDeposit-FixedDeposit",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_ForeignExchangeGrowthBonus",
+   "finalUrl": "https://www.publicbank.com.hk/tc/retailbanking/deposit/RetailBanking-RetailDeposit-FixedDeposit-FixedDeposit",
    "tables": 0,
-   "title": "外幣兌換增值賞 | 大眾銀行（香港）",
-   "textLen": 908,
+   "title": "定期存款 | 大眾銀行（香港）",
+   "textLen": 689,
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
+   "bank": "dbs",
+   "url": "https://www.dbs.com.hk/personal/ExchangeRate.page",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.dbs.com.hk/personal/rates-online/foreign-currency-foreign-exchange.page",
+   "tables": 26,
+   "title": "Currency Exchange Rate | DBS Hong Kong",
+   "textLen": 1888,
+   "debug": [
+    "SEKSGDUSD | Effective Date :28/10/2026 Last Updated :09:30AM ## Currency / AUD || Buy Rate (HKD) / 5.478213 || Sell Rate (HKD) / 5.566097",
+    " ## Currency / CAD || Buy Rate (HKD) / 5.541381 || Sell Rate (HKD) / 5.617146",
+    " ## Currency / CHF || Buy Rate (HKD) / 9.395325 || Sell Rate (HKD) / 9.511074"
+   ],
+   "rows": 0,
+   "fx": [
+    "AUD",
+    "CNY",
+    "GBP",
+    "JPY",
+    "USD"
+   ],
+   "sample": ""
+  },
+  {
+   "bank": "publicbank",
+   "url": "https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_Double11Promotion",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_Double11Promotion",
+   "tables": 0,
+   "title": "雙11推廣 | 大眾銀行（香港）",
+   "textLen": 848,
+   "mode": "text",
+   "rows": 2,
+   "fx": [],
+   "sample": "HKD 6個月*=0.5, HKD 7日*=11"
+  },
+  {
+   "bank": "fubon",
+   "url": "https://www.fubonbank.com.hk/tc/deposit/latest-promotions/fd-evergreen-promotion.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.fubonbank.com.hk/tc/deposit/latest-promotions/fd-evergreen-promotion.html",
+   "tables": 2,
+   "title": "外幣定期存款優惠 | 富邦銀行",
+   "textLen": 2554,
+   "rows": 9,
+   "fx": [],
+   "sample": "GBP 7日*=15.38, CNY 7日*=12.88, USD 7日*=12.88, HKD 7日*=6.88, AUD 1個月*=8.88, GBP 1個月*=5.38, CNY 1個月*=4.38, USD 1個月*=5.88, HKD 1個月*=3.38"
+  },
+  {
+   "bank": "chonghing",
+   "url": "https://www.chbank.com",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.chbank.com/tc/homepage.shtml",
+   "tables": 1,
+   "title": "創興銀行 - 主頁 個人及商業銀行服務 | 存款 | 投資 | 保險 | 跨境金融",
+   "textLen": 1429,
+   "debug": [
+    "賬之結欠 (港幣/人民幣) 30,000 年息 (%) 10% | 以下列表及數據只供參考，並不反映客戶之戶口實際狀況。 ## 假設客戶没有因此卡而產生額外費用，並每月繳付： / 客戶清還結欠之時間約為： / 客戶最後還款總額估計為： || a. 最低還款額* / 月份 / 港幣 / 人民幣 || b. 港幣 / 人民幣 / 36 個月 / 港幣 / 人民幣"
+   ],
    "rows": 0,
    "fx": [],
    "sample": ""
   },
   {
    "bank": "publicbank",
-   "url": "https://www.publicbank.com.hk/tc/promotions/Promotions_OtherBankingServices/Promotion_SharesMarginFinancingPromotion",
+   "url": "https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_FixedDeposit",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.publicbank.com.hk/tc/promotions/Promotions_OtherBankingServices/Promotion_SharesMarginFinancingPromotion",
+   "finalUrl": "https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_FixedDeposit",
    "tables": 0,
-   "title": "證券保證金交易推廣 | 大眾銀行（香港）",
-   "textLen": 1748,
+   "title": "定期存款 | 大眾銀行（香港）",
+   "textLen": 801,
    "rows": 0,
    "fx": [],
    "sample": ""
@@ -2100,72 +2104,17 @@
    "sample": ""
   },
   {
-   "bank": "fubon",
-   "url": "https://www.fubonbank.com.hk/tc/deposit/latest-promotions/fd-evergreen-promotion.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.fubonbank.com.hk/tc/deposit/latest-promotions/fd-evergreen-promotion.html",
-   "tables": 2,
-   "title": "外幣定期存款優惠 | 富邦銀行",
-   "textLen": 2554,
-   "rows": 9,
-   "fx": [],
-   "sample": "GBP 7日*=15.38, CNY 7日*=12.88, USD 7日*=12.88, HKD 7日*=6.88, AUD 1個月*=8.88, GBP 1個月*=5.38, CNY 1個月*=4.38, USD 1個月*=5.88, HKD 1個月*=3.38"
-  },
-  {
    "bank": "publicbank",
-   "url": "https://www.publicbank.com.hk/tc/usefultools/rates/depositinterestrates",
+   "url": "https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_PremierSavingsPromotion",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.publicbank.com.hk/tc/usefultools/rates/depositinterestrates",
-   "tables": 6,
-   "title": "存‭款年利率 | 大眾銀行（香港）",
-   "textLen": 1968,
-   "rows": 54,
-   "fx": [],
-   "sample": "HKD 7日=0.6, HKD 14日=0.8, HKD 1個月=2.3, HKD 2個月=2.45, HKD 3個月=2.85, HKD 6個月=2.95, HKD 12個月=3.35, USD 7日=1, JPY 7日=0.15, GBP 7日=1.2, AUD 7日=1.9, CNY 7日=0.7, USD 14日=1.15, JPY 14日=0.2"
-  },
-  {
-   "bank": "chonghing",
-   "url": "https://www.chbank.com",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.chbank.com/tc/homepage.shtml",
-   "tables": 1,
-   "title": "創興銀行 - 主頁 個人及商業銀行服務 | 存款 | 投資 | 保險 | 跨境金融",
-   "textLen": 1429,
-   "debug": [
-    "賬之結欠 (港幣/人民幣) 30,000 年息 (%) 10% | 以下列表及數據只供參考，並不反映客戶之戶口實際狀況。 ## 假設客戶没有因此卡而產生額外費用，並每月繳付： / 客戶清還結欠之時間約為： / 客戶最後還款總額估計為： || a. 最低還款額* / 月份 / 港幣 / 人民幣 || b. 港幣 / 人民幣 / 36 個月 / 港幣 / 人民幣"
-   ],
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "shacom",
-   "url": "https://www.shacombank.com.hk/tch/personal/deposits/fixed/fixed.jsp",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.shacombank.com.hk/tch/personal/deposits/fixed/fixed.jsp",
+   "finalUrl": "https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_PremierSavingsPromotion",
    "tables": 0,
-   "title": "一般定期存款",
-   "textLen": 1086,
+   "title": "尊尚儲蓄推廣 | 大眾銀行（香港）",
+   "textLen": 1135,
    "rows": 0,
    "fx": [],
    "sample": ""
-  },
-  {
-   "bank": "ncb",
-   "url": "https://www.ncb.com.hk/nanyang_bank/html/14ac.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.ncb.com.hk/nanyang_bank/html/14ac.html",
-   "tables": 14,
-   "title": "利率/匯價 - 存款利率",
-   "textLen": 9803,
-   "rows": 86,
-   "fx": [],
-   "sample": "CNY 7日=0.3, CNY 14日=0.3, CNY 1個月=0.5, CNY 2個月=0.5, CNY 3個月=0.55, CNY 6個月=0.6, CNY 12個月=0.6, HKD 7日=0.01, HKD 14日=0.01, HKD 1個月=0.01, HKD 2個月=0.01, HKD 3個月=0.01, HKD 6個月=0.01, HKD 9個月=0.01"
   },
   {
    "bank": "fubon",
@@ -2181,6 +2130,19 @@
    "sample": "GBP 7日*=15.38, CNY 7日*=12.88, USD 7日*=12.88, HKD 7日*=6.88, AUD 1個月*=8.88, GBP 1個月*=5.38, CNY 1個月*=4.38, USD 1個月*=5.88, HKD 1個月*=3.38"
   },
   {
+   "bank": "shacom",
+   "url": "https://www.shacombank.com.hk/tch/personal/deposits/fixed/fixed.jsp",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.shacombank.com.hk/tch/personal/deposits/fixed/fixed.jsp",
+   "tables": 0,
+   "title": "一般定期存款",
+   "textLen": 1086,
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
    "bank": "chonghing",
    "url": "https://www.chbank.com/tc/personal/banking-services/account-services/hkd-foreign-currency-savings-deposit/index.shtml",
    "ok": true,
@@ -2194,19 +2156,14 @@
    "sample": ""
   },
   {
-   "bank": "shacom",
-   "url": "https://www.shacombank.com.hk/tch/personal/deposits/mini/mindeposits.jsp",
+   "bank": "publicbank",
+   "url": "https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_ForeignExchangeGrowthBonus",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.shacombank.com.hk/tch/personal/deposits/mini/mindeposits.jsp",
-   "tables": 6,
-   "title": "不同貨幣的最低開戶存款額",
-   "textLen": 1301,
-   "debug": [
-    "務簡介 專享優惠 綠色通道 服務簡介 尊享優勢 國際網絡 | 存款 | 存款 | 不同貨幣的最低開戶存款額 | 支票存款 ## 貨幣 / 最低開戶存款額(原幣計算) || 港元 (HKD) / 5,000 || 美元 (USD) / 100",
-    "00 日圓 (JPY) 100,000 歐羅 (EUR) 1,000 新加坡元 (SGD) 1,000 | 簡便儲蓄存款 ## 貨幣 / 最低開戶存款額(原幣計算) || 港元(HKD) / 1,000 || 美元(USD) / 100",
-    " 100,000 歐羅(EUR) 1,000 人民幣(CNY) 100 新加坡元(SGD) 1,000 | 存摺儲蓄存款 ## 貨幣 / 最低開戶存款額(原幣計算) || 港元(HKD)* / 100 || 美元(USD) / 100"
-   ],
+   "finalUrl": "https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_ForeignExchangeGrowthBonus",
+   "tables": 0,
+   "title": "外幣兌換增值賞 | 大眾銀行（香港）",
+   "textLen": 914,
    "rows": 0,
    "fx": [],
    "sample": ""
@@ -2222,7 +2179,7 @@
    "textLen": 2242,
    "debug": [
     " ## 一般查詢 / 一般查詢 || 港元最優惠利率 / 5.375% p.a. || 美元最優惠利率 / 6.750% p.a.",
-    "一般查詢 港元最優惠利率 5.375% p.a. 美元最優惠利率 6.750% p.a. 樓宇按揭利率 按此查詢有關詳情 ## 外幣匯價 / 外幣匯價 / 外幣匯價 || 貨幣 / 買入 / 賣出 || 人民幣 / 1.1698 / 1.1834",
+    "一般查詢 港元最優惠利率 5.375% p.a. 美元最優惠利率 6.750% p.a. 樓宇按揭利率 按此查詢有關詳情 ## 外幣匯價 / 外幣匯價 / 外幣匯價 || 貨幣 / 買入 / 賣出 || 人民幣 / 1.1700 / 1.1836",
     " ## 富邦magi©money manager港元有息支票戶口 / 富邦magi©money manager港元有息支票戶口 || 戶口結餘 (港元) / 年利率 || 10,000元以下 / 0.00%"
    ],
    "rows": 0,
@@ -2262,14 +2219,71 @@
    "sample": ""
   },
   {
-   "bank": "ncb",
-   "url": "https://www.ncb.com.hk/nanyang_bank/html/121023.html",
+   "bank": "publicbank",
+   "url": "https://www.publicbank.com.hk/tc/promotions/Promotions_OtherBankingServices/Promotion_SharesMarginFinancingPromotion",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.ncb.com.hk/nanyang_bank/html/121023.html",
+   "finalUrl": "https://www.publicbank.com.hk/tc/promotions/Promotions_OtherBankingServices/Promotion_SharesMarginFinancingPromotion",
    "tables": 0,
-   "title": "定期存款 – 南洋商業銀行",
-   "textLen": 2497,
+   "title": "證券保證金交易推廣 | 大眾銀行（香港）",
+   "textLen": 1754,
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
+   "bank": "shacom",
+   "url": "https://www.shacombank.com.hk/tch/personal/deposits/mini/mindeposits.jsp",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.shacombank.com.hk/tch/personal/deposits/mini/mindeposits.jsp",
+   "tables": 6,
+   "title": "不同貨幣的最低開戶存款額",
+   "textLen": 1301,
+   "debug": [
+    "務簡介 專享優惠 綠色通道 服務簡介 尊享優勢 國際網絡 | 存款 | 存款 | 不同貨幣的最低開戶存款額 | 支票存款 ## 貨幣 / 最低開戶存款額(原幣計算) || 港元 (HKD) / 5,000 || 美元 (USD) / 100",
+    "00 日圓 (JPY) 100,000 歐羅 (EUR) 1,000 新加坡元 (SGD) 1,000 | 簡便儲蓄存款 ## 貨幣 / 最低開戶存款額(原幣計算) || 港元(HKD) / 1,000 || 美元(USD) / 100",
+    " 100,000 歐羅(EUR) 1,000 人民幣(CNY) 100 新加坡元(SGD) 1,000 | 存摺儲蓄存款 ## 貨幣 / 最低開戶存款額(原幣計算) || 港元(HKD)* / 100 || 美元(USD) / 100"
+   ],
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
+   "bank": "publicbank",
+   "url": "https://www.publicbank.com.hk/tc/usefultools/rates/depositinterestrates",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.publicbank.com.hk/tc/usefultools/rates/depositinterestrates",
+   "tables": 6,
+   "title": "存‭款年利率 | 大眾銀行（香港）",
+   "textLen": 1968,
+   "rows": 54,
+   "fx": [],
+   "sample": "HKD 7日=0.6, HKD 14日=0.8, HKD 1個月=2.3, HKD 2個月=2.55, HKD 3個月=3, HKD 6個月=3, HKD 12個月=3.35, USD 7日=1, JPY 7日=0.15, GBP 7日=1.2, AUD 7日=1.9, CNY 7日=0.7, USD 14日=1.15, JPY 14日=0.2"
+  },
+  {
+   "bank": "ncb",
+   "url": "https://www.ncb.com.hk/nanyang_bank/html/14ac.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.ncb.com.hk/nanyang_bank/html/14ac.html",
+   "tables": 14,
+   "title": "利率/匯價 - 存款利率",
+   "textLen": 8284,
+   "rows": 86,
+   "fx": [],
+   "sample": "CNY 7日=0.3, CNY 14日=0.3, CNY 1個月=0.5, CNY 2個月=0.5, CNY 3個月=0.55, CNY 6個月=0.6, CNY 12個月=0.6, HKD 7日=0.01, HKD 14日=0.01, HKD 1個月=0.01, HKD 2個月=0.01, HKD 3個月=0.01, HKD 6個月=0.01, HKD 9個月=0.01"
+  },
+  {
+   "bank": "fubon",
+   "url": "https://www.fubonbank.com.hk/tc/online-services/online-fx/service-overview.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.fubonbank.com.hk/tc/online-services/online-fx/service-overview.html",
+   "tables": 0,
+   "title": "富邦「網上外幣兌換」服務概覽 | 富邦銀行",
+   "textLen": 1243,
    "rows": 0,
    "fx": [],
    "sample": ""
@@ -2314,32 +2328,6 @@
    "sample": ""
   },
   {
-   "bank": "fubon",
-   "url": "https://www.fubonbank.com.hk/tc/online-services/online-fx/service-overview.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.fubonbank.com.hk/tc/online-services/online-fx/service-overview.html",
-   "tables": 0,
-   "title": "富邦「網上外幣兌換」服務概覽 | 富邦銀行",
-   "textLen": 1243,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "ncb",
-   "url": "https://www.ncb.com.hk/nanyang_bank/html/14a.html",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.ncb.com.hk/nanyang_bank/html/14a.html",
-   "tables": 0,
-   "title": "利率/匯價 – 南洋商業銀行",
-   "textLen": 2184,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
    "bank": "chiyu",
    "url": "https://www.chiyubank.com/wcs/trading-rate",
    "ok": false,
@@ -2359,17 +2347,30 @@
    "sample": "USD 7日=0.01, GBP 7日=1, JPY 7日=0.01, CNY 7日=0.4, AUD 7日=0.05, USD 14日=0.02, GBP 14日=1, JPY 14日=0.01, CNY 14日=0.4, AUD 14日=0.05, USD 1個月=0.05, GBP 1個月=1, JPY 1個月=0.01, CNY 1個月=0.45"
   },
   {
-   "bank": "za",
-   "url": "https://bank.za.group/hk/deposit",
+   "bank": "fubon",
+   "url": "https://www.fubonbank.com.hk/tc/sofr.html",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://bank.za.group/hk/deposit",
-   "tables": 1,
-   "title": "存款 | 逢星期二就領存款加息劵！– ZA Bank",
-   "textLen": 6145,
-   "rows": 23,
+   "finalUrl": "https://www.fubonbank.com.hk/tc/sofr.html",
+   "tables": 0,
+   "title": "香港銀行同業拆息定價 | 富邦銀行",
+   "textLen": 433,
+   "rows": 0,
    "fx": [],
-   "sample": "HKD 7日=0.1, CNY 7日=0.1, USD 7日=0.1, GBP 7日=0.01, AUD 7日=0.01, JPY 7日=0.001, HKD 1個月=0.1, CNY 1個月=0.1, USD 1個月=0.1, GBP 1個月=0.01, AUD 1個月=0.01, JPY 1個月=0.001, HKD 3個月=0.51, CNY 3個月=0.31"
+   "sample": ""
+  },
+  {
+   "bank": "ncb",
+   "url": "https://www.ncb.com.hk/nanyang_bank/html/121023.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.ncb.com.hk/nanyang_bank/html/121023.html",
+   "tables": 0,
+   "title": "定期存款 – 南洋商業銀行",
+   "textLen": 2523,
+   "rows": 0,
+   "fx": [],
+   "sample": ""
   },
   {
    "bank": "shacom",
@@ -2385,14 +2386,27 @@
    "sample": ""
   },
   {
-   "bank": "fubon",
-   "url": "https://www.fubonbank.com.hk/tc/sofr.html",
+   "bank": "za",
+   "url": "https://bank.za.group/hk/deposit",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.fubonbank.com.hk/tc/sofr.html",
+   "finalUrl": "https://bank.za.group/hk/deposit",
+   "tables": 1,
+   "title": "存款 | 逢星期二就領存款加息劵！– ZA Bank",
+   "textLen": 6145,
+   "rows": 23,
+   "fx": [],
+   "sample": "HKD 7日=0.1, CNY 7日=0.1, USD 7日=0.1, GBP 7日=0.01, AUD 7日=0.01, JPY 7日=0.001, HKD 1個月=0.1, CNY 1個月=0.1, USD 1個月=0.1, GBP 1個月=0.01, AUD 1個月=0.01, JPY 1個月=0.001, HKD 3個月=0.51, CNY 3個月=0.31"
+  },
+  {
+   "bank": "ncb",
+   "url": "https://www.ncb.com.hk/nanyang_bank/html/14a.html",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.ncb.com.hk/nanyang_bank/html/14a.html",
    "tables": 0,
-   "title": "香港銀行同業拆息定價 | 富邦銀行",
-   "textLen": 433,
+   "title": "利率/匯價 – 南洋商業銀行",
+   "textLen": 2427,
    "rows": 0,
    "fx": [],
    "sample": ""
@@ -2411,6 +2425,20 @@
    "sample": "HKD 1個月*=2.4, USD 1個月*=3.3, CNY 1個月*=0.75, GBP 1個月*=3.4, HKD 3個月*=2.9, USD 3個月*=3.9, CNY 3個月*=1.25, GBP 3個月*=3.55, HKD 6個月*=3.1, USD 6個月*=3.95, CNY 6個月*=1.3, GBP 6個月*=3.55, HKD 12個月*=3.4, USD 12個月*=4"
   },
   {
+   "bank": "chiyu",
+   "url": "https://www.chiyubank.com/cyb/attachDir/2026/10/2026102717195883096.pdf",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.chiyubank.com/cyb/attachDir/2026/10/2026102717195883096.pdf",
+   "tables": 0,
+   "title": "PDF",
+   "textLen": 2272,
+   "mode": "text",
+   "rows": 45,
+   "fx": [],
+   "sample": "HKD 1個月*=2.4, HKD 3個月*=3.1, HKD 4個月*=3.15, HKD 6個月*=3.25, HKD 12個月*=3.35, USD 1個月*=3.5, USD 3個月*=4, USD 4個月*=4, USD 6個月*=4.1, USD 12個月*=4.15, CNY 1個月*=0.8, CNY 3個月*=1.35, CNY 4個月*=1.35, CNY 6個月*=1.4"
+  },
+  {
    "bank": "za",
    "url": "https://bank.za.group/hk/app-download",
    "ok": true,
@@ -2422,33 +2450,6 @@
    "rows": 0,
    "fx": [],
    "sample": ""
-  },
-  {
-   "bank": "mox",
-   "url": "https://mox.com/zh/promotions/time-deposit",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://mox.com/zh/promotions/time-deposit/",
-   "tables": 3,
-   "title": "定期存款 | Mox",
-   "textLen": 1785,
-   "rows": 12,
-   "fx": [],
-   "sample": "USD 1個月*=6.8, USD 3個月*=3.8, USD 6個月*=3.85, USD 9個月*=3.85, USD 12個月*=3.85, HKD 3個月*=2.65, HKD 6個月*=3, HKD 9個月*=3.1, HKD 12個月*=3.2, HKD 24個月*=3.2, USD 7日*=15"
-  },
-  {
-   "bank": "chiyu",
-   "url": "https://www.chiyubank.com/cyb/attachDir/2026/10/2026102617445033709.pdf",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.chiyubank.com/cyb/attachDir/2026/10/2026102617445033709.pdf",
-   "tables": 0,
-   "title": "PDF",
-   "textLen": 2266,
-   "mode": "text",
-   "rows": 45,
-   "fx": [],
-   "sample": "HKD 1個月*=2.4, HKD 3個月*=3.1, HKD 4個月*=3.15, HKD 6個月*=3.25, HKD 12個月*=3.35, USD 1個月*=3.5, USD 3個月*=4, USD 4個月*=4, USD 6個月*=4.05, USD 12個月*=4.15, CNY 1個月*=0.8, CNY 3個月*=1.35, CNY 4個月*=1.35, CNY 6個月*=1.35"
   },
   {
    "bank": "chiyu",
@@ -2464,17 +2465,17 @@
    "sample": "HKD 7日=0.125, HKD 14日=0.125, HKD 1個月=0.125, HKD 2個月=0.125, HKD 3個月=0.15, HKD 6個月=0.175, HKD 9個月=0.175, HKD 12個月=0.175, HKD 15個月=0.175, HKD 18個月=0.175, HKD 24個月=0.175, HKD 36個月=0.175"
   },
   {
-   "bank": "welab",
-   "url": "https://www.welab.bank/zh/feature/gosave_2/",
+   "bank": "mox",
+   "url": "https://mox.com/zh/promotions/time-deposit",
    "ok": true,
    "status": 200,
-   "finalUrl": "https://www.welab.bank/zh/feature/gosave_2/",
-   "tables": 6,
-   "title": "定期存款特高年利率｜WeLab Bank",
-   "textLen": 14686,
-   "rows": 18,
+   "finalUrl": "https://mox.com/zh/promotions/time-deposit/",
+   "tables": 3,
+   "title": "定期存款 | Mox",
+   "textLen": 1785,
+   "rows": 12,
    "fx": [],
-   "sample": "HKD 3個月*=2.95, HKD 6個月*=3.1, HKD 12個月*=3.25, HKD 13個月*=3.35, HKD 18個月*=3.15, HKD 24個月*=3.15, USD 1個月*=3.5, USD 3個月*=3.8, USD 6個月*=4, USD 12個月*=4.05, USD 18個月*=4.15, CNY 3個月*=1.15, CNY 6個月*=1.15, AUD 3個月*=4"
+   "sample": "USD 1個月*=6.8, USD 3個月*=3.8, USD 6個月*=3.85, USD 9個月*=3.85, USD 12個月*=3.85, HKD 3個月*=2.65, HKD 6個月*=3, HKD 9個月*=3.1, HKD 12個月*=3.2, HKD 24個月*=3.2, USD 7日*=15"
   },
   {
    "bank": "shacom",
@@ -2488,6 +2489,19 @@
    "rows": 30,
    "fx": [],
    "sample": "HKD 7日=0.125, HKD 14日=0.125, HKD 1個月=0.15, HKD 2個月=0.175, HKD 3個月=0.185, HKD 6個月=0.2, HKD 9個月=0.25, HKD 12個月=0.3, HKD 15個月=0.3, HKD 18個月=0.3"
+  },
+  {
+   "bank": "welab",
+   "url": "https://www.welab.bank/zh/feature/gosave_2/",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.welab.bank/zh/feature/gosave_2/",
+   "tables": 6,
+   "title": "定期存款特高年利率｜WeLab Bank",
+   "textLen": 14686,
+   "rows": 18,
+   "fx": [],
+   "sample": "HKD 3個月*=2.95, HKD 6個月*=3.1, HKD 12個月*=3.25, HKD 13個月*=3.35, HKD 18個月*=3.15, HKD 24個月*=3.15, USD 1個月*=3.5, USD 3個月*=3.8, USD 6個月*=4, USD 12個月*=4.05, USD 18個月*=4.15, CNY 3個月*=1.15, CNY 6個月*=1.15, AUD 3個月*=4"
   },
   {
    "bank": "za",
@@ -2529,22 +2543,6 @@
    "sample": ""
   },
   {
-   "bank": "mox",
-   "url": "https://mox.com/zh/promotions/flexiboostsavings",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://mox.com/zh/promotions/flexiboostsavings/",
-   "tables": 1,
-   "title": "Mox | FlexiBoost靈活穩賺高達3.5%活存年利率",
-   "textLen": 1645,
-   "debug": [
-    "，輕鬆追蹤戶口狀況，儲錢自然更簡單。 | 你更可以因應自己的理財需要，靈活選擇港元或美元儲蓄。高息活存年利率，一眼睇清： ## FlexiBoost 優惠期 / FlexiBoost年利率（港元） / FlexiBoost年利率（美元） || 首30日 / 2.5% / 3.3% || 其後30日 / 2.6% / 3.4%"
-   ],
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
    "bank": "livi",
    "url": "https://www.livibank.com/zh_HK/features/livisave.html",
    "ok": true,
@@ -2571,6 +2569,22 @@
    "sample": ""
   },
   {
+   "bank": "mox",
+   "url": "https://mox.com/zh/promotions/flexiboostsavings",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://mox.com/zh/promotions/flexiboostsavings/",
+   "tables": 1,
+   "title": "Mox | FlexiBoost靈活穩賺高達3.5%活存年利率",
+   "textLen": 1645,
+   "debug": [
+    "，輕鬆追蹤戶口狀況，儲錢自然更簡單。 | 你更可以因應自己的理財需要，靈活選擇港元或美元儲蓄。高息活存年利率，一眼睇清： ## FlexiBoost 優惠期 / FlexiBoost年利率（港元） / FlexiBoost年利率（美元） || 首30日 / 2.5% / 3.3% || 其後30日 / 2.6% / 3.4%"
+   ],
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
    "bank": "welab",
    "url": "https://www.welab.bank/zh/legal/gosave_2",
    "ok": true,
@@ -2582,33 +2596,6 @@
    "rows": 0,
    "fx": [],
    "sample": ""
-  },
-  {
-   "bank": "mox",
-   "url": "https://mox.com/zh/promotions/asia-miles-12m-or-24m-time-deposit",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://mox.com/zh/promotions/asia-miles-12m-or-24m-time-deposit/",
-   "tables": 1,
-   "title": "開立定期存款里數即時賺，全城最快！話飛就飛 | Mox",
-   "textLen": 1485,
-   "debug": [
-    "通」里數定期存款 現已支援港元及美元，新資金或現有資金均可。隨心選擇，里數等你賺取。 | 更多選擇。更多里數。更多可能。 ## 定期本金（新資金） / 年期 / 你可獲得的「亞洲萬里通」里數 / 你可兌換的航點及客艙級別^ || HKD110,240 / 6個月 / 14,000里數 / 台北、河內、夏門的經濟客艙來回機票一張 || USD36,111 / 3個月 / 26,000里數 / 東京、大阪、札幌的經濟客艙來回機票一張"
-   ],
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "fusion",
-   "url": "https://www.fusionbank.com",
-   "ok": false,
-   "status": 567,
-   "finalUrl": "https://www.fusionbank.com/",
-   "tables": 0,
-   "title": "请求已被拦截",
-   "textLen": 231,
-   "error": "HTTP 567"
   },
   {
    "bank": "livi",
@@ -2625,14 +2612,41 @@
   },
   {
    "bank": "fusion",
+   "url": "https://www.fusionbank.com",
+   "ok": false,
+   "status": 567,
+   "finalUrl": "https://www.fusionbank.com/",
+   "tables": 0,
+   "title": "请求已被拦截",
+   "textLen": 231,
+   "error": "HTTP 567"
+  },
+  {
+   "bank": "fusion",
    "url": "https://www.fusionbank.com/deposit.html",
    "ok": false,
    "status": 567,
    "finalUrl": "https://www.fusionbank.com/deposit.html",
    "tables": 0,
    "title": "请求已被拦截",
-   "textLen": 232,
+   "textLen": 231,
    "error": "HTTP 567"
+  },
+  {
+   "bank": "mox",
+   "url": "https://mox.com/zh/promotions/asia-miles-12m-or-24m-time-deposit",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://mox.com/zh/promotions/asia-miles-12m-or-24m-time-deposit/",
+   "tables": 1,
+   "title": "開立定期存款里數即時賺，全城最快！話飛就飛 | Mox",
+   "textLen": 1485,
+   "debug": [
+    "通」里數定期存款 現已支援港元及美元，新資金或現有資金均可。隨心選擇，里數等你賺取。 | 更多選擇。更多里數。更多可能。 ## 定期本金（新資金） / 年期 / 你可獲得的「亞洲萬里通」里數 / 你可兌換的航點及客艙級別^ || HKD110,240 / 6個月 / 14,000里數 / 台北、河內、夏門的經濟客艙來回機票一張 || USD36,111 / 3個月 / 26,000里數 / 東京、大阪、札幌的經濟客艙來回機票一張"
+   ],
+   "rows": 0,
+   "fx": [],
+   "sample": ""
   },
   {
    "bank": "paob",
@@ -2661,6 +2675,19 @@
    "sample": ""
   },
   {
+   "bank": "livi",
+   "url": "https://www.livibank.com/zh_HK/features",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://www.livibank.com/",
+   "tables": 0,
+   "title": "Home | livi bank Hong Kong",
+   "textLen": 2352,
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
    "bank": "mox",
    "url": "https://mox.com/zh/promotions/mox-emirates",
    "ok": true,
@@ -2672,19 +2699,6 @@
    "debug": [
     "起至2026年11月30日，憑Mox Card用優惠碼「 HKMOX26」於阿聯酋航空預訂機票專享即減優惠，全港獨家🔥 ## 目的地（香港出發） / 客艙級別 / 獨家即減優惠 / 點為之「全城最好」？ || 全球熱門航點（杜拜及曼谷除外） / 商務客艙 / 單程：➖HKD250 來回：➖HKD500 / 🏆 全港最高折扣 || 全球熱門航點（杜拜及曼谷除外） / 尊尚經濟客艙 / 單程：➖HKD150 來回：➖HKD300 / 👑 全港獨家"
    ],
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "livi",
-   "url": "https://www.livibank.com/zh_HK/features",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://www.livibank.com/",
-   "tables": 0,
-   "title": "Home | livi bank Hong Kong",
-   "textLen": 2352,
    "rows": 0,
    "fx": [],
    "sample": ""
@@ -2702,19 +2716,6 @@
     "收費除非另有說明，否則從04/2026開始生效了解更多 | 最優惠利率 | 現時平安數字銀行的港元最優惠利率：5.25% ## 生效日期 / 平安數字銀行的港元最優惠利率 || 2025-11-14 / 5.25% || 2025-10-03 / 5.375%",
     "% | 上述資料僅供參考。港元最優惠利率將根據本行不時公佈的利率為準。 | 現時平安數字銀行的美元最優惠利率：6.25% ## 生效日期 / 平安數字銀行的美元最優惠利率 || 2026-10-02 / 6.25% || 2025-12-19 / 6.00%"
    ],
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "mox",
-   "url": "https://mox.com/zh/promotions/mox-payroll",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://mox.com/zh/promotions/mox-payroll/",
-   "tables": 0,
-   "title": "Mox-Payroll-2026",
-   "textLen": 1170,
    "rows": 0,
    "fx": [],
    "sample": ""
@@ -2746,6 +2747,19 @@
    "sample": "HKD 7日=0.01, HKD 1個月=0.1, HKD 2個月=1.75, HKD 3個月=2.55, HKD 4個月=2.8, HKD 6個月=2.95, HKD 9個月=3.15, HKD 12個月=3.4, USD 7日=0.05, USD 1個月=2.9, USD 2個月=3.15, USD 3個月=3.6, USD 4個月=3.7, USD 6個月=3.8"
   },
   {
+   "bank": "mox",
+   "url": "https://mox.com/zh/promotions/mox-payroll",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://mox.com/zh/promotions/mox-payroll/",
+   "tables": 0,
+   "title": "Mox-Payroll-2026",
+   "textLen": 1170,
+   "rows": 0,
+   "fx": [],
+   "sample": ""
+  },
+  {
    "bank": "antbank",
    "url": "https://www.antbank.hk",
    "ok": true,
@@ -2754,24 +2768,6 @@
    "tables": 0,
    "title": "螞蟻銀行（香港）",
    "textLen": 2699,
-   "rows": 0,
-   "fx": [],
-   "sample": ""
-  },
-  {
-   "bank": "mox",
-   "url": "https://mox.com/zh/promotions/Mission-Bonus-Rate",
-   "ok": true,
-   "status": 200,
-   "finalUrl": "https://mox.com/zh/promotions/Mission-Bonus-Rate/",
-   "tables": 5,
-   "title": "Mission Bonus 額外年利率 | Mox",
-   "textLen": 4619,
-   "debug": [
-    "000或等值 (根據售出的貨幣金額) 存款任務：存入比上月平均活期存款結餘²多於HKD15,000的存款任務合資格結餘³ ## 任務 / 合資格活期存款 (港元/美元)⁴ || 戶口出糧 / 1.5%年利率 || 投資* / 1%年利率",
-    "reated with Sketch. | 你存放於Mox的活期存款可賺取以下基本活存年利率： | 港元基本活存年利率: ## 港元活期存款 / 基本活存年利率 || 無上限 / 0.001%",
-    "本活存年利率： | 港元基本活存年利率: | 港元活期存款 基本活存年利率 無上限 0.001% | 美元基本活期存款: ## 美元活期存款 / 基本活存年利率 || 無上限 / 0.001%"
-   ],
    "rows": 0,
    "fx": [],
    "sample": ""
@@ -2804,15 +2800,22 @@
    "sample": "USD 1個月*=3, USD 3個月*=3.25"
   },
   {
-   "bank": "antbank",
-   "url": "https://www.antbank.hk/zh-hk",
-   "ok": false,
-   "status": 404,
-   "finalUrl": "https://www.antbank.hk/zh-hk",
-   "tables": 0,
-   "title": "出错了-404",
-   "textLen": 13,
-   "error": "HTTP 404"
+   "bank": "mox",
+   "url": "https://mox.com/zh/promotions/Mission-Bonus-Rate",
+   "ok": true,
+   "status": 200,
+   "finalUrl": "https://mox.com/zh/promotions/Mission-Bonus-Rate/",
+   "tables": 5,
+   "title": "Mission Bonus 額外年利率 | Mox",
+   "textLen": 4619,
+   "debug": [
+    "000或等值 (根據售出的貨幣金額) 存款任務：存入比上月平均活期存款結餘²多於HKD15,000的存款任務合資格結餘³ ## 任務 / 合資格活期存款 (港元/美元)⁴ || 戶口出糧 / 1.5%年利率 || 投資* / 1%年利率",
+    "reated with Sketch. | 你存放於Mox的活期存款可賺取以下基本活存年利率： | 港元基本活存年利率: ## 港元活期存款 / 基本活存年利率 || 無上限 / 0.001%",
+    "本活存年利率： | 港元基本活存年利率: | 港元活期存款 基本活存年利率 無上限 0.001% | 美元基本活期存款: ## 美元活期存款 / 基本活存年利率 || 無上限 / 0.001%"
+   ],
+   "rows": 0,
+   "fx": [],
+   "sample": ""
   },
   {
    "bank": "airstar",
@@ -2828,6 +2831,17 @@
    "sample": ""
   },
   {
+   "bank": "antbank",
+   "url": "https://www.antbank.hk/zh-hk",
+   "ok": false,
+   "status": 404,
+   "finalUrl": "https://www.antbank.hk/zh-hk",
+   "tables": 0,
+   "title": "出错了-404",
+   "textLen": 13,
+   "error": "HTTP 404"
+  },
+  {
    "bank": "welab",
    "url": "https://www.welab.bank/zh/feature/fx-daily-leaderboard",
    "ok": true,
@@ -2835,9 +2849,9 @@
    "finalUrl": "https://www.welab.bank/zh/feature/fx-daily-leaderboard/",
    "tables": 1,
    "title": "匯率全城最低¹及AI格價助你慳最多 | WeLab Bank",
-   "textLen": 3917,
+   "textLen": 3970,
    "debug": [
-    "3配合 AI 匯率比較，幫你唱錢匯錢一律至抵！ | 熱門外幣 | 即睇 WeLab Bank 幫你慳幾多！💰 | 日圓 ## 每 HKD 100,000 慳高達 HKD 599 WeLab Bank 0.04979 (JPY 1 <> HKD) || BOC(HK) 0.05006 || Hang Seng Bank 0.05008"
+    "3配合 AI 匯率比較，幫你唱錢匯錢一律至抵！ | 熱門外幣 | 即睇 WeLab Bank 幫你慳幾多！💰 | 日圓 ## 每 HKD 100,000 慳高達 HKD 679 WeLab Bank 0.04974 (JPY 1 <> HKD) || HSBC 0.05008 || BOC(HK) 0.05004"
    ],
    "rows": 0,
    "fx": [],
