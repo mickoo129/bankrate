@@ -20,6 +20,8 @@ MKPA 工具之一。呢個 repo 只放呢一個工具，獨立部署去 Netlify�
 - 聯絡資料**只用電子名片連結**（`https://api.portfoplus.com/api/v1/adviser/5e41564ab3b1bc00153394db?m=link&r=adviser`），唔好加電話、WhatsApp 號碼、電郵或顧問資料輸入欄。
 - 一定要有「列印 / 存 PDF」掣；列印版有工具名、列印日期、電子名片二維碼同版權行。
 - 唔做深色模式。
+- 頁頭：鎖住喺頂；第一行 icon + 工具名 + 按鈕，手機都要見到工具名；標題欄唔放副名（簡介放內文開頭）。
+- 「分享呢個方案」：用 `mkShare()`，連結包括設定、撳開重現方案，唔可以包括客人姓名。
 - 版面：內容最闊 1320px，兩邊留白 `clamp(16px, 3vw, 32px)`；平板、手機唔可以橫向捲動。
 - Icon：用 `mkpa-tools/_standard/make-icons.py` 產生（宏利綠圓角方塊 + 白色線條），標題旁、瀏覽器分頁、加至主畫面都用同一個；唔好自己換第二個風格。標題旁 icon 大細跟頁頭標題（約 24–40px），唔使硬性統一 32px。
 - 版權行：© 年份 Michael Koo Protection Alliance (MKPA). 版權所有。
