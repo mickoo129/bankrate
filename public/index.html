@@ -17,12 +17,13 @@
 </head>
 <body>
 <div class="mk-print-head"><b>MKPA · 定存息口通｜香港銀行定期息口比較</b><span>列印日期：<span class="mk-print-date"></span></span></div>
-<header class="top">
+<header class="top mk-header">
   <div class="wrap top-in">
     <a class="brand" href="./"><img class="mk-logo" src="favicon.svg" alt="" width="28" height="28">定存息口通</a>
     <div class="top-act">
       <p class="updated" id="updated">讀取中…</p>
-      <button type="button" class="mk-print-btn" onclick="window.print()">列印 / 存 PDF</button>
+      <button type="button" class="mk-share-btn" id="share">分享<span class="mk-long">呢個方案</span></button>
+      <button type="button" class="mk-print-btn" onclick="window.print()">列印<span class="mk-long"> / 存 PDF</span></button>
     </div>
   </div>
   <nav class="wrap tabs" role="tablist" aria-label="功能">
@@ -34,11 +35,11 @@
 </header>
 
 <main class="wrap">
+  <p class="updated-m" id="updatedM" aria-hidden="true"></p>
   <!-- 定期比較 -->
   <section id="tab-rates" class="panel" role="tabpanel">
     <div class="title-row">
       <h1>定期存款息口比較</h1>
-      <button class="btn" id="share" type="button">複製分享連結</button>
     </div>
 
     <div class="filters card">

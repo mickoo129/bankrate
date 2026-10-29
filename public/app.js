@@ -677,9 +677,15 @@
     amountBox($('#amount'));
     amountBox($('#fxAmt'));
     setupPanels();
+    // 分享呢個方案（MKPA 標準）：手機彈分享選單，電腦複製連結；連結包括貨幣、金額、銀行同「我嘅情況」，同而家所在分頁
     $('#share').onclick = async () => {
-      const url = shareUrl();
-      try { await navigator.clipboard.writeText(url); toast('已複製連結，可以貼落 WhatsApp'); }
+      const tab = (document.querySelector('.tabs [aria-selected="true"]') || {}).dataset?.tab || 'rates';
+      const url = shareUrl().replace(/#rates$/, '#' + tab);
+      if (navigator.share && matchMedia('(pointer: coarse)').matches) {
+        try { await navigator.share({ title: document.title, url }); } catch {}
+        return;
+      }
+      try { await navigator.clipboard.writeText(url); toast('已複製連結，客人撳開會見到同一個方案'); }
       catch { window.prompt('複製呢條連結：', url); }
     };
 
@@ -707,11 +713,13 @@
     state.data = data; state.history = hist;
     if (!data) {
       $('#updated').textContent = '暫時讀唔到數據';
+      $('#updatedM').textContent = '暫時讀唔到數據';
       $('#cmp tbody').innerHTML = '<tr><td colspan="6" class="empty-msg">數據檔未準備好，系統第一次更新完成之後就會顯示。</td></tr>';
       return;
     }
     const ok = data.banks.filter((b) => b.status !== 'none').length;
     $('#updated').innerHTML = `更新於 <b>${esc(timeAgo(data.updatedAt))}</b><br>${ok} 間銀行`;
+    $('#updatedM').innerHTML = `息口更新於 <b>${esc(timeAgo(data.updatedAt))}</b> · ${ok} 間銀行`;
     if (state.banks) state.banks = state.banks.filter((id) => data.banks.some((b) => b.id === id));
     renderMe(); renderPicker(); renderRates(); renderFx(); renderTd(); renderTrend(); renderStatus();
   }
