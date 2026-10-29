@@ -530,5 +530,6 @@ body[data-tab="about"]{--pc:var(--mk-cat-7);--pc-soft:var(--mk-cat-7-soft)}
 .tabs button[data-tab="rates"]{--tc:var(--mk-cat-1)} .tabs button[data-tab="fx"]{--tc:var(--mk-cat-2)}
 .tabs button[data-tab="fxtd"]{--tc:var(--mk-cat-3)} .tabs button[data-tab="trend"]{--tc:var(--mk-cat-4)}
 .tabs button::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--tc,var(--mk-cat-7));margin-right:7px;vertical-align:1px;box-shadow:0 0 0 2px rgba(255,255,255,.45)}
-.tabs button[aria-selected='true']{border-bottom-color:transparent;background:var(--pc-soft);color:var(--navy);border-radius:8px 8px 0 0;box-shadow:inset 0 3px 0 var(--pc)}
+.tabs button[aria-selected='true']{border-bottom-color:transparent;background:var(--tc);color:#fff;border-radius:8px 8px 0 0}
+.tabs button[aria-selected='true']::before{background:#fff;box-shadow:none}
 @media print{body{background:#fff!important}}
