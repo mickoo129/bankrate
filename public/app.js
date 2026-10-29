@@ -651,6 +651,7 @@
     const tabs = document.querySelectorAll('.tabs button');
     const show = (name) => {
       tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
+      document.body.dataset.tab = name;
       document.querySelectorAll('.panel').forEach((p) => { p.hidden = p.id !== 'tab-' + name; });
       if (location.hash !== '#' + name) history.replaceState(null, '', location.pathname + location.search + '#' + name);
     };
