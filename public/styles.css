@@ -454,14 +454,14 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
   --mk-max:1320px;                        /* 內容最闊 */
   --mk-gutter:clamp(16px,3vw,32px);       /* 兩邊留白：手機 16px → 桌面 32px */
   /* 分類色盤：主色（圓點、色條、圖表）／ -ink 白底寫字 ／ -soft 淺底 */
-  --mk-cat-1:#2A78D6; --mk-cat-1-ink:#2873CE; --mk-cat-1-soft:#E7EFF9;   /* 醫療／住院 */
-  --mk-cat-2:#6250D6; --mk-cat-2-ink:#6250D6; --mk-cat-2-soft:#E9E7F9;   /* 危疾 */
-  --mk-cat-3:#EB6834; --mk-cat-3-ink:#C94714; --mk-cat-3-soft:#F9ECE7;   /* 人壽／身故 */
-  --mk-cat-4:#0E9AA7; --mk-cat-4-ink:#0C808B; --mk-cat-4-soft:#E7F7F9;   /* 意外 */
-  --mk-cat-5:#C2417A; --mk-cat-5-ink:#C2417A; --mk-cat-5-soft:#F8E8EF;   /* 癌症 */
-  --mk-cat-6:#C99A2E; --mk-cat-6-ink:#8F6D21; --mk-cat-6-soft:#F9F3E7;   /* 儲蓄／退休／強積金 */
-  --mk-cat-7:#5B7086; --mk-cat-7-ink:#5B7086; --mk-cat-7-soft:#EDF0F3;   /* 中性／其他 */
-  --mk-cat-8:#8A5A44; --mk-cat-8-ink:#8A5A44; --mk-cat-8-soft:#F5EEEB;   /* 第8色 */
+  --mk-cat-1:#1E6FE6; --mk-cat-1-ink:#1D6CDF; --mk-cat-1-soft:#E4EEFC;   /* 1 醫療／住院 */
+  --mk-cat-2:#EA6A23; --mk-cat-2-ink:#B7531B; --mk-cat-2-soft:#FCEDE5;   /* 2 人壽／身故 */
+  --mk-cat-3:#9B2FC0; --mk-cat-3-ink:#9B2FC0; --mk-cat-3-soft:#F3E6F7;   /* 3 危疾 */
+  --mk-cat-4:#079BA0; --mk-cat-4-ink:#067D81; --mk-cat-4-soft:#E1F3F4;   /* 4 意外 */
+  --mk-cat-5:#D39A12; --mk-cat-5-ink:#926B0C; --mk-cat-5-soft:#FAF3E3;   /* 5 儲蓄／退休／強積金 */
+  --mk-cat-6:#DB3A64; --mk-cat-6-ink:#CE375E; --mk-cat-6-soft:#FBE7EC;   /* 6 癌症 */
+  --mk-cat-7:#6E7378; --mk-cat-7-ink:#6B7074; --mk-cat-7-soft:#EEEEEF;   /* 7 中性／其他 */
+  --mk-cat-8:#8A5A44; --mk-cat-8-ink:#8A5A44; --mk-cat-8-soft:#F1EBE9;   /* 8 後備 */
 }
 /* 分類 class：加喺元素上就用 var(--c) var(--c-ink) var(--c-soft) */
 .mk-cat-1{--c:var(--mk-cat-1);--c-ink:var(--mk-cat-1-ink);--c-soft:var(--mk-cat-1-soft)}
@@ -520,3 +520,15 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
 /* ===== MKPA 統一標準 完 ===== */
 
 .top .mk-logo { width: 28px; height: 28px; border-radius: 7px; }
+
+/* ===== 分頁底色（MKPA 分類色盤，按次序）：定期 1、匯價 2、外幣定期 3、走勢 4、資料狀態 7 ===== */
+body{--pc:var(--mk-cat-1);--pc-soft:var(--mk-cat-1-soft);background:var(--pc-soft);transition:background-color .2s}
+body[data-tab="fx"]{--pc:var(--mk-cat-2);--pc-soft:var(--mk-cat-2-soft)}
+body[data-tab="fxtd"]{--pc:var(--mk-cat-3);--pc-soft:var(--mk-cat-3-soft)}
+body[data-tab="trend"]{--pc:var(--mk-cat-4);--pc-soft:var(--mk-cat-4-soft)}
+body[data-tab="about"]{--pc:var(--mk-cat-7);--pc-soft:var(--mk-cat-7-soft)}
+.tabs button[data-tab="rates"]{--tc:var(--mk-cat-1)} .tabs button[data-tab="fx"]{--tc:var(--mk-cat-2)}
+.tabs button[data-tab="fxtd"]{--tc:var(--mk-cat-3)} .tabs button[data-tab="trend"]{--tc:var(--mk-cat-4)}
+.tabs button::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--tc,var(--mk-cat-7));margin-right:7px;vertical-align:1px;box-shadow:0 0 0 2px rgba(255,255,255,.45)}
+.tabs button[aria-selected='true']{border-bottom-color:transparent;background:var(--pc-soft);color:var(--navy);border-radius:8px 8px 0 0;box-shadow:inset 0 3px 0 var(--pc)}
+@media print{body{background:#fff!important}}
