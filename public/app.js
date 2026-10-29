@@ -551,8 +551,8 @@
     const from = trend.years ? `${+last.slice(0, 4) - trend.years}${last.slice(4)}` : '0000';
     const pts = h.months.filter(([m]) => m > from);
     const series = [
-      { name: `銀行定期牌價 ${TT[trend.tenor]}（金管局：主要銀行平均）`, key: 'd' + trend.tenor, color: 'var(--accent)' },
-      { name: `參考：HIBOR ${TT[trend.tenor]}（唔係定期息率）`, key: 'h' + trend.tenor, color: 'var(--ink-3)', dash: true },
+      { name: `銀行定期牌價 ${TT[trend.tenor]}（金管局：主要銀行平均）`, key: 'd' + trend.tenor, color: 'var(--mk-cat-1)' },
+      { name: `參考：HIBOR ${TT[trend.tenor]}（唔係定期息率）`, key: 'h' + trend.tenor, color: 'var(--mk-cat-7)', dash: true },
     ].map((sr) => ({ ...sr, pts: pts.filter(([, v]) => v[sr.key] != null).map(([m, v]) => [m, v[sr.key]]) }));
     const all = series.flatMap((s) => s.pts.map((p) => p[1]));
     if (!all.length) { el.innerHTML = '<p class="empty-msg">呢個存期暫時冇數據。</p>'; return; }
