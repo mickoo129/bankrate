@@ -18,20 +18,19 @@
 <body>
 <div class="mk-print-head"><b>MKPA · 定存息口通｜香港銀行定期息口比較</b><span>列印日期：<span class="mk-print-date"></span></span></div>
 <header class="top mk-header">
-  <div class="wrap top-in">
+  <div class="wrap top-in mk-bar">
     <a class="brand" href="./"><img class="mk-logo" src="favicon.svg" alt="" width="28" height="28"><span class="mk-name">定存息口通<small class="mk-sub">香港銀行定期息口及匯價比較</small></span></a>
+    <nav class="tabs mk-tabs" role="tablist" aria-label="功能">
+      <button role="tab" class="mk-tab mk-cat-1" aria-selected="true" data-tab="rates">定期比較</button>
+      <button role="tab" class="mk-tab mk-cat-2" aria-selected="false" data-tab="fx">匯價比較</button>
+      <button role="tab" class="mk-tab mk-cat-3" aria-selected="false" data-tab="fxtd">外幣定期計算</button>
+      <button role="tab" class="mk-tab mk-cat-4" aria-selected="false" data-tab="trend">息口走勢</button>
+    </nav>
     <div class="top-act">
       <p class="updated" id="updated">讀取中…</p>
       <button type="button" class="mk-share-btn" id="share">分享<span class="mk-long">呢個方案</span></button>
       <button type="button" class="mk-print-btn" onclick="window.print()">列印<span class="mk-long"> / 存 PDF</span></button>
     </div>
-  </div>
-  <nav class="wrap tabs" role="tablist" aria-label="功能">
-    <button role="tab" aria-selected="true" data-tab="rates">定期比較</button>
-    <button role="tab" aria-selected="false" data-tab="fx">匯價比較</button>
-    <button role="tab" aria-selected="false" data-tab="fxtd">外幣定期計算</button>
-    <button role="tab" aria-selected="false" data-tab="trend">息口走勢</button>
-  </nav>
 </header>
 
 <main class="wrap">
