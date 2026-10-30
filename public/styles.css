@@ -34,9 +34,9 @@ a { color: var(--accent); }
 
 /* header */
 .top-in { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; }
-.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--mk-deep); text-decoration: none; font-weight: 900; font-size: 1.15rem; letter-spacing: .03em; }
-.updated { margin: 0; font-size: .8rem; color: var(--mk-muted); text-align: right; }
-.updated b { color: var(--mk-ink); font-weight: 500; }
+.brand { display: inline-flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font-weight: 900; font-size: 1.15rem; letter-spacing: .03em; }
+.updated { margin: 0; font-size: .8rem; color: #C9DDD8; text-align: right; }
+.updated b { color: #fff; font-weight: 500; }
 
 .panel { padding: 22px 0 12px; }
 .title-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
@@ -495,24 +495,25 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
   .mk-print-head b{color:var(--mk-deep);font-size:11pt}
 }
 /* 頁頭：統一鎖住喺頂；第一行 icon + 工具名 + 按鈕 */
-/* 頁頭（跟 claimsreport）：淺色底、深色字；第一行 icon＋工具名 → 分頁掣（名右邊）→ 右邊按鈕；平板同手機分頁掣落第二行、左右捲 */
-.mk-header{position:sticky;top:0;z-index:50;background:var(--mk-bg);color:var(--mk-ink);border-bottom:1px solid var(--mk-line)}
+/* 頁頭：深青綠底、白字（分頁掣擺法跟 claimsreport）；第一行 icon＋工具名 → 分頁掣（名右邊）→ 右邊按鈕；平板同手機分頁掣落第二行、左右捲 */
+.mk-header{position:sticky;top:0;z-index:50;background:var(--mk-deep);color:#fff;border-bottom:0}
 .mk-bar{display:flex;align-items:center;gap:16px;min-height:60px}
 .mk-title{display:flex;align-items:center;gap:10px;min-width:0;font-family:var(--mk-sans);font-weight:900;font-size:17px;white-space:nowrap;color:var(--mk-deep);text-decoration:none}
 .mk-title span{overflow:hidden;text-overflow:ellipsis}
 /* 工具名 + 細字簡介（兩行都擠喺 56px 頁頭入面） */
 .mk-name{display:flex;flex-direction:column;justify-content:center;min-width:0;line-height:1.2}
 .mk-sub{display:block;margin-top:2px;color:inherit;font-size:12px;font-weight:500;letter-spacing:0;opacity:.78;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mk-header .mk-name{color:var(--mk-deep)}
-.mk-header .mk-sub{color:var(--mk-muted);opacity:1}
+.mk-header .mk-title,.mk-header .mk-name{color:#fff}
+.mk-header .mk-sub{color:#C9DDD8;opacity:1}
 /* 分頁掣／導覽：每粒加 .mk-tab 同 .mk-cat-N（或者自己設 --c、--c-ink）；選中用 .on／.active／aria-selected／aria-pressed／aria-current */
 .mk-tabs{--c:var(--mk-brand);--c-ink:var(--mk-brand-ink);display:flex;align-items:center;gap:4px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none}
 .mk-tabs::-webkit-scrollbar{display:none}
-.mk-tab{display:inline-flex;align-items:center;gap:6px;flex:none;padding:6px 10px;border:0;border-radius:999px;background:none;color:#3C4A49;font-family:var(--mk-sans);font-size:14px;font-weight:500;line-height:1.4;white-space:nowrap;text-decoration:none;cursor:pointer;box-shadow:none}
-.mk-tab::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);flex:none;box-shadow:none;margin:0}
-.mk-tab:hover{background:var(--mk-surface);color:var(--mk-ink);text-decoration:none}
-.mk-tab.on,.mk-tab.active,.mk-tab[aria-selected="true"],.mk-tab[aria-pressed="true"],.mk-tab[aria-current="page"]{background:var(--c-ink);color:#fff;font-weight:700}
-.mk-tab.on::before,.mk-tab.active::before,.mk-tab[aria-selected="true"]::before,.mk-tab[aria-pressed="true"]::before,.mk-tab[aria-current="page"]::before{background:#fff}
+.mk-tab{display:inline-flex;align-items:center;gap:6px;flex:none;padding:6px 10px;border:0;border-radius:999px;background:none;color:#D7E7E3;font-family:var(--mk-sans);font-size:14px;font-weight:500;line-height:1.4;white-space:nowrap;text-decoration:none;cursor:pointer;box-shadow:none}
+.mk-tab::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);flex:none;box-shadow:0 0 0 2px rgba(255,255,255,.35);margin:0}
+.mk-tab:hover{background:rgba(255,255,255,.1);color:#fff;text-decoration:none}
+/* 選中：白色膠囊、字用該分類文字色，色點保留分類色 */
+.mk-tab.on,.mk-tab.active,.mk-tab[aria-selected="true"],.mk-tab[aria-pressed="true"],.mk-tab[aria-current="page"]{background:#fff;color:var(--c-ink);font-weight:700}
+.mk-tab.on::before,.mk-tab.active::before,.mk-tab[aria-selected="true"]::before,.mk-tab[aria-pressed="true"]::before,.mk-tab[aria-current="page"]::before{box-shadow:none}
 /* 平板同手機（≤1023px）：分頁掣落第二行，一行過左右捲 */
 @media (max-width:1023px){.mk-bar{flex-wrap:wrap;row-gap:0;column-gap:10px;padding-top:8px}.mk-bar>.mk-title{flex:1}.mk-bar>.mk-tabs{order:3;flex:none;width:100%;margin:2px 0 6px}}
 .mk-actions{margin-left:auto;display:flex;align-items:center;gap:8px;flex:none}
@@ -520,6 +521,9 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
 .mk-share-btn{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--mk-brand);background:var(--mk-surface);color:var(--mk-brand-ink);font:inherit;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap}
 .mk-share-btn:hover{background:var(--mk-brand-soft)}
 .mk-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:999;background:var(--mk-ink);color:#fff;font:600 14px/1.4 var(--mk-sans);padding:10px 16px;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.18);max-width:calc(100vw - 32px)}
+/* 頁頭入面嘅掣：透明底、白字白框 */
+.mk-header .mk-share-btn,.mk-header .mk-print-btn{background:transparent;color:#fff;border-color:rgba(255,255,255,.55)}
+.mk-header .mk-share-btn:hover,.mk-header .mk-print-btn:hover{background:rgba(255,255,255,.12)}
 .mk-share-btn>.mk-long{margin-left:-6px} /* 抵銷 gap，令「分享呢個方案」連埋 */
 .mk-print-btn>.mk-long{margin-left:-2px} /* 「列印 / 存 PDF」保留一個空格 */
 /* 手機：按鈕字縮短（「分享」「列印」） */
