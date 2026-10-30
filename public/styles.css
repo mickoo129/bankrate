@@ -515,7 +515,7 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
 .mk-tab.on,.mk-tab.active,.mk-tab[aria-selected="true"],.mk-tab[aria-pressed="true"],.mk-tab[aria-current="page"]{background:#fff;color:var(--c-ink);font-weight:700}
 .mk-tab.on::before,.mk-tab.active::before,.mk-tab[aria-selected="true"]::before,.mk-tab[aria-pressed="true"]::before,.mk-tab[aria-current="page"]::before{box-shadow:none}
 /* 平板同手機（≤1023px）：分頁掣落第二行，一行過左右捲 */
-@media (max-width:1023px){.mk-bar{flex-wrap:wrap;row-gap:0;column-gap:10px;padding-top:8px}.mk-bar>.mk-title{flex:1}.mk-bar>.mk-tabs{order:3;flex:none;width:100%;margin:2px 0 6px}}
+@media (max-width:1023px){.mk-header .mk-bar,.mk-header.mk-bar{flex-wrap:wrap;height:auto;min-height:0;align-content:flex-start;row-gap:8px;column-gap:10px;padding-top:10px;padding-bottom:8px}.mk-bar>.mk-title{flex:1}.mk-header .mk-bar>.mk-tabs,.mk-header.mk-bar>.mk-tabs{order:3;flex:none;width:100%;margin:0}}
 .mk-actions{margin-left:auto;display:flex;align-items:center;gap:8px;flex:none}
 /* 分享呢個方案（同列印按鈕一樣樣式） */
 .mk-share-btn{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--mk-brand);background:var(--mk-surface);color:var(--mk-brand-ink);font:inherit;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap}
