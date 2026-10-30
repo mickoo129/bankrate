@@ -489,9 +489,13 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
 .mk-print-btn{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--mk-brand);background:var(--mk-surface);color:var(--mk-brand-ink);font:inherit;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap}
 .mk-print-btn:hover{background:var(--mk-brand-soft)}
 .mk-print-head{display:none}
+/* MKPA 工具箱連結（頁尾，電子名片同版權行之間；開新分頁；列印唔印） */
+.mk-home-link{margin:16px 0 0;font-family:var(--mk-sans);font-size:14px;line-height:1.5}
+.mk-home-link a{color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.mk-home-link a:hover{text-decoration-thickness:2px}
 @media print{
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .mk-no-print,.mk-print-btn,.mk-share-btn,.mk-toast,.mk-ecard-btn{display:none!important}
+  .mk-no-print,.mk-print-btn,.mk-share-btn,.mk-toast,.mk-ecard-btn,.mk-home-link{display:none!important}
   .mk-header{position:static}
   .mk-ecard{break-inside:avoid;padding:10px 14px;margin-top:14px}
   .mk-ecard-qr{display:block}
