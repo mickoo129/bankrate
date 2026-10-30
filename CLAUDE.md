@@ -26,7 +26,7 @@ MKPA 工具之一。呢個 repo 只放呢一個工具，獨立部署去 Netlify�
 - 頁頭：鎖住喺頂；第一行 icon + 工具名 + 按鈕，手機都要見到工具名；工具名下面一行細字簡介（15 字以內、唔用句號）。
 - 「分享呢個方案」：用 `mkShare()`，連結包括設定、撳開重現方案，唔可以包括客人姓名。
 - 版面：內容最闊 1320px，兩邊留白 `clamp(16px, 3vw, 32px)`；平板、手機唔可以橫向捲動。
-- Icon：用 `mkpa-tools/_standard/make-icons.py` 產生（宏利綠圓角方塊 + 白色線條），標題旁、瀏覽器分頁、加至主畫面都用同一個；唔好自己換第二個風格。標題旁 icon 大細跟頁頭標題（約 24–40px），唔使硬性統一 32px。
+- Icon：用 `mkpa-tools/_standard/make-icons.py` 產生（圖形 `trend-up`，宏利綠圓角方塊 + 白色線條），標題旁、瀏覽器分頁、加至主畫面都用同一個；唔好自己換第二個風格。標題旁 icon 大細跟頁頭標題（約 24–40px），唔使硬性統一 32px。
 - 版權行：© 年份 Michael Koo Protection Alliance (MKPA). 版權所有。
 - 介面用繁體中文（香港用語）；手機闊度 375px 唔可以橫向捲動。
 
@@ -35,3 +35,5 @@ MKPA 工具之一。呢個 repo 只放呢一個工具，獨立部署去 Netlify�
 - 網頁喺 `public/`（Netlify publish 目錄），純 HTML/CSS/JS，唔使 build。
 - GitHub Actions（`.github/workflows/scrape.yml`）每 2 小時抓息口，自動 commit 落 `public/data/` 同 `debug/`。呢啲數據檔唔好手動改。
 - 網頁直接由 `raw.githubusercontent.com/mickoo129/bankrate/main/public/data/` 讀數據，所以 repo 名同路徑唔好改。
+- 「分享呢個方案」放落網址嘅設定：貨幣（`c`）、金額（`a`）、存期（`t`）、揀咗嘅銀行（`b`）、「我嘅情況」（`h` 筆錢喺邊間、`e` 有戶口、`p` 高級理財），加 `#` 後面而家所在分頁。
+- 用色屬標準「三級用色」第 2 級（功能分頁）：定期比較 1、匯價比較 2、外幣定期計算 3、息口走勢 4、資料來源頁 7；分頁掣有色點，選中用該色文字色做底、白字；頁頭下面一條該分頁色帶；內容底色用該分頁淺底。

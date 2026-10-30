@@ -654,6 +654,8 @@
       document.body.dataset.tab = name;
       document.querySelectorAll('.panel').forEach((p) => { p.hidden = p.id !== 'tab-' + name; });
       if (location.hash !== '#' + name) history.replaceState(null, '', location.pathname + location.search + '#' + name);
+      const sel = document.querySelector(`.tabs [data-tab="${name}"]`);
+      if (sel) sel.scrollIntoView({ block: 'nearest', inline: 'center' });
     };
     tabs.forEach((t) => t.addEventListener('click', () => { show(t.dataset.tab); window.scrollTo({ top: 0 }); }));
     document.querySelectorAll('[data-go]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); show(a.dataset.go); window.scrollTo({ top: 0 }); }));
@@ -679,15 +681,9 @@
     amountBox($('#fxAmt'));
     setupPanels();
     // 分享呢個方案（MKPA 標準）：手機彈分享選單，電腦複製連結；連結包括貨幣、金額、銀行同「我嘅情況」，同而家所在分頁
-    $('#share').onclick = async () => {
+    $('#share').onclick = () => {
       const tab = (document.querySelector('.tabs [aria-selected="true"]') || {}).dataset?.tab || 'rates';
-      const url = shareUrl().replace(/#rates$/, '#' + tab);
-      if (navigator.share && matchMedia('(pointer: coarse)').matches) {
-        try { await navigator.share({ title: document.title, url }); } catch {}
-        return;
-      }
-      try { await navigator.clipboard.writeText(url); toast('已複製連結，客人撳開會見到同一個方案'); }
-      catch { window.prompt('複製呢條連結：', url); }
+      mkShare(shareUrl().replace(/#rates$/, '#' + tab));
     };
 
     fillSelect($('#fxFrom'), CCY.map((c) => ({ v: c.code, label: `${c.code} ${c.name}` })), 'HKD');
