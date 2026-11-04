@@ -220,7 +220,9 @@ function segmentOf(header) {
 
 // ---- deposit tables -------------------------------------------------------
 function analyseDepositTable(tbl, pageCtx) {
-  const grid = tbl.grid;
+  let grid = tbl.grid;
+  const w0 = (grid[0] || []).length;
+  if (w0 >= 2 && grid.slice(1).every((r) => r.length >= w0) && grid.slice(1).some((r) => r.length > w0 + 2)) grid = grid.map((r) => r.slice(0, w0));
   const nRows = grid.length;
   const nCols = Math.max(...grid.map((r) => r.length));
   const allText = grid.flat().join(' ');
@@ -364,6 +366,8 @@ function parseDeposits(page, source) {
     let type = pageType;
     const shortMax = Math.max(0, ...found.filter((f) => f.tenorDays <= 14).map((f) => f.rate));
     if (pageType === 'auto') type = PROMO_WORDS.test(near + ' ' + head) || shortMax >= 3 ? 'promo' : (weak && prev ? prev.type : 'board');
+    // a table titled as an offer on a rate-sheet page ("定期存款優惠")
+    if (pageType === 'board' && /定期存款優惠|定存優惠|優惠利率|推廣利率|特惠利率/.test(lastSegments(ctx).split('|').pop() || '')) type = 'promo';
     // conditions such as 新資金 / 網上 from the table's own title; customer tier only when the title is short (a tab label)
     const headTags = conditionsFrom(head, { noTier: true }).filter((x) => x === '需經本行兌換' || x === '新資金');
     const tierList = /其他(?:個人)?客戶|一般客戶|其他客戶|One\b/.test(near) && (near.match(/理財|客戶/g) || []).length > 2;
@@ -581,6 +585,12 @@ function parseTextRates(text, source) {
     const own = onlyCurrency(line);
     const ccy = own && own !== 'OTHER' ? own : (i - ctxLine <= 12 ? ctxCcy : null);
     if (own === 'OTHER') continue;
+    if (/額外|加息|額外年利率|extra|bonus/i.test(line)) continue;
+    const many = currenciesIn(line).map((x) => x.code);
+    if (tenors.length === 1 && rates.length === 1 && many.length > 1 && line.length <= 80) {
+      for (const c of many) if (!paired.has(c + tenors[0])) push(c, tenors[0], rates[0], i, line);
+      continue;
+    }
     if (tenors.length === 1 && rates.length >= 1) {
       if (paired.has((ccy || '') + tenors[0])) continue;
       // several rates on one line are usually customer tiers (private / premier / ordinary): use the lowest,

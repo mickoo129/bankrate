@@ -224,7 +224,8 @@ async function scrapeBank(context, bank, mid, report) {
       if (status >= 400) { rep.error = 'HTTP ' + status; continue; }
       const type = guessType(item.type, data);
       let rows = rowsFromPage(data, type, finalUrl).filter((r) => r.tenorDays >= 7 && r.tenorDays <= 1100 && r.rate < 20);
-      if (!rows.length && /定期|定存|time deposit/i.test(data.text)) {
+      const isHome = (() => { try { return /^\/(?:(?:tc|zh|zh-hk|zh_hk|zh-hant|hk|chi|tch|ch)\/?)?(?:index\.\w+|home\.\w+)?$/i.test(new URL(finalUrl).pathname); } catch { return false; } })();
+      if (!rows.length && !isHome && /定期|定存|time deposit/i.test(data.text)) {
         rows = parseTextRates(data.lines, { type: type === 'board' ? 'board' : 'promo', url: finalUrl });
         if (rows.length) rep.mode = 'text';
       }

@@ -26,7 +26,7 @@
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const num = (v) => parseFloat(String(v).replace(/[^\d.\-]/g, '')) || 0;
   const fmt = (v, dp = 0) => Number(v).toLocaleString('en-HK', { minimumFractionDigits: dp, maximumFractionDigits: dp });
-  const pct = (v) => (Math.round(v * 1000) / 1000).toString();
+  const pct = (v) => { const k = Math.round(v * 1000); return (k / 1000).toFixed(k % 10 === 0 ? 2 : 3); };
   const todayHK = () => new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);
   const shortDate = (iso) => { const [, m, d] = iso.split('-'); return `${+m}月${+d}日`; };
 
@@ -110,7 +110,8 @@
   // ---------- my situation → what each offer needs ----------
   // Users answer three plain questions; per bank we work out new customer / new funds / premium.
   const isExpired = (r) => r.validUntil && r.validUntil < todayHK();
-  const isPremium = (r) => PREMIUM.test([...(r.conditions || []), r.segment || '', r.tier || ''].join(' '));
+  const PREMIUM_TIER = /卓越理財|優越理財|豐盛理財|Citigold|優先理財|私人財富|工銀財富|中銀理財|理財金|貴賓|VIP|顯卓|至尊|私人銀行|私人客戶|高級理財|Premier|Prestige|Priority|Elite/i;
+  const isPremium = (r) => PREMIUM.test([...(r.conditions || []), r.segment || ''].join(' ')) || PREMIUM_TIER.test(r.tier || '');
   const bankName = (id) => { const b = state.data && state.data.banks.find((x) => x.id === id); return b ? b.name : id; };
   const me = (id) => ({
     newCustomer: !state.accounts.includes(id) && !state.premium.includes(id),
@@ -160,6 +161,18 @@
     if (/起存額未有資料/.test(w)) return '起存額未知';
     if (/換外幣/.test(w)) return '要先換外幣';
     return '有條件';
+  }
+  // two or three words on the main conditions, for the phone ranking
+  function shortConds(r) {
+    const c = r.conditions || [], out = [];
+    if (c.includes('新客戶')) out.push('新客戶');
+    if (c.includes('新資金')) out.push('新資金');
+    if (isPremium(r)) out.push('理財客戶');
+    if (c.includes('網上/手機開立')) out.push('網上開');
+    if (c.includes('只限分行')) out.push('分行開');
+    if (r.maxAmount) out.push(`上限 ${r.maxAmount >= 1e4 ? fmt(r.maxAmount / 1e4) + ' 萬' : fmt(r.maxAmount)}`);
+    if (r.validUntil) out.push(`至 ${shortDate(r.validUntil)}`);
+    return out.slice(0, 4);
   }
   // most banks need about HKD 10,000 for a time deposit; used when a rate's minimum is unknown
   const TYPICAL_MIN_HKD = 10000;
@@ -218,6 +231,10 @@
     if (!state.data) { tbody.innerHTML = '<tr><td colspan="6" class="empty-msg">讀取緊數據…</td></tr>'; $('#rank').innerHTML = '<li class="empty-msg">讀取緊數據…</li>'; return; }
     const { rows, noData, best } = rowsForTable();
     const small = hkdValue(state.amount, state.ccy) < TYPICAL_MIN_HKD;
+    const sit = [state.homeBank ? `筆錢喺${bankName(state.homeBank)}` : '新資金',
+      state.accounts.length ? `已有戶口：${state.accounts.map(bankName).join('、')}` : '全部當新客戶',
+      state.premium.length ? `高級理財：${state.premium.map(bankName).join('、')}` : ''].filter(Boolean).join('・');
+    $('#printMeta').textContent = `按：${sit}・${CCY_NAME[state.ccy]} ${state.ccy} ${fmt(state.amount)}・息口數據 ${timeAgo(state.data.updatedAt).split('（')[0]}・息口只供參考，以銀行公布為準`;
     $('#caption').innerHTML = `${esc(CCY_NAME[state.ccy])}定期・存 <b>${state.ccy} ${fmt(state.amount)}</b>・數字係你攞到嘅最高年利率，已計各銀行起存額，撳入去睇條件同其他選擇。`
       + (small ? `<span class="warn-line">大部分銀行定期要 HKD ${fmt(TYPICAL_MIN_HKD)} 或等值起存，金額太細可能做唔到；起存額未有資料嘅息口暫時唔計。</span>` : '');
 
@@ -259,7 +276,7 @@
       return `<li class="rk${i === 0 ? ' best' : ''}${open ? ' open' : ''}">
         <button type="button" class="rk-head" data-k="${k}" aria-expanded="${open}">
           <span class="rk-pos">${i + 1}</span>
-          <span class="rk-name"><b>${esc(b.name)}</b>${b.promoUrl ? '<small class="promo-note">優惠未能自動讀取，請睇銀行網站</small>' : ''}<small>${tag ? tag + '・' : ''}利息 ≈ ${state.ccy} ${fmt(state.amount * r.rate / 100 * days / 365, 0)}・${r.minAmount == null ? '起存額未知' : r.minAmount > 0 ? `${fmt(r.minAmount)} 起` : '冇起存要求'}</small></span>
+          <span class="rk-name"><b>${esc(b.name)}</b>${shortConds(r).length ? `<span class="rk-conds">${shortConds(r).map((x) => `<i>${esc(x)}</i>`).join('')}</span>` : ''}${b.promoUrl ? '<small class="promo-note">優惠未能自動讀取，請睇銀行網站</small>' : ''}<small>${tag ? tag + '・' : ''}利息 ≈ ${state.ccy} ${fmt(state.amount * r.rate / 100 * days / 365, 0)}・${r.minAmount == null ? '起存額未知' : r.minAmount > 0 ? `${fmt(r.minAmount)} 起` : '冇起存要求'}</small></span>
           <span class="rk-rate">${pct(r.rate)}<small>%</small>${hasConditions(r) ? '<i class="dot-cond" aria-hidden="true"></i>' : ''}${kindTag(r)}</span>
         </button>
         ${open ? `<div class="rk-detail">${detailHtml(b, state.sort)}</div>` : ''}

@@ -542,3 +542,10 @@ body[data-tab="about"]{--pc:var(--mk-cat-7);--pc-soft:var(--mk-cat-7-soft)}
 /* 功能分頁（第二級）：頁頭下面一條該分頁顏色色帶 */
 .mk-header{box-shadow:inset 0 -3px 0 var(--pc)}
 @media print{.mk-header{box-shadow:none}}
+
+/* 手機排名：主要條件細標籤 */
+.rk-conds { display: flex; flex-wrap: wrap; gap: 4px; margin: 3px 0 2px; }
+.rk-conds i { font-style: normal; font-size: .72rem; line-height: 1.3; padding: 1px 6px; border-radius: 999px; background: var(--mk-warn-soft); color: var(--mk-warn); font-weight: 500; }
+/* 列印版：寫低按咩情況計、數據時間 */
+.print-meta { display: none; }
+@media print { .print-meta { display: block; margin: 0 0 6px; font-size: 9.5pt; color: var(--mk-ink); font-weight: 500; } }

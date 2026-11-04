@@ -46,7 +46,8 @@ module.exports = [
     pages: [
       { url: 'https://www.sc.com/hk/zh/deposits/online-time-deposit/', type: 'promo' },
       { url: 'https://www.sc.com/hk/zh/deposits/time-deposits-promotion/', type: 'promo' },
-      { url: 'https://www.sc.com/hk/zh/deposits/foreign-exchange-time-deposit/', type: 'promo' },
+      // 外幣兌換定期：要先喺渣打換外幣先有，唔係一般定期
+      { url: 'https://www.sc.com/hk/zh/deposits/foreign-exchange-time-deposit/', type: 'promo', conditions: ['需經本行兌換'] },
       { url: 'https://www.sc.com/hk/zh/deposits/board-rates/', type: 'board' },
     ],
     seeds: ['https://www.sc.com/hk/zh/investment/foreign-exchange/'],
@@ -98,6 +99,7 @@ module.exports = [
     promoUrl: 'https://www.hk.bankcomm.com/hk/hk/tw/file/getContentPath.html?fileId=2600167',
     pages: [
       // rate tables are drawn inside an iframe that only fills in when opened from these pages
+      // 牌價頁入面另有一個「定期存款優惠」表（標題寫明），會自動當優惠
       { url: 'https://www.hk.bankcomm.com/hk/shtml/hk/tw/2005155/2005178/2005179/list.shtml?channelId=2005155', type: 'board' },
       { url: 'https://www.hk.bankcomm.com/hk/shtml/hk/tw/2005155/2005178/2005180/list.shtml?channelId=2005155', type: 'board' },
       { url: 'https://www.hk.bankcomm.com/hk/tw/file/getContentPath.do?fileId=2600167', type: 'promo', pdf: true },],
@@ -150,7 +152,8 @@ module.exports = [
   {
     id: 'publicbank', name: '大眾銀行', nameEn: 'Public Bank', group: 'mid',
     site: 'https://www.publicbank.com.hk',
-    pages: [],
+    pages: [
+      { url: 'https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_Double11Promotion', type: 'promo' },],
     seeds: ['https://www.publicbank.com.hk/tc/personal/deposits', 'https://www.publicbank.com.hk/tc/'],
   },
   {
