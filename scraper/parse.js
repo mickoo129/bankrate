@@ -222,7 +222,16 @@ function segmentOf(header) {
 function analyseDepositTable(tbl, pageCtx) {
   let grid = tbl.grid;
   const w0 = (grid[0] || []).length;
-  if (w0 >= 2 && grid.slice(1).every((r) => r.length >= w0) && grid.slice(1).some((r) => r.length > w0 + 2)) grid = grid.map((r) => r.slice(0, w0));
+  const hiddenMin = new Map();
+  if (w0 >= 2 && grid.slice(1).every((r) => r.length >= w0) && grid.slice(1).some((r) => r.length > w0 + 2)) {
+    grid = grid.map((r) => {
+      const cut = r.slice(0, w0);
+      // last hidden cell that looks like an amount ("20000.00") is the minimum deposit
+      const amt = r.slice(w0).reverse().find((x) => /^\d{3,}(?:\.\d{2})?$/.test(x) && +x >= 500 && +x <= 1e8);
+      if (amt) hiddenMin.set(cut, +amt);
+      return cut;
+    });
+  }
   const nRows = grid.length;
   const nCols = Math.max(...grid.map((r) => r.length));
   const allText = grid.flat().join(' ');
@@ -280,7 +289,7 @@ function analyseDepositTable(tbl, pageCtx) {
         tenorDays: days,
         tenor: tenorLabel(days),
         rate,
-        minAmount: parseMinAmount(header) ?? parseMinAmount(rowLabel),
+        minAmount: parseMinAmount(header) ?? parseMinAmount(rowLabel) ?? hiddenMin.get(row) ?? null,
         tierLabel: [header, rowLabel].filter(Boolean).join(' ').slice(0, 100),
         segment: [...new Set([segmentOf(header), segmentOf(rowLabel), capOnline ? '網上利率' : ''].filter(Boolean))].join(' ').slice(0, 40),
         tableIndex: tbl.index,
@@ -625,4 +634,31 @@ function effectiveDate(text) {
   return null;
 }
 
-module.exports = { capAmounts, validUntilNear, amountPairs, contextMins, amountCurrency, lastSegments, tenorsOf, parseTextRates, validUntil, parseDeposits, parseFx, parseTenor, parseRate, parseMinAmount, lastCurrency, effectiveDate, tenorLabel, conditionsFrom };
+// Conditions for one offer, from the bank's terms document: the clause that mentions this rate.
+// e.g. "…以電匯價將港元兌換為人民幣…單筆兌換金額等值HK$20,000或以上…1 星期的定期存款…11%"
+function termsFor(row, termsText) {
+  const t = (termsText || '').replace(/\s+/g, '');
+  const rate = String(+row.rate.toFixed(4));
+  const re = new RegExp(`(?<![\\d.])${rate.replace('.', '\\.')}0*%`, 'g');
+  const out = { conditions: [], minAmount: null, maxAmount: null };
+  let m, win = '';
+  while ((m = re.exec(t))) {
+    // start at the beginning of the sentence naming the rate, so the clause before it doesn't leak in
+    let back = t.slice(Math.max(0, m.index - 150), m.index);
+    const cut = Math.max(back.lastIndexOf('。'), back.lastIndexOf('；'));
+    if (cut >= 0) back = back.slice(cut + 1);
+    win += ' ' + back + t.slice(m.index, m.index + 500);
+  }
+  if (!win) return null;
+  out.conditions = conditionsFrom(win);
+  if (FX_CONVERT.test(win) || /兌換為[^。]{0,20}(?:或|及)[^。]{0,20}兌換|兌換金額|外幣兌換定期/.test(win)) out.conditions.push('需經本行兌換');
+  if (/(?:透過|於|親臨)本行任何一間分行|即時於分行|只適用於分行|只限分行/.test(win) && !/網上|手機|流動/.test(win)) out.conditions.push('只限分行');
+  const mins = contextMins(win, { loose: true });
+  out.minAmount = mins[row.currency] ?? (row.currency === 'HKD' ? null : null);
+  const caps = capAmounts(win);
+  out.maxAmount = caps[row.currency] || null;
+  out.conditions = [...new Set(out.conditions)];
+  return out;
+}
+
+module.exports = { termsFor, capAmounts, validUntilNear, amountPairs, contextMins, amountCurrency, lastSegments, tenorsOf, parseTextRates, validUntil, parseDeposits, parseFx, parseTenor, parseRate, parseMinAmount, lastCurrency, effectiveDate, tenorLabel, conditionsFrom };

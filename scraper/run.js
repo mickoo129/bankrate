@@ -11,7 +11,7 @@ const { chromium } = require('playwright');
 const { JSDOM, VirtualConsole } = require('jsdom');
 const banks = require('./banks');
 const { extractTables } = require('./extract');
-const { parseDeposits, parseFx, validUntil, parseTextRates, capAmounts, validUntilNear, contextMins } = require('./parse');
+const { parseDeposits, parseFx, validUntil, parseTextRates, capAmounts, validUntilNear, contextMins, termsFor } = require('./parse');
 
 const DATA_DIR = path.join(__dirname, '..', 'public', 'data');
 const CURRENCIES = ['HKD', 'USD', 'CNY', 'AUD', 'GBP', 'JPY'];
@@ -248,6 +248,26 @@ async function scrapeBank(context, bank, mid, report) {
           if (r.minAmount == null) { const mn = contextMins(data.text, { strict: true })[r.currency]; if (mn != null) { r.minAmount = mn; r.minFrom = 'page'; } }
         }
       });
+      // promo pages that link their terms ("條款及細則"): conditions come from the clause naming each rate
+      if (item.terms && rows.some((r) => r.type === 'promo')) {
+        const want = new RegExp(item.terms);
+        const link = links.find((l) => l.href && want.test(l.text));
+        if (link) {
+          try {
+            const tp = await loadPdf(context, link.href);
+            const tt = tp.data.text || '';
+            rep.terms = tt.length;
+            for (const r of rows) {
+              if (r.type !== 'promo') continue;
+              const t = termsFor(r, tt);
+              if (!t) continue;
+              r.conditions = [...new Set([...(r.conditions || []), ...t.conditions])];
+              if (r.minAmount == null && t.minAmount != null) { r.minAmount = t.minAmount; r.minFrom = 'terms'; }
+              if (t.maxAmount) r.maxAmount = t.maxAmount;
+            }
+          } catch (e) { rep.termsError = String(e.message || e).slice(0, 120); }
+        }
+      }
       const caps = capAmounts(data.text);
       for (const r of rows) if (r.type === 'promo' && caps[r.currency] && !(r.minAmount > caps[r.currency])) r.maxAmount = caps[r.currency];
       const before = rows.length;

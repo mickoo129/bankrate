@@ -153,7 +153,8 @@ module.exports = [
     id: 'publicbank', name: '大眾銀行', nameEn: 'Public Bank', group: 'mid',
     site: 'https://www.publicbank.com.hk',
     pages: [
-      { url: 'https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_Double11Promotion', type: 'promo' },],
+      // 條件寫喺「條款及細則」PDF（例如 1 星期 11% 其實要先喺分行換人民幣／港元）
+      { url: 'https://www.publicbank.com.hk/tc/promotions/Promotions_Deposit/Promotion_Double11Promotion', type: 'promo', terms: '條款及細則' },],
     seeds: ['https://www.publicbank.com.hk/tc/personal/deposits', 'https://www.publicbank.com.hk/tc/'],
   },
   {

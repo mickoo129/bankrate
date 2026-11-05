@@ -124,3 +124,16 @@ console.log('all parser tests passed');
   assert.strictEqual(page([['萬利錢儲蓄存款', '更新時間'], ['存款期', '年利率〈%〉'], ['12 個月', '1.00000'], ['18 個月', '1.00000']], '港元').length, 0);
   console.log('format tests ok');
 }
+
+{ // terms clause for a rate; minimum kept from a hidden column
+  const assert = require('assert');
+  const { termsFor, parseDeposits } = require('../scraper/parse');
+  const T = '4.1. 於本行任何一間分行以 HK$10,000 或以上敍做 6 個月港元定期存款，可享額外定期年利率 0.5%。 5.1. 合資格客戶可就其兌換的金額享有 1 星期定期存款年利率 11%：(i) 透過本行任何一間分行以電匯價將港元兌換為人民幣或人民幣兌換為港元，而該單筆兌換金額等值HK$20,000 或以上; 及 (ii) 即時於分行敍做 1 星期的定期存款。';
+  const t = termsFor({ rate: 11, currency: 'HKD' }, T);
+  assert.ok(t.conditions.includes('需經本行兌換') && t.conditions.includes('只限分行'));
+  assert.strictEqual(t.minAmount, 20000);
+  const rows = parseDeposits({ tables: [{ index: 0, context: '定期存款優惠', grid: [['貨幣', '存期', '年利率'], ['HKD', '3個月', '3.15%', '103', 'TD', '001', '00', '', '', '245', '0000000001000000.00', '1000000.00'], ['USD', '1年', '4.10%', '112', 'TD', '001', '00', '', '', '247', '0000000000003000.00', '3000.00']] }], text: '' }, { type: 'board', url: 'x' });
+  assert.strictEqual(rows.find((r) => r.currency === 'HKD').minAmount, 1000000);
+  assert.strictEqual(rows.find((r) => r.currency === 'HKD').type, 'promo');
+  console.log('terms tests ok');
+}
