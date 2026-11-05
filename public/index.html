@@ -58,6 +58,7 @@
       </div>
 
       <div class="sheet" id="mePanel" hidden>
+        <p class="q-help me-note">息口按以下情況計。要先喺銀行換外幣先有嘅短期高息，唔計入比較表（喺「外幣定期計算」睇）。</p>
         <div class="q">
           <h3>1. 你筆錢而家喺邊間銀行？</h3>
           <p class="q-help">好多優惠只限「由其他銀行轉過嚟」嘅錢。揀咗之後，存返同一間銀行就唔會計呢類優惠。</p>
@@ -94,7 +95,10 @@
       </div>
     </div>
 
-    <div class="seg tenor-seg" id="tenorSeg" role="radiogroup" aria-label="存期"></div>
+    <div class="tenor-row">
+      <div class="seg tenor-seg" id="tenorSeg" role="radiogroup" aria-label="存期"></div>
+      <label class="check only-promo"><input type="checkbox" id="onlyPromo"> 只睇有優惠嘅銀行</label>
+    </div>
     <p class="print-meta" id="printMeta"></p>
     <p class="caption" id="caption"></p>
     <div class="table-wrap card wide-only">

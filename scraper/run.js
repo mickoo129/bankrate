@@ -196,6 +196,8 @@ async function scrapeBank(context, bank, mid, report) {
   const visited = new Set();
   const queue = [];
   for (const p of bank.pages || []) queue.push({ ...p, fixed: true });
+  // settings for a configured page apply however the page is reached (with or without a trailing slash, via a link…)
+  const pageOpts = new Map((bank.pages || []).map((p) => [canonical(p.url), p]));
   for (const u of bank.fxPages || []) queue.push({ url: u, fx: true, fixed: true });
   for (const u of bank.seeds || []) queue.push({ url: u, seed: true, depth: 0 });
 
@@ -208,8 +210,10 @@ async function scrapeBank(context, bank, mid, report) {
   while (queue.length && visited.size < MAX_PAGES_PER_BANK) {
     const item = queue.shift();
     if (!item.fixed) item.url = canonical(item.url);
-    const key = item.url;
+    const key = canonical(item.url);
     if (visited.has(key)) continue;
+    const cfg = pageOpts.get(key);
+    if (cfg && !item.fixed) Object.assign(item, { ...cfg, url: item.url, fixed: true });
     visited.add(key);
     const rep = { bank: bank.id, url: item.url, ok: false };
     report.push(rep);

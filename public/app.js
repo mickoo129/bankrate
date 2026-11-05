@@ -54,7 +54,7 @@
     if (q.has('p')) state.premium = q.get('p') ? q.get('p').split(',') : [];
   })();
   const save = () => {
-    try { localStorage.setItem('dep-prefs3', JSON.stringify({ ccy: state.ccy, amount: state.amount, sort: state.sort, banks: state.banks, homeBank: state.homeBank, accounts: state.accounts, premium: state.premium })); } catch {}
+    try { localStorage.setItem('dep-prefs3', JSON.stringify({ ccy: state.ccy, amount: state.amount, sort: state.sort, onlyPromo: state.onlyPromo, banks: state.banks, homeBank: state.homeBank, accounts: state.accounts, premium: state.premium })); } catch {}
   };
   function shareUrl() {
     const q = new URLSearchParams({ c: state.ccy, a: String(state.amount), t: String(state.sort) });
@@ -162,6 +162,8 @@
     if (/換外幣/.test(w)) return '要先換外幣';
     return '有條件';
   }
+  // offers ending soon: "仲有 5 日"
+  const daysLeft = (r) => { if (!r.validUntil) return null; const n = Math.round((Date.parse(r.validUntil) - Date.parse(todayHK())) / 864e5) + 1; return n >= 0 && n <= 14 ? n : null; };
   // two or three words on the main conditions, for the phone ranking
   function shortConds(r) {
     const c = r.conditions || [], out = [];
@@ -171,7 +173,7 @@
     if (c.includes('網上/手機開立')) out.push('網上開');
     if (c.includes('只限分行')) out.push('分行開');
     if (r.maxAmount) out.push(`上限 ${r.maxAmount >= 1e4 ? fmt(r.maxAmount / 1e4) + ' 萬' : fmt(r.maxAmount)}`);
-    if (r.validUntil) out.push(`至 ${shortDate(r.validUntil)}`);
+    if (r.validUntil) out.push(daysLeft(r) != null ? `仲有 ${daysLeft(r)} 日` : `至 ${shortDate(r.validUntil)}`);
     return out.slice(0, 4);
   }
   // most banks need about HKD 10,000 for a time deposit; used when a rate's minimum is unknown
@@ -197,6 +199,7 @@
       if (state.banks && !state.banks.includes(b.id)) continue;
       const { mine, cells, blocked } = cellsFor(b);
       if (!mine.length) { noData.push(b); continue; }
+      if (state.onlyPromo && !TENORS.some((t) => cells[t.d] && cells[t.d].type === 'promo')) continue;
       rows.push({ b, cells, blocked });
     }
     const best = {};
@@ -215,10 +218,10 @@
   }
   function summaryText() {
     const parts = [];
-    parts.push(state.homeBank ? `筆錢喺${esc(bankName(state.homeBank))}` : '筆錢由其他銀行轉過嚟');
+    parts.push(state.homeBank ? `筆錢喺${esc(bankName(state.homeBank))}` : '新資金');
     parts.push(state.accounts.length ? `已有戶口：${state.accounts.map((x) => esc(bankName(x))).join('、')}` : '全部當新客戶');
     if (state.premium.length) parts.push(`高級理財：${state.premium.map((x) => esc(bankName(x))).join('、')}`);
-    return `按你嘅情況計：${parts.join('；')}。要先換外幣先有嘅短期高息唔計入表。`;
+    return `按：${parts.join('・')}`;
   }
 
   // ---------- 定期比較 ----------
@@ -244,16 +247,16 @@
     for (const { b, cells, blocked } of rows) {
       const alt = rowNo++ % 2 ? ' class="alt"' : '';
       const tag = meLabel(b.id);
-      const promoLink = b.promoUrl ? `<a class="promo-link" href="${esc(b.promoUrl)}" target="_blank" rel="noopener">優惠請睇銀行網站 ↗</a>` : '';
+      const promoLink = b.promoUrl ? `<a class="promo-link" href="${esc(b.promoUrl)}" target="_blank" rel="noopener" title="優惠未能自動讀取，請睇銀行網站" aria-label="${esc(b.name)}優惠：請睇銀行網站">優惠 ↗</a>` : '';
       const stale = b.status === 'stale' ? `<small class="stale">數據截至 ${esc(timeAgo(b.lastSuccess).split('（')[0])}</small>` : '';
-      html.push(`<tr${alt}><th scope="row" class="bank-cell"><b>${esc(b.name)}</b>${tag ? `<small class="me-tag">${tag}</small>` : ''}${stale}${promoLink}</th>${TENORS.map((t) => {
+      html.push(`<tr${alt}><th scope="row" class="bank-cell"><b>${esc(b.name)}</b>${promoLink}${tag ? `<small class="me-tag">${tag}</small>` : ''}${stale}</th>${TENORS.map((t) => {
         const r = cells[t.d];
         const k = `${b.id}|${t.d}`;
         const open = state.open === k;
         if (!r) return `<td class="cell empty${open ? ' open' : ''}" data-k="${k}" tabindex="0" role="button" aria-expanded="${open}" aria-label="${esc(b.name)} ${t.label}：${blocked[t.d] ? esc(blocked[t.d]) : '你暫時冇合適息口'}，撳睇其他選擇">—${blocked[t.d] ? `<small class="why">${esc(blocked[t.d])}</small>` : ''}</td>`;
         const isBest = r.rate === best[t.d] && best[t.d] > 0;
         return `<td class="cell${isBest ? ' best' : ''}${open ? ' open' : ''}" data-k="${k}" tabindex="0" role="button" aria-expanded="${open}" aria-label="${esc(b.name)} ${t.label} ${pct(r.rate)}%${hasConditions(r) ? '，有條件' : ''}，撳睇詳情">
-          <span class="v">${pct(r.rate)}<small>%</small></span>${hasConditions(r) ? '<i class="dot-cond" aria-hidden="true"></i>' : ''}${kindTag(r)}</td>`;
+          <span class="v">${pct(r.rate)}<small>%</small></span>${hasConditions(r) ? '<i class="dot-cond" aria-hidden="true"></i>' : ''}${kindTag(r)}${daysLeft(r) != null ? `<small class="ends">仲有 ${daysLeft(r)} 日</small>` : ''}</td>`;
       }).join('')}</tr>`);
       if (state.open && state.open.startsWith(b.id + '|')) html.push(`<tr class="detail${alt ? ' alt' : ''}"><td colspan="6">${detailHtml(b, +state.open.split('|')[1])}</td></tr>`);
     }
@@ -492,7 +495,7 @@
     $('#tdMineWrap').hidden = !mine;
     const onlyMine = mine && $('#tdMine').checked;
     const myBanks = new Set([...state.accounts, ...state.premium, state.homeBank].filter(Boolean));
-    $('#tdBase').innerHTML = `你放 <b>HKD ${money(amt)}</b> 做${esc(CCY_NAME[ccy])}定期 ${TENOR_LABEL(tenor)}，到期換返港幣攞返幾多？（按今日匯率計）`;
+    $('#tdBase').innerHTML = `你放 <b>HKD ${money(amt)}</b> 做${esc(CCY_NAME[ccy])}定期 ${TENOR_LABEL(tenor)}，到期換返港幣攞返幾多？（按今日匯率計；綠色／紅色細字係同一間銀行改做港元定期嘅分別）`;
     const rows = [];
     for (const b of state.data.banks) {
       if (onlyMine && !myBanks.has(b.id)) continue;
@@ -511,16 +514,17 @@
     }
     rows.sort((x, y) => y.gain - x.gain);
     if (!rows.length) { list.innerHTML = `<li class="empty-msg">${onlyMine ? '你有戶口嘅銀行' : '暫時未有銀行'}未有${esc(CCY_NAME[ccy])}${TENOR_LABEL(tenor)}定期息口${onlyMine ? '，可以取消「只睇我有戶口嘅銀行」' : '，試吓揀另一個存期'}。</li>`; return; }
-    list.innerHTML = rows.map((x, i) => {
+    const shown = td.all ? rows : rows.slice(0, 5);
+    list.innerHTML = shown.map((x, i) => {
       const k = x.b.id, open = td.open === k;
       const n = needs(x.r);
-      const cmp = x.hk
-        ? `同一間改做港元定期：攞返 HKD ${money(x.hkBack)}，${x.hkBack > x.back ? `比做${esc(CCY_NAME[ccy])}多 ${money(x.hkBack - x.back)}` : x.hkBack < x.back ? `比做${esc(CCY_NAME[ccy])}少 ${money(x.back - x.hkBack)}` : '兩者一樣'}`
-        : '呢間未有合適嘅港元同期定期資料';
+      const diff = x.hk ? x.back - x.hkBack : null;
+      const cmp = diff == null ? '' : Math.abs(diff) < 1 ? '同港元定期差唔多'
+        : diff > 0 ? `比港元定期多 ${money(diff)}` : `比港元定期少 ${money(-diff)}`;
       return `<li class="rk${open ? ' open' : ''}">
         <button type="button" class="rk-head" data-td="${k}" aria-expanded="${open}">
           <span class="rk-pos">${i + 1}</span>
-          <span class="rk-name"><b>${esc(x.b.name)}</b><small>${esc(CCY_NAME[ccy])}年息 ${pct(x.r.rate)}%${x.f ? '' : '・換錢價估算'}</small><small class="cmp">${cmp}</small></span>
+          <span class="rk-name"><b>${esc(x.b.name)}</b><small>${esc(CCY_NAME[ccy])}年息 ${pct(x.r.rate)}%${x.f ? '' : '・換錢價估算'}</small>${cmp ? `<small class="cmp${diff < 0 ? ' worse' : ''}">${cmp}</small>` : ''}</span>
           <span class="rk-back"><small>到期攞返</small><b>HKD ${money(x.back)}</b>${chip(x.gain)}</span>
         </button>
         ${open ? `<div class="rk-detail"><div class="detail-in">
@@ -536,7 +540,7 @@
           <p class="d-foot"><a href="${esc(x.r.url || x.b.site)}" target="_blank" rel="noopener">睇銀行原文及條款</a></p>
         </div></div>` : ''}
       </li>`;
-    }).join('');
+    }).join('') + (rows.length > 5 ? `<li class="rk-more"><button type="button" class="btn" data-tdall>${td.all ? '只睇頭 5 名' : `睇全部 ${rows.length} 間`}</button></li>` : '');
   }
   function setupTd() {
     seg($('#tdCcy'), CCY.slice(1).map((c) => ({ v: c.code, label: c.name })), td.ccy, (v) => { td.ccy = v; td.open = null; renderTd(); });
@@ -547,6 +551,7 @@
     $('#tdMine').addEventListener('change', renderTd);
     $('#tdList').addEventListener('click', (e) => {
       if (e.target.closest('a')) return;
+      if (e.target.closest('[data-tdall]')) { td.all = !td.all; renderTd(); return; }
       const h = e.target.closest('[data-td]'); if (!h) return;
       td.open = td.open === h.dataset.td ? null : h.dataset.td; renderTd();
     });
@@ -623,7 +628,9 @@
         <table class="facts-t"><thead><tr><th></th><th>期間平均</th><th>最高${nr ? '' : '<small>（嗰個月）</small>'}</th><th>最低${nr ? '' : '<small>（嗰個月）</small>'}</th><th>${nr ? '最近' : '最近一個月'}</th></tr></thead>
         <tbody>${row(bs, nr ? '牌價' : '銀行定期牌價', 'blue')}${row(hb, nr ? 'HIBOR<small>參考</small>' : 'HIBOR（只作參考）', 'grey')}</tbody></table>`;
       const span = trend.years ? `過去 ${trend.years} 年` : '1997 年以來';
-      $('#trendNote').textContent = `${span}，${TT[trend.tenor]}港元定期牌價最高試過 ${pc(bs.mx[1])}（${ym(bs.mx[0])}），最低只有 ${pc(bs.mn[1])}（${ym(bs.mn[0])}），最近係 ${pc(bs.now[1])}。`
+      const vsAvg = bs.now[1] < bs.avg * 0.9 ? '低過' : bs.now[1] > bs.avg * 1.1 ? '高過' : '同';
+      $('#trendNote').textContent = `而家${TT[trend.tenor]}港元定期牌價係 ${pc(bs.now[1])}，${vsAvg}${span}平均（${pc(bs.avg)}）${vsAvg === '同' ? '差唔多' : ''}。`
+        + `${span}，${TT[trend.tenor]}港元定期牌價最高試過 ${pc(bs.mx[1])}（${ym(bs.mx[0])}），最低只有 ${pc(bs.mn[1])}（${ym(bs.mn[0])}），最近係 ${pc(bs.now[1])}。`
         + (hb ? `同期 HIBOR 喺 ${pc(hb.mn[1])} 至 ${pc(hb.mx[1])} 之間上落。` : '')
         + '息口會跟經濟環境大幅變動，高息唔會一直維持。';
     }
@@ -691,6 +698,8 @@
     const tenorItems = TENORS.map((t) => ({ v: t.d, label: t.label }));
     seg($('#ccy'), ccyItems, state.ccy, (v) => { state.ccy = v; state.open = null; save(); renderRates(); });
     seg($('#tenorSeg'), tenorItems, state.sort, (v) => { state.sort = v; state.open = null; save(); renderRates(); });
+    $('#onlyPromo').checked = !!state.onlyPromo;
+    $('#onlyPromo').addEventListener('change', () => { state.onlyPromo = $('#onlyPromo').checked; state.open = null; save(); renderRates(); });
     $('#amount').value = fmt(state.amount);
     $('#amount').addEventListener('input', () => { state.amount = num($('#amount').value); save(); renderRates(); amountWarn($('#amount'), state.amount); });
     $('#amount').addEventListener('blur', () => { $('#amount').value = state.amount ? fmt(state.amount) : ''; });
