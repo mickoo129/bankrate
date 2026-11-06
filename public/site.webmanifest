@@ -3,7 +3,7 @@
   "short_name": "定存息口通",
   "lang": "zh-HK",
   "start_url": ".",
-  "display": "standalone",
+  "display": "browser",
   "background_color": "#F6F9F8",
   "theme_color": "#0E5E57",
   "icons": [

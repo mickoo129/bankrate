@@ -483,9 +483,15 @@ select.rel.rel-premium { color: var(--promo); border-color: color-mix(in srgb, v
 .mk-home-link{margin:16px 0 0;font-family:var(--mk-sans);font-size:14px;line-height:1.5}
 .mk-home-link a{color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
 .mk-home-link a:hover{text-decoration-thickness:2px}
+/* 列印保護提示（iPhone 主畫面 app 模式、app 內置瀏覽器唔支援列印時顯示） */
+.mk-printhelp{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:1000;width:min(440px,calc(100vw - 32px));background:#fff;color:var(--mk-ink);border:1px solid var(--mk-line);border-radius:14px;box-shadow:0 12px 32px -8px rgba(14,94,87,.35);padding:14px 16px;font-family:var(--mk-sans);font-size:14px;line-height:1.55}
+.mk-printhelp p{margin:0 0 10px}.mk-printhelp b{display:block;margin-bottom:2px;color:var(--mk-deep);font-size:15px}
+.mk-printhelp div{display:flex;gap:8px;justify-content:flex-end}
+.mk-printhelp button{font:inherit;font-weight:700;border-radius:999px;padding:7px 14px;cursor:pointer;border:1px solid var(--mk-brand);background:#fff;color:var(--mk-brand-ink)}
+.mk-printhelp .mk-printhelp-copy{background:var(--mk-brand);color:#fff}
 @media print{
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .mk-no-print,.mk-print-btn,.mk-share-btn,.mk-toast,.mk-ecard-btn,.mk-home-link{display:none!important}
+  .mk-no-print,.mk-print-btn,.mk-share-btn,.mk-toast,.mk-ecard-btn,.mk-home-link,.mk-printhelp{display:none!important}
   .mk-header{position:static}
   .mk-ecard{break-inside:avoid;padding:10px 14px;margin-top:14px}
   .mk-ecard-qr{display:block}

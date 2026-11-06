@@ -209,5 +209,34 @@ function mkToast(msg){var t=document.createElement('div');t.className='mk-toast'
 document.querySelectorAll('.mk-year').forEach(function(e){e.textContent=d.getFullYear();});
 document.querySelectorAll('.mk-print-date').forEach(function(e){e.textContent=d.getFullYear()+' 年 '+(d.getMonth()+1)+' 月 '+d.getDate()+' 日';});})();
 </script>
+<!-- MKPA 列印保護（由 _standard/snippets.html 複製）：iPhone 主畫面 app 模式、WhatsApp／IG／Facebook／微信等 app 內置瀏覽器唔支援列印，撳「列印」時改為提示用 Safari／Chrome 開 -->
+<script>
+(function(){
+  var ua=navigator.userAgent||"";
+  function blocked(){
+    var inApp=/FBAN|FBAV|FB_IAB|Instagram|Line\/|WhatsApp|MicroMessenger|WeChat|Messenger|Threads|Snapchat|TikTok|BytedanceWebview/i.test(ua);
+    var standalone=window.navigator.standalone===true||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches&&/iPhone|iPad|iPod/i.test(ua));
+    return inApp||standalone;
+  }
+  function help(){
+    var old=document.querySelector(".mk-printhelp"); if(old) old.remove();
+    var d=document.createElement("div"); d.className="mk-printhelp"; d.setAttribute("role","dialog"); d.setAttribute("aria-label","列印提示");
+    d.innerHTML='<p><b>呢個畫面唔支援列印</b>由主畫面 icon 或者 WhatsApp、IG 等 app 開，手機唔俾列印。請撳「複製連結」，貼去 Safari 或 Chrome 開，再撳「列印 / 存 PDF」。</p><div><button type="button" class="mk-printhelp-copy">複製連結</button><button type="button" class="mk-printhelp-close">知道</button></div>';
+    document.body.appendChild(d);
+    d.querySelector(".mk-printhelp-close").onclick=function(){d.remove();};
+    d.querySelector(".mk-printhelp-copy").onclick=function(){
+      var b=this,u=location.href,ok=function(){b.textContent="已複製";};
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(u).then(ok,function(){prompt("複製呢條連結：",u);});}else{prompt("複製呢條連結：",u);}
+    };
+  }
+  window.mkPrintBlocked=blocked; window.mkPrintHelp=help;
+  document.addEventListener("click",function(e){
+    var t=e.target&&e.target.closest&&e.target.closest(".mk-print-btn");
+    if(!t||!blocked()) return;
+    e.preventDefault(); e.stopImmediatePropagation(); help();
+  },true);
+})();
+</script>
+<!-- /MKPA 列印保護 -->
 </body>
 </html>
