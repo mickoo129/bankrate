@@ -570,3 +570,17 @@ body[data-tab="about"]{--pc:var(--mk-cat-7);--pc-soft:var(--mk-cat-7-soft)}
 }
 #tdList .cmp { white-space: nowrap; }
 @media (max-width: 480px) { #tdTenor { flex-wrap: nowrap; } #tdTenor button { padding: 6px 9px; } }
+
+/* 手機：選項掣一行過、平均填滿成條闊度（貨幣、存期、年期） */
+@media (max-width: 600px) {
+  .filters .field:has(> .seg) { width: 100%; }
+  .filters .seg, #ccy, #tdCcy, .tenor-row .tenor-seg { display: flex; flex-wrap: nowrap; width: 100%; overflow: visible; }
+  .filters .seg button, #ccy button, #tdCcy button, .tenor-seg button { flex: 1 1 0; min-width: 0; padding: 6px 2px; white-space: nowrap; }
+  .tenor-row { gap: 8px; }
+}
+@media (max-width: 600px) {
+  .filters .field:has(> .input) { width: 100%; }
+  .filters .field > .input { width: 100%; box-sizing: border-box; }
+  .filters .field > .input input { flex: 1 1 0; min-width: 0; width: 0; }
+  .filters > .f-row { min-width: 0; }
+}
