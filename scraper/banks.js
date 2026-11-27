@@ -108,8 +108,14 @@ module.exports = [
   {
     id: 'dahsing', name: '大新', nameEn: 'Dah Sing', group: 'mid',
     site: 'https://www.dahsing.com',
-    pages: [],
-    seeds: ['https://www.dahsing.com/html/tc/personal_banking/deposits.html', 'https://www.dahsing.com/html/tc/index.html'],
+    // 2026 年 11 月：舊存款頁已刪、首頁擋自動讀取（403），所以直接列出定期頁
+    pages: [
+      { url: 'https://www.dahsing.com/html/tc/deposit/fixed_deposit/hkd_fixed_deposit.html' },
+      { url: 'https://www.dahsing.com/html/tc/deposit/fixed_deposit/usd_fixed_deposit.html' },
+      { url: 'https://www.dahsing.com/html/tc/deposit/fixed_deposit/rmb_fixed_deposit.html' },
+      { url: 'https://www.dahsing.com/html/tc/deposit/fixed_deposit/hkd_and_foreign_currency_fixed_deposit.html' },
+      { url: 'https://www.dahsing.com/html/tc/deposit/fixed_deposit/monthly_gain_fixed_deposit.html' },],
+    seeds: ['https://www.dahsing.com/html/tc/deposit/index.html'],
   },
   {
     id: 'citic', name: '中信銀行(國際)', nameEn: 'CNCBI', group: 'mid',
