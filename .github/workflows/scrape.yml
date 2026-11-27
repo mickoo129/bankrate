@@ -57,3 +57,8 @@ jobs:
             git rebase --abort 2>/dev/null; sleep 10
           done
           exit 1
+      - name: Health check
+        # 讀到嘅銀行少過上次一半：數據已照更新，呢步令 Actions 失敗，GitHub 會發電郵通知
+        if: always()
+        run: |
+          if [ -f scrape-alert.txt ]; then cat scrape-alert.txt; exit 1; fi

@@ -192,6 +192,8 @@ function rowsFromPage(data, type, url) {
   return parseDeposits(data, { type, url });
 }
 
+const DROPPED = []; // 合理性檢查剔走嘅息率
+
 async function scrapeBank(context, bank, mid, report) {
   const visited = new Set();
   const queue = [];
@@ -327,7 +329,12 @@ async function scrapeBank(context, bank, mid, report) {
     fs.mkdirSync(path.join(__dirname, '..', 'debug'), { recursive: true });
     fs.writeFileSync(path.join(__dirname, '..', 'debug', bank.id + '.json'), JSON.stringify(debugPages));
   } catch {}
-  return { deposits: uniq, fx, sources: Array.from(sources), offerEnd };
+  // 合理性檢查：年利率唔應該係 0 或以下、或者高過 15%（多數係讀錯數字，例如抓咗金額或者年期）
+  // （呢個上限係用嚟捉「讀錯」，唔係質疑官方數字；真係有咁高嘅優惠就調高上限。剔走嘅會寫入 report.json 嘅 dropped）
+  const sane = uniq.filter((d) => typeof d.rate === 'number' && d.rate > 0 && d.rate <= 15);
+  for (const d of uniq) if (!sane.includes(d)) DROPPED.push({ bank: bank.id, currency: d.currency, tenor: d.tenor, rate: d.rate, url: d.url });
+  if (sane.length < uniq.length) console.warn(`${bank.id}: dropped ${uniq.length - sane.length} rate(s) outside 0–15%`);
+  return { deposits: sane, fx, sources: Array.from(sources), offerEnd };
 }
 
 function conditionsOnlyFromSegment(r) {
@@ -465,10 +472,18 @@ function updateHistory(history, latest) {
     }),
   };
 
+  // 健康檢查：今次讀到嘅銀行少過上次一半（多數係網絡出事或者大量網頁改版）。讀到嘅照更新（讀唔到嘅已經逐間照用上次數字），
+  // 只係寫低 scrape-alert.txt，workflow 最後一步見到就令 Actions 失敗、GitHub 發電郵通知
+  const freshOk = out.banks.filter((b) => b.status === 'ok').length;
+  const prevOk = (prev.banks || []).filter((b) => b.status === 'ok').length;
+  if (!only && prevOk >= 6 && freshOk < Math.ceil(prevOk / 2)) {
+    fs.writeFileSync('scrape-alert.txt', `今次只讀到 ${freshOk} 間銀行（上次 ${prevOk} 間）。讀唔到嘅銀行照用上次數字。請睇 report.json 搵原因。\n`);
+  }
+
   fs.writeFileSync(path.join(DATA_DIR, 'latest.json'), JSON.stringify(out));
   const history = updateHistory(readJson(path.join(DATA_DIR, 'history.json'), {}), out);
   fs.writeFileSync(path.join(DATA_DIR, 'history.json'), JSON.stringify(history));
-  fs.writeFileSync(path.join(DATA_DIR, 'report.json'), JSON.stringify({ at: now, pages: report }, null, 1));
+  fs.writeFileSync(path.join(DATA_DIR, 'report.json'), JSON.stringify({ at: now, dropped: DROPPED, pages: report }, null, 1));
 
   const ok = out.banks.filter((b) => b.status === 'ok').length;
   console.log(`\nDONE: ${ok}/${out.banks.length} banks with fresh data`);
