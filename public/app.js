@@ -731,18 +731,22 @@
 
   async function load() {
     const [data, hist] = await Promise.all([getJson('latest.json'), getJson('history.json'), loadLiveMid()]);
-    state.allBanks = data.banks;
-    data.banks = data.banks.filter((b) => b.deposits && b.deposits.length); // banks we could never read are left out
-    state.data = data; state.history = hist;
     if (!data) {
       $('#updated').textContent = '暫時未能讀取數據';
       $('#updatedM').textContent = '暫時未能讀取數據';
       $('#cmp tbody').innerHTML = '<tr><td colspan="6" class="empty-msg">數據檔尚未準備好，系統首次更新完成後便會顯示。</td></tr>';
       return;
     }
+    state.allBanks = data.banks;
+    data.banks = data.banks.filter((b) => b.deposits && b.deposits.length); // banks we could never read are left out
+    state.data = data; state.history = hist;
     const ok = data.banks.filter((b) => b.status !== 'none').length;
-    $('#updated').innerHTML = `更新於 <b>${esc(timeAgo(data.updatedAt))}</b><br>${ok} 間銀行`;
-    $('#updatedM').innerHTML = `息口更新於 <b>${esc(timeAgo(data.updatedAt))}</b> · ${ok} 間銀行`;
+    // 正常每 2 小時更新；超過 8 小時冇更新就提示（例如自動更新暫時出事）
+    const hrs = (Date.now() - new Date(data.updatedAt)) / 3600e3;
+    const h = Math.round(hrs), isStale = hrs > 8;
+    $('#updated').innerHTML = `更新於 <b>${esc(timeAgo(data.updatedAt))}</b><br>${ok} 間銀行${isStale ? ` · <span class="stale-note">已 ${h} 小時未更新</span>` : ''}`;
+    $('#updatedM').innerHTML = `息口更新於 <b>${esc(timeAgo(data.updatedAt))}</b> · ${ok} 間銀行${isStale ? `<br><span class="stale-note">資料已超過 ${h} 小時未更新，息口可能已經改變，請以銀行公布為準。</span>` : ''}`;
+    if (isStale) $('#updated').title = '資料已超過 ' + h + ' 小時未更新，息口可能已經改變，請以銀行公布為準。';
     if (state.banks) state.banks = state.banks.filter((id) => data.banks.some((b) => b.id === id));
     renderMe(); renderPicker(); renderRates(); renderFx(); renderTd(); renderTrend(); renderStatus();
   }

@@ -590,3 +590,7 @@ body[data-tab="about"]{--pc:var(--mk-cat-7);--pc-soft:var(--mk-cat-7-soft)}
   .filters .field > .input input { flex: 1 1 0; min-width: 0; width: 0; }
   .filters > .f-row { min-width: 0; }
 }
+
+/* 資料太耐冇更新嘅提示（頁頭深色底用淺琥珀，內文用標準琥珀） */
+.updated .stale-note { color: #FFD98A; font-weight: 700; }
+.updated-m .stale-note { color: var(--mk-warn, #8A5B00); font-weight: 700; }

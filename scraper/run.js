@@ -327,7 +327,10 @@ async function scrapeBank(context, bank, mid, report) {
     fs.mkdirSync(path.join(__dirname, '..', 'debug'), { recursive: true });
     fs.writeFileSync(path.join(__dirname, '..', 'debug', bank.id + '.json'), JSON.stringify(debugPages));
   } catch {}
-  return { deposits: uniq, fx, sources: Array.from(sources), offerEnd };
+  // 合理性檢查：年利率唔應該係 0 或以下、或者高過 15%（多數係讀錯數字，例如抓咗金額或者年期）
+  const sane = uniq.filter((d) => typeof d.rate === 'number' && d.rate > 0 && d.rate <= 15);
+  if (sane.length < uniq.length) console.warn(`${bank.id}: dropped ${uniq.length - sane.length} rate(s) outside 0–15%`);
+  return { deposits: sane, fx, sources: Array.from(sources), offerEnd };
 }
 
 function conditionsOnlyFromSegment(r) {
@@ -464,6 +467,15 @@ function updateHistory(history, latest) {
       return { ...base, status: 'none', checkedAt: now, deposits: [], sources: [], fx: (r && r.fx) || {}, fxAt: r && Object.keys(r.fx || {}).length ? now : null };
     }),
   };
+
+  // 合理性檢查：今次讀到嘅銀行少過上次一半（例如網絡出事、大量網頁改版），唔好覆蓋數據，令 Actions 失敗發電郵通知
+  const freshOk = out.banks.filter((b) => b.status === 'ok').length;
+  const prevOk = (prev.banks || []).filter((b) => b.status === 'ok').length;
+  if (!only && prevOk >= 6 && freshOk < Math.ceil(prevOk / 2)) {
+    fs.writeFileSync(path.join(DATA_DIR, 'report.json'), JSON.stringify({ at: now, pages: report }, null, 1));
+    console.error(`\nABORT: only ${freshOk} banks fresh (last run ${prevOk}). Keeping previous data.`);
+    process.exit(1);
+  }
 
   fs.writeFileSync(path.join(DATA_DIR, 'latest.json'), JSON.stringify(out));
   const history = updateHistory(readJson(path.join(DATA_DIR, 'history.json'), {}), out);
